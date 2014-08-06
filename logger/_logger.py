@@ -3,10 +3,9 @@
 
 import sys
 import logging
-import color
 import platform
 
-__all__=[config_logger, default_configs, get_logger]
+import _color
 
 LOGNAME = None
 
@@ -15,7 +14,7 @@ default_configs = {"logger_name":"AXUI",
                    "logging_stream":"stdout", 
                    "logging_file":"", 
                    "file_logging_mode":"a", 
-                   "formatter":"%(message)%", 
+                   "formatter":"%(message)s", 
                    "color":"True" }
                    
 logging_levels = {"CRITICAL":logging.CRITICAL, 
@@ -41,20 +40,20 @@ def config_logger(configs=default_configs):
     if not configs["logger_name"]:
         configs["logger_name"]=default_configs["logger_name"]
     
-    if configs["logging_levels"].upper() in logging_levels:
-        configs["logging_levels"]=logging_levels[configs["logging_levels"].upper()]
+    if configs["logging_level"].upper() in logging_levels:
+        configs["logging_level"]=logging_levels[configs["logging_level"].upper()]
     else:
-        configs["logging_levels"]=logging_levels[default_configs["logging_levels"]]
+        configs["logging_level"]=logging_levels[default_configs["logging_level"].upper()]
         
     if configs["logging_stream"].upper() in logging_stream:
-        configs["logging_stream"]=logging_stream[configs["logging_stream"]]
+        configs["logging_stream"]=logging_stream[configs["logging_stream"].upper()]
     else:
-        configs["logging_stream"]=logging_stream[default_configs["logging_stream"]]
+        configs["logging_stream"]=logging_stream[default_configs["logging_stream"].upper()]
         
     if configs["file_logging_mode"].upper() in file_logging_mode:
         configs["file_logging_mode"]=file_logging_mode[configs["file_logging_mode"].upper()]
     else:
-        configs["file_logging_mode"]=logging_levels[default_configs["file_logging_mode"]]
+        configs["file_logging_mode"]=file_logging_mode[default_configs["file_logging_mode"].upper()]
         
     if not configs["formatter"]:
         configs["formatter"]=default_configs["formatter"]
@@ -62,7 +61,7 @@ def config_logger(configs=default_configs):
     if configs["color"].upper() in logging_color:
         configs["color"]=logging_color[configs["color"].upper()]
     else:
-        configs["color"]=logging_color[default_configs["color"]]
+        configs["color"]=logging_color[default_configs["color"].upper()]
         
     #config logger according input configs
     logger = logging.getLogger(configs["logger_name"])
@@ -87,22 +86,26 @@ def config_logger(configs=default_configs):
 
         logger.addHandler(file_handler)
     
-    if color:
+    if configs["color"]:
         if platform.system()=='Windows':
             # Windows does not support ANSI escapes 
             # and we are using API calls to set the console color
             logging.StreamHandler.emit = \
-            color.add_coloring_to_emit_windows(logging.StreamHandler.emit)
+            _color.add_coloring_to_emit_windows(logging.StreamHandler.emit)
         else:
             # all non-Windows platforms are supporting ANSI escapes so we use them
             logging.StreamHandler.emit = \
-            color.add_coloring_to_emit_ansi(logging.StreamHandler.emit)
+            _color.add_coloring_to_emit_ansi(logging.StreamHandler.emit)
 
+    global LOGNAME
     LOGNAME = configs["logger_name"]
     
 def get_logger():
+    global LOGNAME
     if LOGNAME == None:
         raise NotImplementedError("Logger not configure yet")
     else:
         return logging.getLogger(LOGNAME)
+        
+__all__=["config_logger", "default_configs", "get_logger"]
 

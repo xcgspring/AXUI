@@ -12,7 +12,7 @@ class TestConfigLogger(unittest.TestCase):
                    "logging_stream":"stdout", 
                    "logging_file":"test_config_logger.log", 
                    "file_logging_mode":"a", 
-                   "formatter":"%(message)%", 
+                   "formatter":"%(message)s", 
                    "color":"True" }
                    
         self.AXUI_logger.config_logger(valid_configs)
@@ -32,7 +32,7 @@ class TestLogger(unittest.TestCase):
                    "logging_stream":"stdout", 
                    "logging_file":"test_logger.log", 
                    "file_logging_mode":"a", 
-                   "formatter":"%(message)%", 
+                   "formatter":"%(message)s", 
                    "color":"True" }
                    
         self.AXUI_logger.config_logger(valid_configs)
