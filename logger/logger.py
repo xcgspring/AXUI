@@ -6,10 +6,9 @@ import logging
 import color
 import platform
 
-__all__=[config_logger, default_configs, LOGGER]
+__all__=[config_logger, default_configs, get_logger]
 
 LOGNAME = None
-LOGGER = get_logger()
 
 default_configs = {"logger_name":"AXUI", 
                    "logging_level":"DEBUG", 

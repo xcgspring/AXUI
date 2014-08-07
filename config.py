@@ -12,7 +12,6 @@ CONFIG = Config("global.cfg")
 class Config(object):
     '''
     '''
-    logging_configs = {
     def __init__(self, config_file):
         self.config = parser.RawConfigParser()
         self.config.read(config_file)

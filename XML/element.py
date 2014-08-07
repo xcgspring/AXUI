@@ -2,24 +2,26 @@
 #1. Add UI bind function
 #2. Add comments
 
-import AXUI.logger as logger
+import AXUI.config as AXUI_config
+import AXUI.logger as AXUI_logger
 
 class Element(object):
-    attributes = {
-        'ID':'',
-        'name':'',
-        'search_condition':'',
-        'start_operation':'',
-        'timeout':'',
-        'if_validate':True,
-        'reference_picture':''
-    }
-
-    parent = None
-    children = []
-    associate_UI_element = None
-
+    '''
+    '''
     def __init__(self, xml_element):
+        self.attributes = {
+            'ID':'',
+            'name':'',
+            'search_condition':'',
+            'start_operation':'',
+            'timeout':'',
+            'if_validate':True,
+            'reference_picture':''
+        }
+        self.parent = None
+        self.children = []
+        self.UIElement = None
+        
         for attrib in self.attributes.items():
             attrib_key = attrib[0]
             attrib[attrib_key] = xml_element.attrib.get(attrib_key)
@@ -30,5 +32,9 @@ class Element(object):
             self.children.append(child)
 
     def bind_UI_element(self):
-        pass
+        '''
+        '''
+            
+    
 
+    
