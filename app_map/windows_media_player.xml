@@ -1,0 +1,19 @@
+
+<desktop ID="1" name="desktop">
+    <window ID="11" name="library window" search_condition="" start_operation="">
+        <menu_bar ID="111" name="menu bar" search_condition="" start_operation="">
+            <menu_item ID="1111" name="File" search_condition="" />
+            <menu_item ID="2111" name="File" search_condition="" />
+            <menu_item ID="3111" name="File" search_condition="" />
+            <menu_item ID="4111" name="File" search_condition="" />
+            <menu_item ID="5111" name="File" search_condition="" />
+        </menu_bar>
+    </window>
+    <window ID="21" name="skin window" search_condition="" start_operation="">
+
+    </window>
+    <window ID="21" name="playing window" search_condition="" start_operation="">
+
+    </window>
+</desktop>
+
