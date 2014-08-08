@@ -67,6 +67,7 @@ def config_logger(configs=default_configs):
     logger = logging.getLogger(configs["logger_name"])
     logger.propagate = False
     logger.setLevel(configs["logging_level"])
+    logger.handlers = []
 
     if configs["logging_stream"]:
         stream_handler = logging.StreamHandler(configs["logging_stream"])

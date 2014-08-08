@@ -9,7 +9,7 @@ def build_test_suite():
     suite = unittest.TestSuite()
     for root, dirs, files in os.walk(current_dir):
         for file_ in files:
-            if re.match("test_.*\.py", file_) != None:
+            if re.match("test_.*\.py$", file_) != None:
                 sys.path.append(root)
                 module = __import__(file_.split(".py")[0])
                 suite.addTest(unittest.TestLoader().loadTestsFromModule(module))
