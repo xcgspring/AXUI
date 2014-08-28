@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<AXUI_funcs xmlns="AXUI_windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI_funcs AXUI_funcs.xsd">
+
+    <include name="wmplayer" path="windows_media_player.xml" />
+    
+    <func name="func1" description="">
+        <step cmd="wmplayer.keyboard CTRL+M" />
+    </func>
+
+    <func name="func2" description="">
+        <step cmd="wmplayer.mouse move" />
+    </func>
+
+    <func name="func3" description="">
+        <step cmd="wmplayer.library_window maxmize" />
+    </func>
+
+</AXUI_funcs>
