@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:AXUI_funcs="AXUI_funcs" targetNamespace="AXUI_funcs" elementFormDefault="qualified">
+
+    <xs:element name="funcs">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="AXUI_funcs:include" />
+                <xs:element ref="AXUI_funcs:func" />
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="include">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="path" type="xs:string" use="required" />
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="func">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="description" type="xs:string" />
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="step">
+                    <xs:complexType>
+                        <xs:attribute name="cmd" type="xs:string" use="required" />
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+</xs:schema>

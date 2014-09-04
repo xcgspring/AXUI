@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 
-<AXUI_windows xmlns="AXUI_windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="AXUI_windows AXUI_windows.xsd">
+<AXUI_windows:elements xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI_windows AXUI_windows.xsd">
 
-    <include name="desktop" path="window_desktop.xml" />
-    <include name="funcs" path="windows_media_player_funcs.xml" />
+    <AXUI_windows:include name="desktop" path="window_desktop.xml" />
+    <AXUI_windows:include name="funcs" path="windows_media_player_funcs.xml" />
     
-    <window ID="" name="library_window" parent="desktop.desktop" identifier="name='Windows Media Player'" start_cmd="C:\Program Files\Windows Media Player\wmplayer.exe">
-        <menu_bar ID="" name="menu_bar" identifier="name='menu bar'" start_func="funcs.func1">
-            <menu_item ID="" name="File" identifier="name='File'" />
-            <menu_item ID="" name="View" identifier="name='View'" />
-            <menu_item ID="" name="Play" identifier="name='Play'" />
-            <menu_item ID="" name="Tools" identifier="name='Tools'" />
-            <menu_item ID="" name="Help" identifier="name='Help'" />
-        </menu_bar>
-        <group ID="" name="transport_button_group" start_func="funcs.func2">
-            <button ID="" name="stop" identifier="name='stop'"/>
-            <button ID="" name="previous" identifier="name='previous'"/>
-            <button ID="" name="play" identifier="name='play'"/>
-            <button ID="" name="next" identifier="name='next'"/>
-        </group>
-        <slider ID="" name="volume" identifier="name='volume'" start_func="funcs.func3"/>
-        <slider ID="" name="seek" identifier="name='seek'"/>
-    </window>
+    <AXUI_windows:window ID="" name="library_window" parent="desktop.desktop" identifier="name='Windows Media Player'" start_cmd="C:\Program Files\Windows Media Player\wmplayer.exe">
+        <AXUI_windows:menu_bar ID="" name="menu_bar" identifier="name='menu bar'" start_func="funcs.func1">
+            <AXUI_windows:menu_item ID="" name="File" identifier="name='File'" />
+            <AXUI_windows:menu_item ID="" name="View" identifier="name='View'" />
+            <AXUI_windows:menu_item ID="" name="Play" identifier="name='Play'" />
+            <AXUI_windows:menu_item ID="" name="Tools" identifier="name='Tools'" />
+            <AXUI_windows:menu_item ID="" name="Help" identifier="name='Help'" />
+        </AXUI_windows:menu_bar>
+        <AXUI_windows:group ID="" name="transport_button_group" start_func="funcs.func2">
+            <AXUI_windows:button ID="" name="stop" identifier="name='stop'"/>
+            <AXUI_windows:button ID="" name="previous" identifier="name='previous'"/>
+            <AXUI_windows:button ID="" name="play" identifier="name='play'"/>
+            <AXUI_windows:button ID="" name="next" identifier="name='next'"/>
+        </AXUI_windows:group>
+        <AXUI_windows:slider ID="" name="volume" identifier="name='volume'" start_func="funcs.func3"/>
+        <AXUI_windows:slider ID="" name="seek" identifier="name='seek'"/>
+    </AXUI_windows:window>
 
-</AXUI_windows>
+</AXUI_windows:elements>
 
