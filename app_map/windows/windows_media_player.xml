@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 
-<AXUI_windows:elements xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI_windows AXUI_windows.xsd">
+<AXUI_windows:elements xmlns:AXUI_windows="AXUI_windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI_windows AXUI_windows.xsd">
 
     <AXUI_windows:include name="desktop" path="window_desktop.xml" />
     <AXUI_windows:include name="funcs" path="windows_media_player_funcs.xml" />
     
-    <AXUI_windows:window ID="" name="library_window" parent="desktop.desktop" identifier="name='Windows Media Player'" start_cmd="C:\Program Files\Windows Media Player\wmplayer.exe">
-        <AXUI_windows:menu_bar ID="" name="menu_bar" identifier="name='menu bar'" start_func="funcs.func1">
-            <AXUI_windows:menu_item ID="" name="File" identifier="name='File'" />
-            <AXUI_windows:menu_item ID="" name="View" identifier="name='View'" />
-            <AXUI_windows:menu_item ID="" name="Play" identifier="name='Play'" />
-            <AXUI_windows:menu_item ID="" name="Tools" identifier="name='Tools'" />
-            <AXUI_windows:menu_item ID="" name="Help" identifier="name='Help'" />
-        </AXUI_windows:menu_bar>
-        <AXUI_windows:group ID="" name="transport_button_group" start_func="funcs.func2">
-            <AXUI_windows:button ID="" name="stop" identifier="name='stop'"/>
-            <AXUI_windows:button ID="" name="previous" identifier="name='previous'"/>
-            <AXUI_windows:button ID="" name="play" identifier="name='play'"/>
-            <AXUI_windows:button ID="" name="next" identifier="name='next'"/>
-        </AXUI_windows:group>
-        <AXUI_windows:slider ID="" name="volume" identifier="name='volume'" start_func="funcs.func3"/>
-        <AXUI_windows:slider ID="" name="seek" identifier="name='seek'"/>
-    </AXUI_windows:window>
+    <AXUI_windows:element ID="" name="library_window" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_cmd="C:\Program Files\Windows Media Player\wmplayer.exe">
+        <AXUI_windows:element ID="" name="menu_bar" identifier="Name='menu bar' AND LocalizedControlType='menu bar'" start_func="funcs.func1">
+            <AXUI_windows:element ID="" name="File" identifier="Name='File' AND LocalizedControlType='menu item'" />
+            <AXUI_windows:element ID="" name="View" identifier="Name='View' AND LocalizedControlType='menu item'" />
+            <AXUI_windows:element ID="" name="Play" identifier="Name='Play' AND LocalizedControlType='menu item'" />
+            <AXUI_windows:element ID="" name="Tools" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
+            <AXUI_windows:element ID="" name="Help" identifier="Name='Help' AND LocalizedControlType='menu item'" />
+        </AXUI_windows:element>
+        <AXUI_windows:element ID="" name="transport_button_group" start_func="funcs.func2">
+            <AXUI_windows:element ID="" name="stop" identifier="name='stop' AND LocalizedControlType='button'"/>
+            <AXUI_windows:element ID="" name="previous" identifier="name='previous' AND LocalizedControlType='button'"/>
+            <AXUI_windows:element ID="" name="play" identifier="name='play' AND LocalizedControlType='button'"/>
+            <AXUI_windows:element ID="" name="next" identifier="name='next' AND LocalizedControlType='button'"/>
+        </AXUI_windows:element>
+        <AXUI_windows:element ID="" name="volume" identifier="name='volume' AND LocalizedControlType='slider'" start_func="funcs.func3"/>
+        <AXUI_windows:element ID="" name="seek" identifier="name='seek' AND LocalizedControlType='slider'"/>
+    </AXUI_windows:element>
 
 </AXUI_windows:elements>
 

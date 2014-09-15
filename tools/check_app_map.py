@@ -15,6 +15,8 @@ def check_app_map(xs_module, app_map):
         print("Check successful")
     except pyxb.UnrecognizedContentError as e:
         print(e.details())
+    except pyxb.IncompleteElementContentError as e:
+    	print(e.details())
         
 if __name__=="__main__":
     print("Usage:\npython %s XSD_file(abs path) app_map_file" % __file__)
