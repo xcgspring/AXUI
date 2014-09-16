@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 
-<AXUI_windows:elements xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI_windows AXUI_windows.xsd">
-    <AXUI_windows:element ID="" name="desktop" identifier="RootElement" />
-</AXUI_windows:elements>
+<AXUI:elements xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
+    <AXUI:element name="desktop" identifier="RootElement" />
+</AXUI:elements>

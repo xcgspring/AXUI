@@ -1,27 +1,27 @@
 <?xml version="1.0"?>
 
-<AXUI_windows:elements xmlns:AXUI_windows="AXUI_windows" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI_windows AXUI_windows.xsd">
+<AXUI:elements xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
 
-    <AXUI_windows:include name="desktop" path="window_desktop.xml" />
-    <AXUI_windows:include name="funcs" path="windows_media_player_funcs.xml" />
+    <AXUI:include_app_map name="desktop" path="windows_desktop.xml" />
+    <AXUI:include_func name="funcs" path="windows_media_player_funcs.xml" />
     
-    <AXUI_windows:element ID="" name="library_window" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_cmd="C:\Program Files\Windows Media Player\wmplayer.exe">
-        <AXUI_windows:element ID="" name="menu_bar" identifier="Name='menu bar' AND LocalizedControlType='menu bar'" start_func="funcs.func1">
-            <AXUI_windows:element ID="" name="File" identifier="Name='File' AND LocalizedControlType='menu item'" />
-            <AXUI_windows:element ID="" name="View" identifier="Name='View' AND LocalizedControlType='menu item'" />
-            <AXUI_windows:element ID="" name="Play" identifier="Name='Play' AND LocalizedControlType='menu item'" />
-            <AXUI_windows:element ID="" name="Tools" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
-            <AXUI_windows:element ID="" name="Help" identifier="Name='Help' AND LocalizedControlType='menu item'" />
-        </AXUI_windows:element>
-        <AXUI_windows:element ID="" name="transport_button_group" start_func="funcs.func2">
-            <AXUI_windows:element ID="" name="stop" identifier="name='stop' AND LocalizedControlType='button'"/>
-            <AXUI_windows:element ID="" name="previous" identifier="name='previous' AND LocalizedControlType='button'"/>
-            <AXUI_windows:element ID="" name="play" identifier="name='play' AND LocalizedControlType='button'"/>
-            <AXUI_windows:element ID="" name="next" identifier="name='next' AND LocalizedControlType='button'"/>
-        </AXUI_windows:element>
-        <AXUI_windows:element ID="" name="volume" identifier="name='volume' AND LocalizedControlType='slider'" start_func="funcs.func3"/>
-        <AXUI_windows:element ID="" name="seek" identifier="name='seek' AND LocalizedControlType='slider'"/>
-    </AXUI_windows:element>
+    <AXUI:element name="library_window" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_cmd="C:\Program Files\Windows Media Player\wmplayer.exe">
+        <AXUI:element name="menu_bar" identifier="Name='menu bar' AND LocalizedControlType='menu bar'" start_func="funcs.func1">
+            <AXUI:element name="File" identifier="Name='File' AND LocalizedControlType='menu item'" />
+            <AXUI:element name="View" identifier="Name='View' AND LocalizedControlType='menu item'" />
+            <AXUI:element name="Play" identifier="Name='Play' AND LocalizedControlType='menu item'" />
+            <AXUI:element name="Tools" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
+            <AXUI:element name="Help" identifier="Name='Help' AND LocalizedControlType='menu item'" />
+        </AXUI:element>
+        <AXUI:element name="transport_button_group" start_func="funcs.func2">
+            <AXUI:element name="stop" identifier="name='stop' AND LocalizedControlType='button'"/>
+            <AXUI:element name="previous" identifier="name='previous' AND LocalizedControlType='button'"/>
+            <AXUI:element name="play" identifier="name='play' AND LocalizedControlType='button'"/>
+            <AXUI:element name="next" identifier="name='next' AND LocalizedControlType='button'"/>
+        </AXUI:element>
+        <AXUI:element name="volume" identifier="name='volume' AND LocalizedControlType='slider'" start_func="funcs.func3"/>
+        <AXUI:element name="seek" identifier="name='seek' AND LocalizedControlType='slider'"/>
+    </AXUI:element>
 
-</AXUI_windows:elements>
+</AXUI:elements>
 

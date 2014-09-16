@@ -104,9 +104,8 @@ def config_logger(configs=default_configs):
 def get_logger():
     global LOGNAME
     if LOGNAME == None:
-        raise NotImplementedError("Logger not configure yet")
-    else:
-        return logging.getLogger(LOGNAME)
+        config_logger()
+    return logging.getLogger(LOGNAME)
         
 __all__=["config_logger", "default_configs", "get_logger"]
 
