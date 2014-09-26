@@ -14,13 +14,13 @@
             <AXUI:element name="Help" identifier="Name='Help' AND LocalizedControlType='menu item'" />
         </AXUI:element>
         <AXUI:element name="transport_button_group" start_func="funcs.func2">
-            <AXUI:element name="stop" identifier="name='stop' AND LocalizedControlType='button'"/>
-            <AXUI:element name="previous" identifier="name='previous' AND LocalizedControlType='button'"/>
-            <AXUI:element name="play" identifier="name='play' AND LocalizedControlType='button'"/>
-            <AXUI:element name="next" identifier="name='next' AND LocalizedControlType='button'"/>
+            <AXUI:element name="stop" identifier="Name='stop' AND LocalizedControlType='button'"/>
+            <AXUI:element name="previous" identifier="Name='previous' AND LocalizedControlType='button'"/>
+            <AXUI:element name="play" identifier="Name='play' AND LocalizedControlType='button'"/>
+            <AXUI:element name="next" identifier="Name='next' AND LocalizedControlType='button'"/>
         </AXUI:element>
-        <AXUI:element name="volume" identifier="name='volume' AND LocalizedControlType='slider'" start_func="funcs.func3"/>
-        <AXUI:element name="seek" identifier="name='seek' AND LocalizedControlType='slider'"/>
+        <AXUI:element name="volume" identifier="Name='volume' AND LocalizedControlType='slider'" start_func="funcs.func3"/>
+        <AXUI:element name="seek" identifier="Name='seek' AND LocalizedControlType='slider'"/>
     </AXUI:element>
 
 </AXUI:elements>
