@@ -1,0 +1,216 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> identifier
+Rule 1     identifier -> identifier AND identifier
+Rule 2     identifier -> identifier OR identifier
+Rule 3     identifier -> LPAREN identifier RPAREN
+Rule 4     identifier -> TERM EQUALS value
+Rule 5     value -> NUMBER
+Rule 6     value -> STRING
+Rule 7     value -> BOOL
+
+Terminals, with rules where they appear
+
+AND                  : 1
+BOOL                 : 7
+EQUALS               : 4
+LPAREN               : 3
+NUMBER               : 5
+OR                   : 2
+RPAREN               : 3
+STRING               : 6
+TERM                 : 4
+error                : 
+
+Nonterminals, with rules where they appear
+
+identifier           : 1 1 2 2 3 0
+value                : 4
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . identifier
+    (1) identifier -> . identifier AND identifier
+    (2) identifier -> . identifier OR identifier
+    (3) identifier -> . LPAREN identifier RPAREN
+    (4) identifier -> . TERM EQUALS value
+
+    LPAREN          shift and go to state 2
+    TERM            shift and go to state 1
+
+    identifier                     shift and go to state 3
+
+state 1
+
+    (4) identifier -> TERM . EQUALS value
+
+    EQUALS          shift and go to state 4
+
+
+state 2
+
+    (3) identifier -> LPAREN . identifier RPAREN
+    (1) identifier -> . identifier AND identifier
+    (2) identifier -> . identifier OR identifier
+    (3) identifier -> . LPAREN identifier RPAREN
+    (4) identifier -> . TERM EQUALS value
+
+    LPAREN          shift and go to state 2
+    TERM            shift and go to state 1
+
+    identifier                     shift and go to state 5
+
+state 3
+
+    (0) S' -> identifier .
+    (1) identifier -> identifier . AND identifier
+    (2) identifier -> identifier . OR identifier
+
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+
+
+state 4
+
+    (4) identifier -> TERM EQUALS . value
+    (5) value -> . NUMBER
+    (6) value -> . STRING
+    (7) value -> . BOOL
+
+    NUMBER          shift and go to state 10
+    STRING          shift and go to state 8
+    BOOL            shift and go to state 11
+
+    value                          shift and go to state 9
+
+state 5
+
+    (3) identifier -> LPAREN identifier . RPAREN
+    (1) identifier -> identifier . AND identifier
+    (2) identifier -> identifier . OR identifier
+
+    RPAREN          shift and go to state 12
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+
+
+state 6
+
+    (1) identifier -> identifier AND . identifier
+    (1) identifier -> . identifier AND identifier
+    (2) identifier -> . identifier OR identifier
+    (3) identifier -> . LPAREN identifier RPAREN
+    (4) identifier -> . TERM EQUALS value
+
+    LPAREN          shift and go to state 2
+    TERM            shift and go to state 1
+
+    identifier                     shift and go to state 13
+
+state 7
+
+    (2) identifier -> identifier OR . identifier
+    (1) identifier -> . identifier AND identifier
+    (2) identifier -> . identifier OR identifier
+    (3) identifier -> . LPAREN identifier RPAREN
+    (4) identifier -> . TERM EQUALS value
+
+    LPAREN          shift and go to state 2
+    TERM            shift and go to state 1
+
+    identifier                     shift and go to state 14
+
+state 8
+
+    (6) value -> STRING .
+
+    AND             reduce using rule 6 (value -> STRING .)
+    OR              reduce using rule 6 (value -> STRING .)
+    $end            reduce using rule 6 (value -> STRING .)
+    RPAREN          reduce using rule 6 (value -> STRING .)
+
+
+state 9
+
+    (4) identifier -> TERM EQUALS value .
+
+    AND             reduce using rule 4 (identifier -> TERM EQUALS value .)
+    OR              reduce using rule 4 (identifier -> TERM EQUALS value .)
+    $end            reduce using rule 4 (identifier -> TERM EQUALS value .)
+    RPAREN          reduce using rule 4 (identifier -> TERM EQUALS value .)
+
+
+state 10
+
+    (5) value -> NUMBER .
+
+    AND             reduce using rule 5 (value -> NUMBER .)
+    OR              reduce using rule 5 (value -> NUMBER .)
+    $end            reduce using rule 5 (value -> NUMBER .)
+    RPAREN          reduce using rule 5 (value -> NUMBER .)
+
+
+state 11
+
+    (7) value -> BOOL .
+
+    AND             reduce using rule 7 (value -> BOOL .)
+    OR              reduce using rule 7 (value -> BOOL .)
+    $end            reduce using rule 7 (value -> BOOL .)
+    RPAREN          reduce using rule 7 (value -> BOOL .)
+
+
+state 12
+
+    (3) identifier -> LPAREN identifier RPAREN .
+
+    AND             reduce using rule 3 (identifier -> LPAREN identifier RPAREN .)
+    OR              reduce using rule 3 (identifier -> LPAREN identifier RPAREN .)
+    $end            reduce using rule 3 (identifier -> LPAREN identifier RPAREN .)
+    RPAREN          reduce using rule 3 (identifier -> LPAREN identifier RPAREN .)
+
+
+state 13
+
+    (1) identifier -> identifier AND identifier .
+    (1) identifier -> identifier . AND identifier
+    (2) identifier -> identifier . OR identifier
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    $end            reduce using rule 1 (identifier -> identifier AND identifier .)
+    RPAREN          reduce using rule 1 (identifier -> identifier AND identifier .)
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+
+  ! AND             [ reduce using rule 1 (identifier -> identifier AND identifier .) ]
+  ! OR              [ reduce using rule 1 (identifier -> identifier AND identifier .) ]
+
+
+state 14
+
+    (2) identifier -> identifier OR identifier .
+    (1) identifier -> identifier . AND identifier
+    (2) identifier -> identifier . OR identifier
+
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+    $end            reduce using rule 2 (identifier -> identifier OR identifier .)
+    RPAREN          reduce using rule 2 (identifier -> identifier OR identifier .)
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+
+  ! AND             [ reduce using rule 2 (identifier -> identifier OR identifier .) ]
+  ! OR              [ reduce using rule 2 (identifier -> identifier OR identifier .) ]
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for AND in state 13 resolved as shift
+WARNING: shift/reduce conflict for OR in state 13 resolved as shift
+WARNING: shift/reduce conflict for AND in state 14 resolved as shift
+WARNING: shift/reduce conflict for OR in state 14 resolved as shift
