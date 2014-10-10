@@ -11,7 +11,9 @@ import AXUI.logger as AXUI_logger
 
 LOGGER = AXUI_logger.get_logger()
 
-#rules
+##################################
+#lexical analysis
+##################################
 reserved = ("AND", "OR")
 tokens = reserved+("EQUALS", "LPAREN", "RPAREN", "TERM", "STRING", "NUMBER", "BOOL")
 
@@ -42,15 +44,18 @@ def t_TERM(t):
     return t
     
 def t_STRING(t):
-    r'"(.)*?"'
+    '(\"(.)*?\")|(\'(.)*?\')' 
     return t
     
 def t_error(t):
     LOGGER.warn("Illegal character %s" % repr(t.value[0]))
     t.lexer.skip(1)
     
-lexer = lex.lex(optimize=1)
+lexer = lex.lex()
 
+##################################
+#Syntactic analysis
+##################################
 def p_identifier_and(p):
     'identifier : identifier AND identifier'
     p[0]=("AND", p[1], p[3])
