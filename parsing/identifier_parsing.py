@@ -3,7 +3,7 @@ this module is used to parse identifier descriptions, based on python ply librar
 identifier description is like:
 'name="xxx" AND class="yyy" OR ((ID = 12312 And enabled="no") AND index=2)'
 this module will parse this identifier to a list like:
-["OR", ["AND", [name, "xxx"], [class, "yyy"]], ["AND", ["AND", [ID, 12312], [enabled, "no"]], [index, 2]]
+("OR", ("AND", (name, "xxx"), (class, "yyy")), ("AND", ("AND", (ID, 12312), (enabled, "no")), (index, 2))
 '''
 
 import ply.lex as lex
@@ -53,7 +53,7 @@ def t_error(t):
     LOGGER.warn("Illegal character %s" % repr(t.value[0]))
     t.lexer.skip(1)
     
-lexer = lex.lex()
+identifier_lexer = lex.lex()
 
 ##################################
 #Syntactic analysis
@@ -89,4 +89,4 @@ def p_value_bool(p):
 def p_error(p):
     LOGGER.warn("Syntax error in input: " + p.value)
     
-parser = yacc.yacc()
+identifier_parser = yacc.yacc(write_tables=0)

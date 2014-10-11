@@ -54,7 +54,7 @@ def t_error(t):
     LOGGER.warn("Illegal character %s" % repr(t.value[0]))
     t.lexer.skip(1)
 
-lexer = lex.lex()
+command_lexer = lex.lex()
 
 ##################################
 #Syntactic analysis
@@ -122,5 +122,5 @@ def p_member(p):
 def p_error(p):
     LOGGER.warn("Syntax error in input: " + p.value)
 
-parser = yacc.yacc()
+command_parser = yacc.yacc(write_tables=0)
 

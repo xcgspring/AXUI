@@ -6,16 +6,16 @@ class TestAppMap(unittest.TestCase):
         self.command = r"x.y.asfas 'asf' 123 'true' true ('asdf', ('asdf', 12))"
         
     def test_lex(self):
-        from AXUI.parsing.identifier_parsing import lexer
+        from AXUI.parsing.command_parsing import command_lexer
 
-        lexer.input(self.command)
+        command_lexer.input(self.command)
         while True:
-            tok = lexer.token()
+            tok = command_lexer.token()
             if not tok:
                 break
             print tok
         
     def test_yacc(self):
-        from AXUI.parsing.identifier_parsing import parser
-        print parser.parse(self.command)
+        from AXUI.parsing.command_parsing import command_lexer, command_parser
+        print command_parser.parse(self.command, lexer=command_lexer)
 
