@@ -2,6 +2,8 @@
 this module is used to parse identifier descriptions, based on python ply library
 identifier description is like:
 'name="xxx" AND class="yyy" OR ((ID = 12312 And enabled="no") AND index=2)'
+this module will parse this identifier to a list like:
+["OR", ["AND", [name, "xxx"], [class, "yyy"]], ["AND", ["AND", [ID, 12312], [enabled, "no"]], [index, 2]]
 '''
 
 import ply.lex as lex
