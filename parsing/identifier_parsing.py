@@ -6,6 +6,9 @@ this module will parse this identifier to a list like:
 ("OR", ("AND", (name, "xxx"), (class, "yyy")), ("AND", ("AND", (ID, 12312), (enabled, "no")), (index, 2))
 '''
 
+#TODO
+#1. Fix p.lineno not correct issue
+
 import ply.lex as lex
 import ply.yacc as yacc
 
@@ -50,7 +53,7 @@ def t_STRING(t):
     return t
     
 def t_error(t):
-    LOGGER.warn("Illegal character %s" % repr(t.value[0]))
+    LOGGER.warn("Illegal character %s in Ln: %d" % (repr(t.value[0]), t.lexer.lineno))
     t.lexer.skip(1)
     
 identifier_lexer = lex.lex()
@@ -87,6 +90,6 @@ def p_value_bool(p):
     p[0]=p[1]
     
 def p_error(p):
-    LOGGER.warn("Syntax error in input: " + p.value)
+    LOGGER.warn("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))
     
 identifier_parser = yacc.yacc(write_tables=0)

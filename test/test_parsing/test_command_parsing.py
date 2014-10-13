@@ -3,7 +3,9 @@ import unittest
 
 class TestAppMap(unittest.TestCase):
     def setUp(self):
-        self.command = r"x.y.asfas 'asf' 123 'true' true ('asdf', ('asdf', 12))"
+        self.command = '''x.y.asfas 'asf' 123 'true' true ('asdf', ('asdf', 12));
+                         y.sf "test" "sdf";
+                         z.sdfjl.t.y.u.z ;'''
         
     def test_lex(self):
         from AXUI.parsing.command_parsing import command_lexer
@@ -18,4 +20,7 @@ class TestAppMap(unittest.TestCase):
     def test_yacc(self):
         from AXUI.parsing.command_parsing import command_lexer, command_parser
         print command_parser.parse(self.command, lexer=command_lexer)
+
+if __name__=="__main__":
+    unittest.main(verbosity=2)
 
