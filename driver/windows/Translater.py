@@ -3,6 +3,7 @@ translate AXUI identifier to Windows UIA searchCondition
 '''
 import re
 import AXUI.logger as logger
+import AXUI.parsing.identifier_parsing.identifier_parser as id_parser
 import UIA.UIA_wrapper as UIA
 import UIA.IUIAutomation_object as IUIAutomation
 
@@ -53,129 +54,100 @@ UIA_identifers_mapping = {
     "RuntimeId":        UIA.UIA_RuntimeIdPropertyId
     }
     
-#special indentifiers is defined for UI elements not properly recongnized by UIA
-special_identifiers_mapping={
+#Custom identifiers is defined for UI elements not properly recongnized by UIA
+#Custom identifiers used with UIA identifiers should its special rules
+custom_identifiers=[
     #Custom UI element might not recongnized by UIA, we can use cordinate to simulate it
-    "Cordinate":
+    #"Cordinate" should be used alone, used with other identifier will be skipped
+    "Cordinate",
     #Find element by Index from a group of elements, you need check the Index before using this identifier
-    "Index":
-    }
+    #"Index" should used in top level "AND" relational identifiers, otherwise will be skipped 
+    "Index"
+    ]
+    
+#what we supprt to identify UI, used in the header of translated result
+#to identify what technology used to identify the UI
+supprted_identifiers=["UIA"].extend(custom_identifiers)
 
 class TranslaterException(Exception):
-    
+    pass
     
 class ParseException(TranslaterException):
+    pass
     
-
-class Translater(object):
+class ID_Translater(object):
     '''
-    translate string identifier to UIA search condition
+    translate string identifier to specify search condition
     '''
-    def __init__(self, identifier):
-        self.identifier = identifier
+    def __init__(self):
+        pass
         
-    def create_search_condition(self, basic_identifier):
+    def get_parsed(self, str_identifier):
         '''
-        create an UIA property search condition based on basic identifier
+        get parsed result for raw identifier string
         '''
-        (identifier_name, identifier_content) = basic_identifier.split("=")
-        UIA_identifier_name = UIA_identifers_mapping[identifier_name.strip()]
-        identifier_content = identifier_content.strip()
+        parsed = id_parser.parse(str_identifier)
+        if not parsed:
+            raise ParseException("Identifier error, please check parser warning message to fix it")
+        return parsed
         
-        return IUIAutomation.CreatePropertyCondition(UIA_identifier_name, identifier_content)
+    def _translated_atomic_identifier(self, parsed_atomic_id):
+        if UIA_identifers_mapping.has_key(parsed_atomic_id):
+            return IUIAutomation.CreatePropertyCondition(UIA_identifers_mapping[parsed_atomic_id[0]], parsed_atomic_id[1])
+        else:
+            #use no UIA identifier will be skipped
+            return None
+    
+    def _translated_relational_identifier(self, relation, translated_id_1, translated_id_2):
+        if relation == "AND":
+            return IUIAutomation.CreateAndCondition(translated_id_1, translated_id_2)
+        elif relation == "OR":
+            return IUIAutomation.CreateOrCondition(translated_id_1, translated_id_2)
+        else:
+            raise TranslaterException("Get error relation id: %s" % repr(relation))
         
-    def _validate(self, identifier):
-        '''
-        define identifier format for windows UIA
-        identifier should constracted by sub_identifier, relation operaters(AND, OR) and brackets
-        minimum identifier should be like "identifier_name=content"
-        identifier_name is predefined, use undefined name will trigger exception
-        content need use quates when containing spaces
-        '''
-        #validate brackets is paired
-        bracket_count=0
-        for c in list(identifier):
-            if c == "(":
-                bracket_count+=1
-            if c == ")":
-                bracket_count-=1
-                
-        if not bracket_count == 0:
-            raise ParseException("identifier has unpair brackets:\n %s" % identifier)
-            
-    def _handle_identifier_without_bracket(self, identifier):
-        '''
-        handle identifier without bracket
-        '''
-        string=""
-        quote_count=0
-        quote_string=""
-        identifier_name=[]
-        identifier_content=[]
-        relations=[]
-        for c in list(identifier):
-            if c == "'":
-                quote_count+=1
-                if not quote_count%2:
-                    
-                
-            if quote_count%2:
-                quote_string="".join((quote_string, c))
+    def _translated_identifier(self, parsed_id)
+        if len(parsed_id) == 3:
+            translated_1 = self.translated_identifier(parsed[1])
+            translated_2 = self.translated_identifier(parsed[2])
+            if translated_1 and translated_2:
+                translated = self._translated_relational_identifier(parsed_id, translated_id_1, translated_id_2)
+            elif not translated_1 and translated_2:
+                translated = translated_2
+            elif translated_1 and not translated_2:
+                translated = translated_1
             else:
-                if quote_string:
-                    identifier_content.append(quota_string.strip("'"))
-                    quote_string=""
-                else:
-                    string="".join((quote_string, c))
-                
-            if c == "=":
-                if string:
-                    identifier_name.append(quota_string.strip())
-                string=""
-                
-            match_result = re.match(".*AND.*|.*OR.*", string)
-
-                
+                translated = None
+        elif len(parsed_id) == 2:
+            translated = self._translated_atomic_identifier(parsed_id)
+        else:
+            raise TranslaterException("Get error parsed_id: %s" % repr(parsed_id))
+            
+        LOGGER.debug("Get translated: %s" % repr(translated))
+        return translated
         
-        
-    def translate(self, identifier):
+    def translated_top_level_identifier(self, parsed_id):
         '''
-        translate indentifier to search condition
+        get tanslated result from parsed identifier
         '''
-        bracket_count=0
-        sub_conditions=[]
-        relations=[]
-        sub_identifier=""
-        bracket_identifier=""
-        for c in list(identifier):
-            if c == "(":
-                bracket_count+=1
-            elif c == ")":
-                bracket_count-=1
+        #handle custom identifier here
+        if len(parsed_id) == 2 and parsed_id[0] == "Cordinate":
+            #handle "Cordinate" identifier
+            return parsed_id
+        elif len(parsed_id) == 3 and parsed_id[0] == "AND" and (parsed_id[1][0] == "Index" or parsed_id[2][0] == "Index")
+            #handle "Index" identifier
+            if parsed_id[1][0] == "Index":
+                return ("Index", (self._translated_identifier(parsed_id[2]), parsed_id[1][1]))
+            else:
+                return ("Index", (self._translated_identifier(parsed_id[1]), parsed_id[2][1]))
+        else:
+            return ("UIA", self._translated_identifier(parsed_id))
+        
+    def get_translated(self, str_identifier):
+        '''
+        get translated result from identifier string
+        '''
+        return self.translated_top_level_identifier(self.get_parsed(str_identifier))
+        
 
-            if bracket_count < 0:
-                raise ParseException("identifier has unpair brackets:\n %s" % identifier)
-            elif bracket_count > 0:
-                if sub_identifier:
-                    #handle sub_identifier here
-                    self._handle_identifier_without_bracket(sub_identifier)
-                    sub_identifier=""
-                else:
-                    bracket_identifier="".join((bracket_identifier, c))
-            elif bracket_count == 0:
-                if bracket_identifier:
-                    #handle bracket_identifier here
-                    sub_conditions.append(self.translate(bracket_identifier.strip()))
-                    bracket_identifier=""
-                else:
-                    sub_identifier="".join((sub_identifier, c))
-
-        if bracket_count != 0:
-            raise ParseException("identifier has unpair brackets:\n %s" % identifier)
-        if sub_identifier:
-            #handle rest sub_identifier here
-            self._handle_identifier_without_bracket(sub_identifier)
-        
-        
-        
         
