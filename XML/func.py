@@ -49,4 +49,7 @@ class FuncMap(object):
         for func_element in root_element.findall("AXUI_funcs:func", namespaces={"AXUI_funcs":"AXUI_funcs"}):
             name = func_element.attrib["name"]
             self.funcs[name] = Func(func_element)
+            
+    def __getattr__(self, name):
+        return self.funcs[name]
         

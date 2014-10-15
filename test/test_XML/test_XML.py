@@ -13,6 +13,10 @@ class TestAppMap(unittest.TestCase):
         import AXUI.XML.app_map as app_map
         app_map_instance = app_map.AppMap(self.app_map_xml)
         desktop_element = app_map_instance.get_element_by_name("desktop.desktop")
+        print desktop_element.name
         wmp_window_element = app_map_instance.get_element_by_name("library_window")
-        play_button_element = app_map_instance.get_element_by_name("play")
+        print wmp_window_element.parent
+        play_button_element = app_map_instance.get_element_by_name("library_window.transport_button_group.play")
+        print play_button_element
+        print app_map_instance.library_window.transport_button_group.play
 

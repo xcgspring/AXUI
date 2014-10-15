@@ -21,5 +21,7 @@ def build_test_suite():
 
 if __name__=="__main__":
     suite=build_test_suite()
-    unittest.TextTestRunner().run(suite)
+    log_file = "unittest.log"
+    with open(log_file, 'w') as f:
+    	unittest.TextTestRunner(f).run(suite)
     
