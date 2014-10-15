@@ -3,54 +3,56 @@
 #2. make UIA and win32 import shorter
 
 import AXUI.logger as logger
-import AXUI.driver.windows.UIA.UIA.UIA as UIA
-import AXUI.driver.windows.win32_event as win32
+import AXUI.parsing.identifier_parsing.identifier_parser as id_parser
+
+import UIA.UIA_wrapper as UIA
+import win32_event as win32
+import Translater.ID_Translater as ID_Translater
+
+LOGGER = logger.get_logger()
+
+class FakeUIElement(object):
+    '''
+    This class is for "Cordinate" identifier UIElement
+    '''
 
 class UIElement(object):
     '''
+    This class implement driver UIElement interface for used by other module
     '''
-    xml_element = None
+    def __init__(self, name, **kwargs):
+        LOGGER.debug("UIElement instance init start: %s" % name)
+        self.name = name
+        #get all info you needed here 
+        self.__dict__ = kwargs
+        
+        if not self._find():
+            self._start()
+            self._find()
+        
+        LOGGER.debug("UIElement instance init complete: %s" % name)
 
-    mouse = None
-    keyboard = None
-    touch = None
-    hardware = None
-
-    UIAElement = None
-
-    def __init__(self, xml_element):
+    def _start(self):
         '''
-        '''
-        self.xml_element = xml_element
-
-        self.mouse = win32.mouse
-        self.keyboard = win32.keyboard
-        self.touch = win32.touch
-        self.hardware = win32.hardware
-
-    def check_UI(self):
-        '''
-        '''
-        self.UIAElement = UIA.search(self.xml_element.searchCondition, self.xml_element.timeout)
-        if self.UIAElement == None:
-            return False
-        else:
-            return True
-
-    def mouse_click(self):
-        '''
+        start the UI, via start_cmd or start_func
         '''
 
-    def keyboard_input(self):
+    def _find(self):
         '''
+        find the UI element via identifier, return one UIAElement if success, return None if not find
+        '''
+        parsed_identifier = id_parser.parse(identifier)
+        translated_identifier = ID_Translater(parsed_identifier).get_translated()
+        if 
+            
+        
+    def stop(self):
+        '''
+        stop the UI, via stop_cmd or stop_func
         '''
 
-    def touch(self):
+    def __getattar__(self, name):
         '''
+        get UI supported property or pattern
         '''
-
-    def hardware_event(self):
-        '''
-        '''
-
         

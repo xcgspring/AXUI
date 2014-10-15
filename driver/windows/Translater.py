@@ -3,7 +3,6 @@ translate AXUI identifier to Windows UIA searchCondition
 '''
 import re
 import AXUI.logger as logger
-import AXUI.parsing.identifier_parsing.identifier_parser as id_parser
 import UIA.UIA_wrapper as UIA
 import UIA.IUIAutomation_object as IUIAutomation
 
@@ -72,24 +71,12 @@ supprted_identifiers=["UIA"].extend(custom_identifiers)
 class TranslaterException(Exception):
     pass
     
-class ParseException(TranslaterException):
-    pass
-    
 class ID_Translater(object):
     '''
-    translate string identifier to specify search condition
+    translate parsed identifier to specify search condition
     '''
-    def __init__(self):
-        pass
-        
-    def get_parsed(self, str_identifier):
-        '''
-        get parsed result for raw identifier string
-        '''
-        parsed = id_parser.parse(str_identifier)
-        if not parsed:
-            raise ParseException("Identifier error, please check parser warning message to fix it")
-        return parsed
+    def __init__(self, parsed_identifier):
+        self.parsed_identifier = parsed_identifier
         
     def _translated_atomic_identifier(self, parsed_atomic_id):
         if UIA_identifers_mapping.has_key(parsed_atomic_id):
@@ -143,11 +130,11 @@ class ID_Translater(object):
         else:
             return ("UIA", self._translated_identifier(parsed_id))
         
-    def get_translated(self, str_identifier):
+    def get_translated(self):
         '''
-        get translated result from identifier string
+        get translated result from parsed identifier
         '''
-        return self.translated_top_level_identifier(self.get_parsed(str_identifier))
+        return self.translated_top_level_identifier(self.parsed_identifier)
         
 
         
