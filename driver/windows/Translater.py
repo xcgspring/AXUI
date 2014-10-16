@@ -5,54 +5,10 @@ import re
 import AXUI.logger as logger
 import UIA.UIA_wrapper as UIA
 import UIA.IUIAutomation_object as IUIAutomation
+import UIA.UIA_identifers_mapping as UIA_identifers_mapping
 
 LOGGER = logger.get_logger()
 
-#UIA Automation Element Property Identifiers
-#http://msdn.microsoft.com/en-us/library/windows/desktop/ee684017(v=vs.85).aspx
-#You can check element property using inspect.exe
-#http://msdn.microsoft.com/en-us/library/windows/desktop/dd318521(v=vs.85).aspx
-UIA_identifers_mapping = {
-    "AcceleratorKey":   UIA.UIA_AcceleratorKeyPropertyId,
-    "AccessKey":        UIA.UIA_AccessKeyPropertyId,
-    "AriaProperties":   UIA.UIA_AriaPropertiesPropertyId,
-    "AriaRole":         UIA.UIA_AriaRolePropertyId,
-    "AutomationId":     UIA.UIA_AutomationIdPropertyId,
-    "BoundingRectangle":UIA.UIA_BoundingRectanglePropertyId,
-    "ClassName":        UIA.UIA_ClassNamePropertyId,
-    "ClickablePoint":   UIA.UIA_ClickablePointPropertyId,
-    "ControllerFor":    UIA.UIA_ControllerForPropertyId,
-    "ControlType":      UIA.UIA_ControlTypePropertyId,
-    "Culture":          UIA.UIA_CulturePropertyId,
-    "DescribedBy":      UIA.UIA_DescribedByPropertyId,
-    "FlowsFrom":        UIA.UIA_FlowsFromPropertyId,
-    "FlowsTo":          UIA.UIA_FlowsToPropertyId,
-    "FrameworkId":      UIA.UIA_FrameworkIdPropertyId,
-    "HasKeyboardFocus": UIA.UIA_HasKeyboardFocusPropertyId,
-    "HelpText":         UIA.UIA_HelpTextPropertyId,
-    "IsContentElement": UIA.UIA_IsContentElementPropertyId,
-    "IsControlElement": UIA.UIA_IsControlElementPropertyId,
-    "IsDataValidForForm": UIA.UIA_IsDataValidForFormPropertyId,
-    "IsEnabled":        UIA.UIA_IsEnabledPropertyId,
-    "IsKeyboardFocusable":UIA.UIA_IsKeyboardFocusablePropertyId,
-    "IsOffscreen":      UIA.UIA_IsOffscreenPropertyId,
-    "IsPassword":       UIA.UIA_IsPasswordPropertyId,
-    "IsPeripheral":     UIA.UIA_IsPeripheralPropertyId,
-    "IsRequiredForForm":UIA.UIA_IsRequiredForFormPropertyId,
-    "ItemStatus":       UIA.UIA_ItemStatusPropertyId,
-    "ItemType":         UIA.UIA_ItemTypePropertyId,
-    "LabeledBy":        UIA.UIA_LabeledByPropertyId,
-    "LiveSetting":      UIA.UIA_LiveSettingPropertyId,
-    "LocalizedControlType":UIA.UIA_LocalizedControlTypePropertyId,
-    "Name":             UIA.UIA_NamePropertyId,
-    "NativeWindowHandle":UIA.UIA_NativeWindowHandlePropertyId,
-    "OptimizeForVisualContent":UIA.UIA_OptimizeForVisualContentPropertyId,
-    "Orientation":      UIA.UIA_OrientationPropertyId,
-    "ProcessId":        UIA.UIA_ProcessIdPropertyId,
-    "ProviderDescription":UIA.UIA_ProviderDescriptionPropertyId,
-    "RuntimeId":        UIA.UIA_RuntimeIdPropertyId
-    }
-    
 #Custom identifiers is defined for UI elements not properly recongnized by UIA
 #Custom identifiers used with UIA identifiers should its special rules
 custom_identifiers=[
