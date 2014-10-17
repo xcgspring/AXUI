@@ -5,21 +5,21 @@
     <AXUI:include_app_map name="desktop" path="windows_desktop.xml" />
     <AXUI:include_func name="funcs" path="windows_media_player_funcs.xml" />
     
-    <AXUI:element name="library_window" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_cmd="C:\Program Files\Windows Media Player\wmplayer.exe">
-        <AXUI:element name="menu_bar" identifier="Name='menu bar' AND LocalizedControlType='menu bar'" start_func="funcs.func1">
+    <AXUI:element name="wmplayer" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_func="funcs.func1">
+        <AXUI:element name="menu_bar" identifier="Name='menu bar' AND LocalizedControlType='menu bar'" start_func="funcs.func2">
             <AXUI:element name="File" identifier="Name='File' AND LocalizedControlType='menu item'" />
             <AXUI:element name="View" identifier="Name='View' AND LocalizedControlType='menu item'" />
             <AXUI:element name="Play" identifier="Name='Play' AND LocalizedControlType='menu item'" />
             <AXUI:element name="Tools" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
             <AXUI:element name="Help" identifier="Name='Help' AND LocalizedControlType='menu item'" />
         </AXUI:element>
-        <AXUI:element name="transport_button_group" start_func="funcs.func2">
+        <AXUI:element name="transport_button_group" start_func="funcs.func3">
             <AXUI:element name="stop" identifier="Name='stop' AND LocalizedControlType='button'"/>
             <AXUI:element name="previous" identifier="Name='previous' AND LocalizedControlType='button'"/>
             <AXUI:element name="play" identifier="Name='play' AND LocalizedControlType='button'"/>
             <AXUI:element name="next" identifier="Name='next' AND LocalizedControlType='button'"/>
         </AXUI:element>
-        <AXUI:element name="volume" identifier="Name='volume' AND LocalizedControlType='slider'" start_func="funcs.func3"/>
+        <AXUI:element name="volume" identifier="Name='volume' AND LocalizedControlType='slider'" start_func="funcs.func4"/>
         <AXUI:element name="seek" identifier="Name='seek' AND LocalizedControlType='slider'"/>
     </AXUI:element>
 

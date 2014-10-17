@@ -4,7 +4,7 @@ import AXUI.logger as AXUI_logger
 LOGGER = AXUI_logger.get_logger()
 
 config_section="driver"
-default_configs={ "driver_used": "windows",
+default_configs={ "driver_used": "fake_driver",
                   "timeout": 5,
                 }
 

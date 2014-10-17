@@ -11,9 +11,12 @@ driver_used = config_driver.DriverUsed
 time_out = config_driver.TimeOut
 
 try:
+    import sys, os
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     driver = __import__(driver_used)
 except ImportError:
     raise NotImplementedError("driver not implement: %s, check your driver folder" % driver_used)
     
-UIElement = driver.UIElement 
+UIElement = driver.UIElement
+RootUIElement = driver.RootUIElement
 

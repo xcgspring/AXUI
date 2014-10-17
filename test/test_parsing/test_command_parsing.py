@@ -3,9 +3,7 @@ import unittest
 
 class TestAppMap(unittest.TestCase):
     def setUp(self):
-        self.command = '''x.y.asfas 'asf' 123 'true' true ('asdf', ('asdf', 12));
-                         y.sf "test" "sdf";
-                         z.sdfjl.t.y.u.z ;'''
+        self.command = '''x.y.asfas 'asf' 123 'true' true ('asdf', ('asdf', 12))'''
         
     def test_lex(self):
         from AXUI.parsing.command_parsing import command_lexer

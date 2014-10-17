@@ -13,8 +13,8 @@ LOGGER = logger.get_logger()
 #Custom identifiers used with UIA identifiers should its special rules
 custom_identifiers=[
     #Custom UI element might not recongnized by UIA, we can use cordinate to simulate it
-    #"Cordinate" should be used alone, used with other identifier will be skipped
-    "Cordinate",
+    #"Coordinate" should be used alone, used with other identifier will be skipped
+    "Coordinate",
     #Find element by Index from a group of elements, you need check the Index before using this identifier
     #"Index" should used in top level "AND" relational identifiers, otherwise will be skipped 
     "Index"
@@ -74,8 +74,8 @@ class ID_Translater(object):
         get tanslated result from parsed identifier
         '''
         #handle custom identifier here
-        if len(parsed_id) == 2 and parsed_id[0] == "Cordinate":
-            #handle "Cordinate" identifier
+        if len(parsed_id) == 2 and parsed_id[0] == "Coordinate":
+            #handle "Coordinate" identifier
             return parsed_id
         elif len(parsed_id) == 3 and parsed_id[0] == "AND" and (parsed_id[1][0] == "Index" or parsed_id[2][0] == "Index")
             #handle "Index" identifier

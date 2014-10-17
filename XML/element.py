@@ -1,6 +1,6 @@
 
 import AXUI.logger as AXUI_logger
-import AXUI.driver.UIElement as UIElement
+from AXUI.driver import UIElement, RootUIElement
 LOGGER = AXUI_logger.get_logger()
 
 class ElementOperationFail(Exception):
@@ -22,6 +22,8 @@ class Element(object):
     
     def __init__(self):
         self.name = ""
+        self.parent_string = ""
+        self.identifier_string = ""
         
         self.children = {}
         self.parent = None
