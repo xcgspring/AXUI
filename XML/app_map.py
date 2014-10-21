@@ -30,12 +30,18 @@ class AppMap(object):
     #move this setting to driver module
     RootIdentifier = "Root"
     
-    def __init__(self, xml, uplevel_app_map=None, uplevel_func_map=None):
+    def __init__(self, xml, uplevel_app_map_xmls=[]):
         self.app_map_xml = XML_config.query_app_map_file(xml)
-        self.elements = {}
-        self.func_maps = {}
+        #prevent recursive include
+        uplevel_app_map_xmls.append(self.app_map_xml)
+        self.uplevel_app_map_xmls = uplevel_app_map_xmls
+        self.app_maps = {}
+        self.funcs = {}
+        self.UI_elements = {}
+        #verify the app map using pyxb
         self.verification()
-        self.parse_elements()
+        #parse the app map and build objects in memory
+        self.parse_all()
 
     def verification(self):
         '''
@@ -49,121 +55,143 @@ class AppMap(object):
             
         from validate import check_app_map
         check_app_map(XML_config.query_schema_file("AXUI_app_map.xsd"), self.app_map_xml)
-
-    def _parse_include_app_map_elements(self, root_element):
-        for include_app_map_element in root_element.findall("AXUI:include_app_map", namespaces={"AXUI":"AXUI"}):
-            name = include_app_map_element.attrib["name"]
-            path = include_app_map_element.attrib["path"]
-            if self.uplevel_app_map and (XML_config.query_app_map_file(path) != self.uplevel_app_map.app_map_xml):
-                self.elements[name] = AppMap(path, uplevel_app_map=self)
-            else:
-                self.elements[name] = self.uplevel_app_map
         
-    def _parse_include_func_elements(self, root_element):
-        for include_func_element in root_element.findall("AXUI:include_func", namespaces={"AXUI":"AXUI"}):
-            name = include_func_element.attrib["name"]
-            path = include_func_element.attrib["path"]
-            self.func_maps[name] = func.FuncMap(path)
-
-    def _init_element(self, xml_element):
-        element = element_module.Element()
-
-        element.name = xml_element.attrib["name"]
-        if xml_element.attrib.has_key("parent"):
-            element.parent_string = xml_element.attrib["parent"]
-        if xml_element.attrib.has_key("start_func"):
-            element.start_func = self.get_func_by_name(xml_element.attrib["start_func"])
-        if xml_element.attrib.has_key("stop_func"):
-            element.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
-        if xml_element.attrib.has_key("identifier"):
-            element.identifier_string = xml_element.attrib["identifier"]
-            element.identifier = id_parser.parse(element.identifier_string)
+    def _parse_include_elements(self, root_element):
+        include_root = root_element.find("AXUI:includes", namespaces={"AXUI":"AXUI"})
+        for include_element in include.findall("AXUI:include_app_map", namespaces={"AXUI":"AXUI"}):
+            name = include_element.attrib["name"]
+            path = include_element.attrib["path"]
+            #prevent recursive include
+            if XML_config.query_app_map_file(path) in self.uplevel_app_map_xmls:
+                raise AppMapException("Recursive include for app map: %s" % XML_config.query_app_map_file(path))
+            self.app_maps[name] = AppMap(path, self.uplevel_app_map_xmls)
             
-        return element
+    def _parse_func_elements(self, root_element):
+        func_root = root_element.find("AXUI:funcs", namespaces={"AXUI":"AXUI"})
+        if func_root:
+            for func_element in root_element.findall("AXUI_funcs:func", namespaces={"AXUI_funcs":"AXUI_funcs"}):
+                name = func_element.attrib["name"]
+                self.funcs[name] = Func(func_element, self)
 
-    def _build_element(self, xml_element, parent_element):
-        element = self._init_element(xml_element)
+    def _init_UI_element(self, xml_element):
+        UI_element = element_module.Element()
 
-        element.parent = parent_element
-        parent_element.children[element.name] = element
+        UI_element.name = xml_element.attrib["name"]
+        if xml_element.attrib.has_key("parent"):
+            UI_element.parent_string = xml_element.attrib["parent"]
+        if xml_element.attrib.has_key("start_func"):
+            UI_element.start_func = self.get_func_by_name(xml_element.attrib["start_func"])
+        if xml_element.attrib.has_key("stop_func"):
+            UI_element.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
+        if xml_element.attrib.has_key("identifier"):
+            UI_element.identifier_string = xml_element.attrib["identifier"]
+            UI_element.identifier = id_parser.parse(UI_element.identifier_string)
+            
+        return UI_element
+
+    def _build_UI_element(self, xml_element, parent_UI_element):
+        UI_element = self._init_UI_element(xml_element)
+
+        UI_element.parent = parent_UI_element
+        parent_UI_element.children[UI_element.name] = UI_element
         
-        return element
+        return UI_element
 
-    def _build_top_level_element(self, xml_element):
-        element = self._init_element(xml_element)
+    def _build_top_level_UI_element(self, xml_element):
+        UI_element = self._init_UI_element(xml_element)
             
         #top level element must have parent
         #except root element
-        if element.parent_string:
-            element.parent = self.get_element_by_name(parent_string)
-        elif element.identifier_string == self.RootIdentifier:
-            element.parent = None
+        if UI_element.parent_string:
+            UI_element.parent = self.get_UI_element_by_name(parent_string)
+        elif UI_element.identifier_string == self.RootIdentifier:
+            UI_element.parent = None
         else:
-            raise AppMapException("Top level element except root must have parent, miss parent in element: %s" % element.name)
+            raise AppMapException("Top level element except root must have parent, miss parent in element: %s" % UI_element.name)
         
-        return element
+        return UI_element
 
-    def _build_children_elements(self, parent_xml_element, parent_element):  
+    def _build_children_UI_elements(self, parent_xml_element, parent_element):  
         for xml_element in \
-        parent_xml_element.findall("AXUI:element", namespaces={"AXUI":"AXUI"}):
-            element = self._build_element(xml_element)            
-            self._build_children_elements(xml_element, element)
+        parent_xml_element.findall("AXUI:UI_element", namespaces={"AXUI":"AXUI"}):
+            UI_element = self._build_element(xml_element)            
+            self._build_children_UI_elements(xml_element, UI_element)
 
-    def _parse_elements(self, root_element):
-        for xml_element in \
-        root_element.findall("AXUI:element", namespaces={"AXUI":"AXUI"}):
-            element = self._build_top_level_element(xml_element)                
-            self.elements[element.name] = element
-            self._build_children_elements(xml_element, element)
+    def _parse_UI_elements(self, root_element):
+        UI_element_root = root_element.find("AXUI:UI_elements", namespaces={"AXUI":"AXUI"})
+        if UI_element_root:
+            for xml_element in \
+            UI_element_root.findall("AXUI:UI_element", namespaces={"AXUI":"AXUI"}):
+                UI_element = self._build_top_level_UI_element(xml_element)                
+                self.UI_elements[element.name] = UI_element
+                self._build_children_UI_elements(xml_element, UI_element)
             
-    def parse_elements(self):
+    def parse_all(self):
         '''
-        parse all elements in the app map
+        parse all elements (app_maps, funcs, UI_elements) in the app map
         '''
         element_tree = ET.parse(self.app_map_xml)
         root_element = element_tree.getroot()
         
-        self._parse_include_app_map_elements(root_element)
-        self._parse_include_func_elements(root_element)
-        self._parse_elements(root_element)
+        self._parse_include_elements(root_element)
+        self._parse_func_elements(root_element)
+        self._parse_UI_elements(root_element)
 
-    def get_element_by_name(self, name_list):
-        '''
-        get element by name, name_list should be like "element1.element2...elementX"
-        '''
-        parent_element = self
-        for name in name_list.split("."):
-            element = getattr(parent_element, name)
-            parent_element = element
+    def _get_object_by_name_list(self, name_list):
+        parent = self
+        for name in name_list:
+            object_ = getattr(parent, name)
+            parent = object_
         
-        return element
+        return object_
+
+    def get_include_app_map_by_name(self, name_list):
+        '''
+        get app_map by name list
+        name_list should be like "app_map1.app_map2...app_mapX"
+        '''
+        object_ = self._get_object_by_name_list(name_list.split("."))
+        if not isinstance(object_, AppMap):
+            raise AppMapException("Expect app map, get %s, please check your name and app map" % type(object_))
+
+    def get_UI_element_by_name(self, name_list):
+        '''
+        get element by name
+        name_list should be like "app_map1.app_map2...element1.element2...elementX"
+        '''
+        return self._get_object_by_name_list(name_list.split("."))
+        if not isinstance(object_, element_module.Element):
+            raise AppMapException("Expect UI element, get %s, please check your name and app map" % type(object_))
         
-    def get_func_by_name(self, func_name):
+    def get_func_by_name(self, name_list):
         '''
-        get func by name, func name should be like "func_map_name.func_name"
+        get func by name
+        name_list should be like "app_map1.app_map2...app_mapX...func_name"
         '''
-        try:
-            (func_map_name, func_name) = func_name.split(".")
-            func_map = self.func_maps[func_map_name]
-            return getattr(func_map, func_name)
-        except ValueError, TypeError:
-            raise ValueError("Func string error: %s. Should be like \"func_map_name.func_name\"" % name)
+        return self._get_object_by_name_list(name_list.split("."))
+        if not isinstance(object_, func.Func):
+            raise AppMapException("Expect func, get %s, please check your name and app map" % type(object_))
 
     def execute(self, command):
         '''
-        execute command, like "elementX.elementY.operation [parameter1 parameter2 ...]"
+        execute command
+        command like "app_map1.app_map2...element1.element2...operation [parameter1 parameter2 ...]"
         '''
-        (object_string_list, parameter_list) = cd_parser.parse(command)
-        parent = self
-        for object_string in object_list:
-            try:
-                object_ = getattr(parent, object_string)
-            except AttributeError:
-                raise AppMapException("Can get '%s' from '%s'" % (object_string, repr(parent)))
-            parent = object_
-        
+        (object_name_list, parameter_list) = cd_parser.parse(command)
+        object_= self._get_object_by_name_list(object_name_list)
         object_(parameter_list)
         
     def __getattr__(self, name):
-        return self.elements[name]
+        '''
+        get app_map attribute
+        will query object from app_maps > UI_elements > funcs
+        '''
+        if name in self.app_maps:
+            return_object = self.app_maps[name]
+        elif name in self.UI_elements:
+            return_object = self.UI_elements[name]
+        elif name in self.funcs:
+            reutrn_object = self.funcs[name]
+        else:
+            raise AttributeError("App map: %s don't have attribute: %s" % (self.app_map_xml, name))
         

@@ -2,39 +2,72 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:AXUI="AXUI" targetNamespace="AXUI" elementFormDefault="qualified">
 
-    <xs:element name="elements">
+    <xs:element name="app_map">
         <xs:complexType>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="AXUI:include_app_map" />
-                <xs:element ref="AXUI:include_func" />
-                <xs:element ref="AXUI:element" />
+            <xs:all minOccurs="0" maxOccurs="1">
+                <xs:element ref="AXUI:includes" />
+                <xs:element ref="AXUI:funcs">
+                <xs:element ref="AXUI:UI_elements" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="includes">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="AXUI:include">
             </xs:choice>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="include_app_map">
+    <xs:element name="include">
         <xs:complexType>
             <xs:attribute name="name" type="xs:string" use="required" />
             <xs:attribute name="path" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="include_func">
+    <xs:element name="funcs">
         <xs:complexType>
-            <xs:attribute name="name" type="xs:string" use="required" />
-            <xs:attribute name="path" type="xs:string" use="required" />
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="AXUI_funcs:func" />
+            </xs:choice>
         </xs:complexType>
     </xs:element>
     
-    <xs:element name="element">
+    <xs:element name="func">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="description" type="xs:string" />
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="step">
+                    <xs:complexType>
+                        <xs:attribute name="type" type="xs:string" use="required" />
+                        <xs:attribute name="cmd" type="xs:string" use="required" />
+                        <xs:attribute name="app_map" type="xs:string">
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="UI_elements">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="AXUI:UI_element" />
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="UI_element">
         <xs:complexType>
             <xs:attribute name="name" type="xs:string" use="required" />
             <xs:attribute name="parent" type="xs:string" />
             <xs:attribute name="identifier" type="xs:string" />
-            <xs:attribute name="start_cmd" type="xs:string" />
             <xs:attribute name="start_func" type="xs:string" />
+            <xs:attribute name="stop_func" type="xs:string" />
             <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="AXUI:element" />
+                <xs:element ref="AXUI:UI_element" />
             </xs:choice>
         </xs:complexType>
     </xs:element>

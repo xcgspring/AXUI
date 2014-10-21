@@ -38,14 +38,14 @@ class Element(object):
     def verify(self):
         '''
         '''
-        if self.UIAElement:
-            result = self.UIAElement.verify()
+        if self.UIElement:
+            result = self.UIElement.verify()
             if result:
-                self.UIAElement = result
+                self.UIElement = result
             else:
-                self.UIAElement = None
+                self.UIElement = None
                 
-        return self.UIAElement
+        return self.UIElement
         
     def find(self, identifier):
         '''
