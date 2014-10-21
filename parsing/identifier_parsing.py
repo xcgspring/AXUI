@@ -54,6 +54,7 @@ def t_STRING(t):
     
 def t_error(t):
     LOGGER.warn("Illegal character %s in Ln: %d" % (repr(t.value[0]), t.lexer.lineno))
+    raise Exception("")
     t.lexer.skip(1)
     
 identifier_lexer = lex.lex()
@@ -91,5 +92,6 @@ def p_value_bool(p):
     
 def p_error(p):
     LOGGER.warn("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))
+    raise Exception("")
     
 identifier_parser = yacc.yacc(write_tables=0)

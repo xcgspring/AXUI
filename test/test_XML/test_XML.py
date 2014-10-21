@@ -8,7 +8,7 @@ class TestAppMap(unittest.TestCase):
     def test_app_map_create(self):
         import AXUI.XML.app_map as app_map
         app_map_instance = app_map.AppMap(self.app_map_xml)
-        assertTrue(app_map_instance, "app map create instance fail")
+        self.assertTrue(app_map_instance, "app map create instance fail")
         
     def test_app_map_singleton(self):
         import AXUI.XML.app_map as app_map
@@ -19,11 +19,11 @@ class TestAppMap(unittest.TestCase):
     def test_get_element(self):
         import AXUI.XML.app_map as app_map
         app_map_instance = app_map.AppMap(self.app_map_xml)
-        desktop_element = app_map_instance.get_element_by_name("desktop.desktop")
-        assertTrue(desktop_element)
-        wmplayer_element = app_map_instance.get_element_by_name("wmplayer")
-        assertTrue(wmplayer_element)
-        play_button_element = app_map_instance.get_element_by_name("library_window.transport_button_group.play")
-        assertTrue(play_button_element)
-        assertTrue(app_map_instance.library_window.transport_button_group.play)
+        desktop_element = app_map_instance.get_UI_element_by_name("desktop.desktop")
+        self.assertTrue(desktop_element)
+        wmplayer_element = app_map_instance.get_UI_element_by_name("wmplayer")
+        self.assertTrue(wmplayer_element)
+        play_button_element = app_map_instance.get_UI_element_by_name("wmplayer.transport_button_group.play")
+        self.assertIs(play_button_element, app_map_instance.wmplayer.transport_button_group.play)
+
 

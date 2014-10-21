@@ -4,10 +4,10 @@
 
     <xs:element name="app_map">
         <xs:complexType>
-            <xs:all minOccurs="0" maxOccurs="1">
-                <xs:element ref="AXUI:includes" />
-                <xs:element ref="AXUI:funcs">
-                <xs:element ref="AXUI:UI_elements" />
+            <xs:all>
+                <xs:element ref="AXUI:includes" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="AXUI:funcs" minOccurs="0" maxOccurs="1"/>
+                <xs:element ref="AXUI:UI_elements" minOccurs="0" maxOccurs="1"/>
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -15,7 +15,7 @@
     <xs:element name="includes">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
-                <xs:element ref="AXUI:include">
+                <xs:element ref="AXUI:include" />
             </xs:choice>
         </xs:complexType>
     </xs:element>
@@ -30,7 +30,7 @@
     <xs:element name="funcs">
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
-                <xs:element ref="AXUI_funcs:func" />
+                <xs:element ref="AXUI:func" />
             </xs:choice>
         </xs:complexType>
     </xs:element>
@@ -44,7 +44,7 @@
                     <xs:complexType>
                         <xs:attribute name="type" type="xs:string" use="required" />
                         <xs:attribute name="cmd" type="xs:string" use="required" />
-                        <xs:attribute name="app_map" type="xs:string">
+                        <xs:attribute name="app_map" type="xs:string" />
                     </xs:complexType>
                 </xs:element>
             </xs:choice>

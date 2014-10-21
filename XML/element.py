@@ -33,8 +33,6 @@ class Element(object):
         
         self.UIElement = None
         
-        LOGGER.debug("Element instance for: %s" % self.name)
-        
     def verify(self):
         '''
         '''

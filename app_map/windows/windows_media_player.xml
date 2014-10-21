@@ -4,7 +4,7 @@
 
     <AXUI:includes>
         <AXUI:include name="desktop" path="windows_desktop.xml" />
-    </AXUI:include>
+    </AXUI:includes>
 
     <AXUI:funcs>
         <AXUI:func name="func1" description="">
@@ -12,7 +12,7 @@
         </AXUI:func>
         
         <AXUI:func name="func2" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.keyboard.input CTRL+M" />
+            <AXUI:step type="GUI" cmd="wmplayer.keyboard.input" />
         </AXUI:func>
         
         <AXUI:func name="func3" description="">

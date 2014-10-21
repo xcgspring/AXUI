@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 
-<AXUI:elements xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
-    <AXUI:element name="desktop" identifier="Root"/>
-</AXUI:elements>
+<AXUI:app_map xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
+    <AXUI:UI_elements>
+        <AXUI:UI_element name="desktop" identifier="Name='Desktop'"/>
+    </AXUI:UI_elements>
+</AXUI:app_map>
