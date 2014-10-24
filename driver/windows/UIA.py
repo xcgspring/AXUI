@@ -3,6 +3,7 @@ Use comtypes to generate python wrapper for windows native UIA API
 
 Comtypes: 
     https://github.com/enthought/comtypes
+    https://pythonhosted.org/comtypes/
 Windows native UIA API: 
     http://msdn.microsoft.com/en-us/library/windows/desktop/ee684021(v=vs.85).aspx
     http://msdn.microsoft.com/en-us/library/windows/desktop/ee671216(v=vs.85).aspx
@@ -117,6 +118,7 @@ def get_property_by_id(UIAElement, property_identifier):
         LOGGER.warn("Sample property identifiers:\n"+repr(UIA_property_identifers))
         raise UIAException("Not support property identifier: %s" % property_identifier)
         
+    #return string for property
     return repr(UIAElement.GetCurrentPropertyValue(UIA_property_identifier))
     
 def get_pattern_by_id(UIAElement, pattern_identifier):

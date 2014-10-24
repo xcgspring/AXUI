@@ -10,7 +10,43 @@ LOGGER = logger.get_logger()
 class UIElementException(Exception):
     pass
 
+
+class Method(object):
+    '''
+    UIA Method wrapper
+    '''
+    def __init__(self, UIA_method_object, *args):
+        self.UIA_method = UIA_method_object
+        self.args = args
+        
+    def __call__(self):
+        
+
+class Pattern(object):
+    '''
+    UIA pattern wapper
+    '''
+    def __init__(self, UIA_pattern_instance):
+        self.UIA_pattern = UIA_pattern_instance
+        
+    def _get_method(self, method_name):
+        
+        
+    def _get_all_methods(self):
+    
+    
+    def _call_method(self, method_name, *args):
+    
+    
+    def __getattr__(self, name):
+    
+        
+
 class CoordinateElement(UIElement):
+    '''
+    coordinate element is for coordinate identifier
+    functions are limited, only support keyboard, mouse and touch operation
+    '''
     def __init__(self, coordinate):
         self.coordinate = coordinate
     
@@ -22,10 +58,10 @@ class CoordinateElement(UIElement):
         return self
     
     def get_property(self, name):
-        raise UIElementException("coordinate element don't have property")
+        raise UIElementException("coordinate element don't support property")
         
     def get_pattern(self, name):
-        raise UIElementException("coordinate element don't have pattern")
+        raise UIElementException("coordinate element don't support pattern")
         
     def _get_coordinate(self):
         return self.coordinate
