@@ -29,7 +29,7 @@ class TranslaterException(Exception):
     
 class ID_Translater(object):
     '''
-    translate parsed identifier to specify search condition
+    translate parsed identifier to acoordingly search condition
     '''
     def __init__(self, parsed_identifier):
         self.parsed_identifier = parsed_identifier

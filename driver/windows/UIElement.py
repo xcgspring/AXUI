@@ -13,37 +13,48 @@ class UIElementException(Exception):
     pass
     
 def _unpack(flag, name, *args):
-    return flag, name, *args
+    return flag, name, args
 
 class Method(object):
-    def __init__(self, function_object, name, args_expected=None):
+    def __init__(self, function_object, name, args_expected=[]):
         self.function_object = funtion_object
         self.name = name
-        self.args_expected = args_expected
+        self.args = []
+        self.outs = []
+        for arg in args_expected:
+            arg_direction = arg[0]
+            arg_type = arg[1]
+            arg_name = arg[2]
+            if arg_direction == "in":
+                self.args.append([arg_type, arg_name])
+            elif arg_direction == "out":
+                self.outs.append([arg_type, arg_name])
+            else:
+                #skip unsupport arg_direction
+                LOGGER.warn("Unsupport arg_direction: %s" % arg_direction)
+                continue
         
     def __repr__(self):
-        name = self.name
-        arguments = self.args_expected
-        docstring += "Name:\t"+name+"\n"
+        docstring += "Name:\t"+self.name+"\n"
         argument_string = "Arguments:\n"
-        return_string = "Return:\n"
-        for argument in arguments:
-            argument_direction = argument[0]
-            argument_type = argument[1]
-            argument_name = argument[2]
+        for argument in self.args:
+            argument_type = argument[0]
+            argument_name = argument[1]
 
-            if argument_direction == "in":
-                if getattr(argument_type, "_type_", None) is atyp in \
-                           ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement):
-                    argument_type = "UIElement"
-                elif argument_type in UIA_enum:
-                    argument_type = UIA_enum[argument_type]
+            if argument_type == "POINTER(IUIAutomationElement)":
+                argument_type = "UIElement"
+            elif argument_type in UIA.UIA_enums:
+                argument_type = UIA.UIA_enums[argument_type]
                         
-                argument_string +="\tName:\t"+argument_name+"\n"
-                argument_string +="\tType:\t"+argument_type+"\n\n"
-            elif argument_direction == "out":
-                return_string +="\tName:\t"+argument_name+"\n"
-                return_string +="\tType:\t"+argument_type+"\n\n"
+            argument_string +="\tName:\t"+argument_name+"\n"
+            argument_string +="\tType:\t"+repr(argument_type)+"\n\n"
+        
+        return_string = "Return:\n"
+        for out in self.outs:
+            return_name = out[0]
+            return_type = out[1]
+            return_string +="\tName:\t"+argument_name+"\n"
+            return_string +="\tType:\t"+argument_type+"\n\n"
                     
         docstring += argument_string
         docstring += return_string
@@ -57,8 +68,27 @@ class Method(object):
             1. If required argument is an enum, check if input argument fit requirement
             2. If required argument is "POINTER(IUIAutomationElement)", we accept UIElement object,
                get required pointer object from UIElement, and send it to function
-            3. Other, use comtypes default handler in function "_fix_inout_args"
+            3. Other, no change, use comtypes default handler function "_fix_inout_args"
         '''
+        if len(self.args) != len(args):
+            LOGGER.warn("Input arguments number not match expected")
+            return None
+        for index, expected_arg in enumerate(self.args):
+            expected_arg_type = expected_arg[0]
+            if expected_arg_type == "POINTER(IUIAutomationElement)":
+                #get the UIAElment
+                args[index] = args[index].UIAElement
+            elif expected_arg_type in UIA.UIA_enums:
+                #enum should be an int value, if argument is a string, should translate to int
+                if args[index] in UIA.UIA_enums[expected_arg_type]:
+                    args[index] = UIA.UIA_enums[expected_arg_type][args[index]]
+                
+                if args[index] not in UIA.UIA_enums[expected_arg_type].values():
+                    LOGGER.warn("Input argument not in expected value: %s" % args[index])
+                    return None
+        
+        return self.function_object(*args)
+            
 
 class Pattern(object):
     
@@ -114,14 +144,13 @@ class Pattern(object):
                 argument_name = argument[2]
 
                 if argument_direction == "in":
-                    if getattr(argument_type, "_type_", None) is atyp in \
-                                ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement):
+                    if argument_type == "POINTER(IUIAutomationElement)":
                         argument_type = "UIElement"
-                    elif argument_type in UIA_enum:
-                        argument_type = UIA_enum[argument_type]
+                    elif argument_type in UIA.UIA_enums:
+                        argument_type = UIA.UIA_enums[argument_type]
                         
                     argument_string +="\tName:\t"+argument_name+"\n"
-                    argument_string +="\tType:\t"+argument_type+"\n\n"
+                    argument_string +="\tType:\t"+repr(argument_type)+"\n\n"
                 elif argument_direction == "out":
                     return_string +="\tName:\t"+argument_name+"\n"
                     return_string +="\tType:\t"+argument_type+"\n\n"
