@@ -68,7 +68,7 @@ class Method(object):
             1. If required argument is an enum, check if input argument fit requirement
             2. If required argument is "POINTER(IUIAutomationElement)", we accept UIElement object,
                get required pointer object from UIElement, and send it to function
-            3. Other, no change, use comtypes default handler function "_fix_inout_args"
+            3. Other, no change
         '''
         if len(self.args) != len(args):
             LOGGER.warn("Input arguments number not match expected")
@@ -88,7 +88,6 @@ class Method(object):
                     return None
         
         return self.function_object(*args)
-            
 
 class Pattern(object):
     
@@ -211,6 +210,10 @@ class UIElement(object):
     '''
     This class implement driver UIElement interface for used by other module
     '''
+    @classmethod
+    def get_root():
+        return UIElement(UIA.IUIAutomation_object.GetRootElement())
+    
     def __init__(self, UIAElement):
         self.UIAElement = UIAElement
         LOGGER.debug("UIElement instance init: %s" % repr(self.UIAElement))
@@ -293,6 +296,4 @@ class UIElement(object):
             if attr is not None:
                 return attr   
             raise AttributeError("Attribute not exist: %s" % name)
-        
-class RootUIElement(UIElement):
-    pass
+

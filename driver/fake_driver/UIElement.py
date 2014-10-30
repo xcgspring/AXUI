@@ -4,6 +4,9 @@ class UIElement(object):
     '''
     this is a template driver module need to implement
     '''
+    @classmethod
+    def get_root():
+        raise NotImplementedError("Not implement")
     property_keys = []
     pattern_keys = []
     def find(self, parsed_identifier):
@@ -55,17 +58,14 @@ class UIElement(object):
             return self.get_mouse()
         elif name == "touch":
             return self.get_touch()
-        elif name in self.property_keys:
-            return self.get_property(name)
-        elif name in self.pattern_keys:
-            return self.get_pattern(name)
         else:
+            attr = self.get_property(name)
+            if attr is not None:
+                return attr
+            attr = self.get_pattern(name)
+            if attr is not None:
+                return attr   
             raise AttributeError("Attribute not exist: %s" % name)
             
-class RootUIElement(UIElement):
-    '''
-    represent root element
-    '''
-    pass
             
         

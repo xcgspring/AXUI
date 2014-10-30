@@ -84,7 +84,7 @@ class Element(object):
                 else:
                     #root element
                     LOGGER.debug("Root element create: %s" % self.name)
-                    self.UIElement = RootUIElement()
+                    self.UIElement = UIElement.get_root()
                 
             if self.identifier:
                 LOGGER.debug("Normal UI element create: %s" % self.name)
