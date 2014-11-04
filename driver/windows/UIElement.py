@@ -184,7 +184,7 @@ class UIElement(object):
         other attributes:      get other attributes or interfaces supported by this UI element
     '''
     @classmethod
-    def get_root():
+    def get_root(cls):
         return UIElement(UIA.IUIAutomation_object.GetRootElement())
     
     def __init__(self, UIAElement):
@@ -231,8 +231,7 @@ class UIElement(object):
         '''
         LOGGER.debug("UIElement verify")
         UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation.CreateTrueCondition())
-        if UIAElement == 
-        return UIElement()
+        return UIElement(UIAElement)
         
     def get_property(self, name):
         return UIA.get_property_by_id(self.UIAElement, name)

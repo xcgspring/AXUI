@@ -390,6 +390,17 @@ UIA_automation_element_property_identifers = (
     "RuntimeId",
     )
     
+#build map for property identifiers
+UIA_automation_element_property_identifers_mapping = {}
+for property_identifier in UIA_automation_element_property_identifers:
+    value = getattr(UIA_wrapper, "UIA_"+property_identifier+"PropertyId", None)
+    if value is None:
+        LOGGER.warn("property identifier: %s not supported by current UIA version" % property_identifier)
+        continue
+        
+    UIA_automation_element_property_identifers_mapping[property_identifier] = value
+    
+    
 #Control Pattern Property Identifiers
 UIA_control_pattern_property_identifiers = (
     "AnnotationAnnotationTypeId",
@@ -988,16 +999,14 @@ def get_property_by_id(UIAElement, property_identifier):
     '''
     get property by identifier, return None if fail
     '''
-    try:
-        UIA_property_identifier = getattr(UIA_wrapper, "UIA_"+property_identifier+"PropertyId")
-    except AttributeError:
+    if property_identifier in UIA_automation_element_property_identifers_mapping:
+        property_value = UIAElement.GetCurrentPropertyValue(UIA_property_identifier)
+        if property_value is None:
+            LOGGER.warn("This property:%s is not supported by this UIAElment" % property_identifier)
+        return property_value
+    else:
         LOGGER.warn("This property identifier is not support: %s, cannot get it from UIA typelib" % property_identifier)
         return None
-    
-    property_value = UIAElement.GetCurrentPropertyValue(UIA_property_identifier)
-    if property_value is None:
-        LOGGER.warn("This property:%s is not supported by this UIAElment" % property_identifier)
-    return property_value
     
 def get_pattern_by_id(UIAElement, pattern_identifier):
     '''

@@ -33,30 +33,31 @@ class ID_Translater(object):
         self.parsed_identifier = parsed_identifier
         
     def _translated_atomic_identifier(self, parsed_atomic_id):
-        if UIA.UIA_identifers_mapping.has_key(parsed_atomic_id):
-            return UIA.IUIAutomation.CreatePropertyCondition(UIA.UIA_identifers_mapping[parsed_atomic_id[0]], parsed_atomic_id[1])
+        if parsed_atomic_id[0] in UIA.UIA_automation_element_property_identifers_mapping:
+            return UIA.IUIAutomation_object.CreatePropertyCondition(UIA.UIA_automation_element_property_identifers_mapping[parsed_atomic_id[0]], parsed_atomic_id[1])
         else:
             #use no UIA identifier will be skipped
+            LOGGER.warn("identifier: %s not in UIA property maps" % parsed_atomic_id[0])
             return None
     
     def _translated_relational_identifier(self, relation, translated_id_1, translated_id_2):
         if relation == "AND":
-            return UIA.IUIAutomation.CreateAndCondition(translated_id_1, translated_id_2)
+            return UIA.IUIAutomation_object.CreateAndCondition(translated_id_1, translated_id_2)
         elif relation == "OR":
-            return UIA.IUIAutomation.CreateOrCondition(translated_id_1, translated_id_2)
+            return UIA.IUIAutomation_object.CreateOrCondition(translated_id_1, translated_id_2)
         else:
             raise TranslaterException("Get error relation id: %s" % repr(relation))
         
     def _translated_identifier(self, parsed_id):
         if len(parsed_id) == 3:
-            translated_1 = self.translated_identifier(parsed[1])
-            translated_2 = self.translated_identifier(parsed[2])
-            if translated_1 and translated_2:
-                translated = self._translated_relational_identifier(parsed_id, translated_id_1, translated_id_2)
-            elif not translated_1 and translated_2:
-                translated = translated_2
-            elif translated_1 and not translated_2:
-                translated = translated_1
+            translated_id_1 = self._translated_identifier(parsed_id[1])
+            translated_id_2 = self._translated_identifier(parsed_id[2])
+            if translated_id_1 and translated_id_2:
+                translated = self._translated_relational_identifier(parsed_id[0], translated_id_1, translated_id_2)
+            elif not translated_id_1 and translated_id_2:
+                translated = translated_id_2
+            elif translated_id_1 and not translated_id_2:
+                translated = translated_id_1
             else:
                 translated = None
         elif len(parsed_id) == 2:
