@@ -995,15 +995,32 @@ UIA_control_pattern_identifers = UIA_control_pattern_interfaces.keys()
 UIA_control_pattern_availability_property_identifiers = \
 [ "Is"+identifier+"Available" for identifier in UIA_control_pattern_identifers ]
 
+#build map for Control Pattern Availability Property Identifiers
+UIA_control_pattern_availability_property_identifiers_mapping = {}
+for identifier in UIA_control_pattern_availability_property_identifiers:
+    value = getattr(UIA_wrapper, "UIA_"+identifier+"PropertyId", None)
+    if value is None:
+        LOGGER.warn("Control pattern property identifier: %s not supported by current UIA version" % property_identifier)
+        continue
+        
+    UIA_control_pattern_availability_property_identifiers_mapping[identifier] = value
+
 def get_property_by_id(UIAElement, property_identifier):
     '''
     get property by identifier, return None if fail
     '''
     if property_identifier in UIA_automation_element_property_identifers_mapping:
-        property_value = UIAElement.GetCurrentPropertyValue(UIA_property_identifier)
+        property_value = UIAElement.GetCurrentPropertyValue(UIA_automation_element_property_identifers_mapping[property_identifier])
         if property_value is None:
             LOGGER.warn("This property:%s is not supported by this UIAElment" % property_identifier)
         return property_value
+        
+    elif property_identifier in UIA_control_pattern_availability_property_identifiers_mapping:
+        property_value = UIAElement.GetCurrentPropertyValue(UIA_control_pattern_availability_property_identifiers_mapping[property_identifier])
+        if property_value is None:
+            LOGGER.warn("This property:%s is not supported by this UIAElment" % property_identifier)
+        return property_value
+        
     else:
         LOGGER.warn("This property identifier is not support: %s, cannot get it from UIA typelib" % property_identifier)
         return None

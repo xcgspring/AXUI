@@ -84,7 +84,7 @@ def p_value_number(p):
     
 def p_value_string(p):
     'value : STRING'
-    p[0]=p[1]
+    p[0]=p[1].strip("\"").strip("\'")
     
 def p_value_bool(p):
     'value : BOOL'

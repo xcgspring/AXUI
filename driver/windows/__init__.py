@@ -1,1 +1,1 @@
-import UIElement
+from UIElement import UIElement as UIElement

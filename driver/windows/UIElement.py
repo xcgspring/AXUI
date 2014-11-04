@@ -198,17 +198,17 @@ class UIElement(object):
         #generate UIA automation element properties
         docstring += "UIA automation element properties:\n"
         for identifier in UIA.UIA_automation_element_property_identifers:
-            value = UIA.get_property_by_id(identifier)
+            value = UIA.get_property_by_id(self.UIAElement, identifier)
             if value is not None:
-                docstring += "%s:\t%s\n" % (identifier, repr(value))
+                docstring += "\t%s:\t%s\n" % (identifier, repr(value))
                 
-        docstring += "\n\n"
+        docstring += "\n"
         #generate UIA control pattern availability properties
         docstring += "UIA control pattern availability properties:\n"
         for identifier in UIA.UIA_control_pattern_availability_property_identifiers:
-            value = UIA.get_property_by_id(identifier)
+            value = UIA.get_property_by_id(self.UIAElement, identifier)
             if value is not None:
-                docstring += "%s:\t%s\n" % (identifier, repr(value))
+                docstring += "\t%s:\t%s\n" % (identifier, repr(value))
                 
         return docstring
 
@@ -217,7 +217,7 @@ class UIElement(object):
         find the UI element via identifier, return one UIAElement if success, return None if not find
         '''
         LOGGER.debug("UIElement find")
-        translated_identifier = Translater.ID_Translater(parsed_identifier)
+        translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
             return CordinateElement(translated_identifier[1])
         elif translated_identifier[0] == "Index":
