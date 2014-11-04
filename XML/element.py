@@ -1,6 +1,6 @@
 
 import AXUI.logger as AXUI_logger
-from AXUI.driver import UIElement, RootUIElement
+from AXUI.driver import UIElement
 LOGGER = AXUI_logger.get_logger()
 
 class ElementOperationFail(Exception):
@@ -65,7 +65,7 @@ class Element(object):
         '''
         start this UI
         '''
-        if self.start_func not None:
+        if self.start_func is not None:
             self.start_func.run()
 
     def start(self):

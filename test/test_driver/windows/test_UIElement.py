@@ -4,8 +4,10 @@ import unittest
 
 class TestUIA(unittest.TestCase):            
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
-    def test_app_map_create(self):
-        import AXUI.driver.windows.UIA as UIA
+    def test_root(self):
+        import AXUI.driver.windows.UIElement as UIElement
+        root_element = UIElement.get_root()
+        self.assertIsNotNone(root_element)
 
 
 

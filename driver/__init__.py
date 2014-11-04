@@ -18,5 +18,4 @@ except ImportError:
     raise NotImplementedError("driver not implement: %s, check your driver folder" % driver_used)
     
 UIElement = driver.UIElement
-RootUIElement = driver.RootUIElement
 

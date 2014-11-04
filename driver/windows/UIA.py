@@ -11,10 +11,10 @@ Windows native UIA API:
 '''
 
 from comtypes.client import GetModule, CreateObject
-from AXUI.logger import logger
+import AXUI.logger as AXUI_logger
 import ctypes
 
-LOGGER = logger.get_logger()
+LOGGER = AXUI_logger.get_logger()
 
 class UIAException(Exception):
     pass
@@ -23,10 +23,11 @@ UIA_type_lib_IID = '{944DE083-8FB8-45CF-BCB7-C477ACB2F897}'
 #generate UIA python wrapper
 UIA_wrapper = GetModule((UIA_type_lib_IID, 1, 0))
 #create object of IUIAutomation interface
-for interface_id in ["IUIAutomation3", "IUIAutomation2", "IUIAutomation"]
-    interface = getattr(UIA_wrapper, interface_id, None)
-    if interface is not None:
-        IUIAutomation_object = CreateObject(UIA_wrapper.CUIAutomation, None, None, interface)
+for interface_id in [("IUIAutomation2", "CUIAutomation8"), ("IUIAutomation", "CUIAutomation")]:
+    IUIAutomation = getattr(UIA_wrapper, interface_id[0], None)
+    CUIAutomation = getattr(UIA_wrapper, interface_id[1], None)
+    if IUIAutomation is not None:
+        IUIAutomation_object = CreateObject(CUIAutomation, None, None, IUIAutomation)
         break
 
 ##############################
@@ -980,7 +981,7 @@ UIA_control_pattern_interfaces = {
 UIA_control_pattern_identifers = UIA_control_pattern_interfaces.keys()
 
 #Control Pattern Availability Property Identifiers
-UIA_control_pattern_availability_property_identifiers = 
+UIA_control_pattern_availability_property_identifiers = \
 [ "Is"+identifier+"Available" for identifier in UIA_control_pattern_identifers ]
 
 def get_property_by_id(UIAElement, property_identifier):

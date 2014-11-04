@@ -1,5 +1,5 @@
 
-import AXUI.logger as logger
+import AXUI.logger as AXUI_logger
 
 import UIA
 import win32
@@ -7,7 +7,7 @@ import ctypes
 
 import Translater
 
-LOGGER = logger.get_logger()
+LOGGER = AXUI_logger.get_logger()
 
 class UIElementException(Exception):
     pass
@@ -124,7 +124,7 @@ class Pattern(object):
             argument = property_[1][0]
             value_type = argument[1]
             value = getattr(self.pattern_object, name)
-            docstring += "#"x32+"\n"
+            docstring += "#"*32+"\n"
             docstring += "Name:\t"+name+"\n"
             docstring += "Value Type:\t"+value_type+"\n"
             docstring += "Value:\t"+repr(value)+"\n"
@@ -133,7 +133,7 @@ class Pattern(object):
         for method_ in self.methods.items():
             name = method_[0]
             arguments = method_[1]
-            docstring += "#"x32+"\n"
+            docstring += "#"*32+"\n"
             docstring += "Name:\t"+name+"\n"
             argument_string = "Arguments:\n"
             return_string = "Return:\n"
@@ -168,53 +168,28 @@ class Pattern(object):
         else:
             raise AttributeError("Attribute not exist: %s" % name)
     
-    
-class CoordinateElement(UIElement):
-    '''
-    coordinate element is for coordinate identifier
-    functions are limited, only support keyboard, mouse and touch operation
-    '''
-    def __init__(self, coordinate):
-        self.coordinate = coordinate
-    
-    def __repr__(self):
-        docstring = ""
-    
-    def find(self, parsed_identifier):
-        #TODO maybe we should let coordinate element have children
-        raise UIElementException("coordinate element should not have children")
-    
-    def verify(self):
-        return self
-    
-    def get_property(self, name):
-        raise UIElementException("coordinate element don't support property")
-        
-    def get_pattern(self, name):
-        raise UIElementException("coordinate element don't support pattern")
-        
-    def _get_coordinate(self):
-        return self.coordinate
-                
-    def __getattr__(self, name):
-        if name == "keyboard":
-            return self.get_keyboard()
-        elif name == "mouse":
-            return self.get_mouse()
-        elif name == "touch":
-            return self.get_touch()
-        else:
-            raise AttributeError("Attribute not exist: %s" % name)
-
 class UIElement(object):
-    '''
-    This class implement driver UIElement interface for used by other module
+    '''This class defines interfaces of UI element, basic unit of UI automation 
+    
+    Every driver (Windows, Android, Selenium) should implement these interfaces,
+    provides independent interfaces for uplevel modules, so we transplant AXUI cross different platform
+    
+    Attributes:
+        get_root:   class method, get the root element
+        find:       find the first descendant element which matches parsed_identifier
+        verify:     verify current UI element still exist
+        keyboard:   get keyboard attached with this UI element
+        mouse:      get mouse attached with this UI element
+        touch:      get touch attached with this UI element
+        other attributes:      get other attributes or interfaces supported by this UI element
     '''
     @classmethod
     def get_root():
         return UIElement(UIA.IUIAutomation_object.GetRootElement())
     
     def __init__(self, UIAElement):
+        #UIAElement is a pointer to IUIAutomation
+        #
         self.UIAElement = UIAElement
         LOGGER.debug("UIElement instance init: %s" % repr(self.UIAElement))
 
@@ -255,7 +230,9 @@ class UIElement(object):
         verify UI element is still exist
         '''
         LOGGER.debug("UIElement verify")
-        return UIElement(self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation.CreateTrueCondition()))
+        UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation.CreateTrueCondition())
+        if UIAElement == 
+        return UIElement()
         
     def get_property(self, name):
         return UIA.get_property_by_id(self.UIAElement, name)
@@ -295,5 +272,43 @@ class UIElement(object):
             attr = self.get_pattern(name)
             if attr is not None:
                 return attr   
+            raise AttributeError("Attribute not exist: %s" % name)
+
+
+class CoordinateElement(UIElement):
+    '''
+    coordinate element is for coordinate identifier
+    functions are limited, only support keyboard, mouse and touch operation
+    '''
+    def __init__(self, coordinate):
+        self.coordinate = coordinate
+    
+    def __repr__(self):
+        docstring = ""
+    
+    def find(self, parsed_identifier):
+        #TODO maybe we should let coordinate element have children
+        raise UIElementException("coordinate element should not have children")
+    
+    def verify(self):
+        return self
+    
+    def get_property(self, name):
+        raise UIElementException("coordinate element don't support property")
+        
+    def get_pattern(self, name):
+        raise UIElementException("coordinate element don't support pattern")
+        
+    def _get_coordinate(self):
+        return self.coordinate
+                
+    def __getattr__(self, name):
+        if name == "keyboard":
+            return self.get_keyboard()
+        elif name == "mouse":
+            return self.get_mouse()
+        elif name == "touch":
+            return self.get_touch()
+        else:
             raise AttributeError("Attribute not exist: %s" % name)
 
