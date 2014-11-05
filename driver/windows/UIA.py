@@ -1,6 +1,7 @@
 '''
 Use comtypes to generate python wrapper for windows native UIA API
 This module should keep update with latest UIA version
+We current not use UIA cach feature
 
 Comtypes: 
     https://github.com/enthought/comtypes
@@ -322,24 +323,6 @@ UIA_enums = {
     },
 }
 
-#check if enum exist in current version UIA namespace
-#set the value if exist
-for enum in UIA_enums.items():
-    enum_name = enum[0]
-    enum_contents = enum[1]
-    #check if enum name in current UIA namespace
-    enum_name_type = getattr(UIA_wrapper, enum_name, None)
-    if enum_name_type is not ctypes.c_int:
-        #enum type should be c_int in UIA wrapper namespace
-        #skip this enum if enum type is not c_int
-        LOGGER.warn("enum: %s not exist in UIA namespace" % enum_name)
-        continue
-    
-    for enum_content_name in enum_contents:
-        enum_content_value = getattr(UIA_wrapper, enum_content_name, None)
-        #set the value to UIA_enums dict
-        UIA_enums[enum_name][enum_content_name] = enum_content_value
-
 ###############################
 #UI Automation Constants
 #http://msdn.microsoft.com/en-us/library/windows/desktop/ee671207(v=vs.85).aspx
@@ -389,17 +372,6 @@ UIA_automation_element_property_identifers = (
     "ProviderDescription",
     "RuntimeId",
     )
-    
-#build map for property identifiers
-UIA_automation_element_property_identifers_mapping = {}
-for property_identifier in UIA_automation_element_property_identifers:
-    value = getattr(UIA_wrapper, "UIA_"+property_identifier+"PropertyId", None)
-    if value is None:
-        LOGGER.warn("property identifier: %s not supported by current UIA version" % property_identifier)
-        continue
-        
-    UIA_automation_element_property_identifers_mapping[property_identifier] = value
-    
     
 #Control Pattern Property Identifiers
 UIA_control_pattern_property_identifiers = (
@@ -486,6 +458,7 @@ UIA_control_pattern_property_identifiers = (
     )
     
 #Pattern interfaces description
+#Not use cach feature
 UIA_control_pattern_interfaces = {
 "AnnotationPattern"         : [
     ('property', 'CurrentAnnotationTypeId',
@@ -498,60 +471,60 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'BSTR', 'retVal' )),
     ('property', 'CurrentTarget',
               ( 'out', 'POINTER(IUIAutomationElement)', 'retVal' )),
-    ('property', 'CachedAnnotationTypeId',
-              ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedAnnotationTypeName',
-              ( 'out', 'BSTR', 'retVal' )),
-    ('property', 'CachedAuthor',
-              ( 'out', 'BSTR', 'retVal' )),
-    ('property', 'CachedDateTime',
-              ( 'out', 'BSTR', 'retVal' )),
-    ('property', 'CachedTarget',
-              ( 'out', 'POINTER(IUIAutomationElement)', 'retVal' )),
+    # ('property', 'CachedAnnotationTypeId',
+              # ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedAnnotationTypeName',
+              # ( 'out', 'BSTR', 'retVal' )),
+    # ('property', 'CachedAuthor',
+              # ( 'out', 'BSTR', 'retVal' )),
+    # ('property', 'CachedDateTime',
+              # ( 'out', 'BSTR', 'retVal' )),
+    # ('property', 'CachedTarget',
+              # ( 'out', 'POINTER(IUIAutomationElement)', 'retVal' )),
 ],
 "DockPattern"               : [
     ('method', 'SetDockPosition',
               ( 'in', 'DockPosition', 'dockPos' )),
     ('property', 'CurrentDockPosition',
               ( 'out', 'DockPosition', 'retVal' )),
-    ('property', 'CachedDockPosition',
-              ( 'out', 'DockPosition', 'retVal' )),
+    # ('property', 'CachedDockPosition',
+              # ( 'out', 'DockPosition', 'retVal' )),
 ],
 "DragPattern"               : [
     ('property', 'CurrentIsGrabbed',
               ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedIsGrabbed',
-              ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedIsGrabbed',
+              # ( 'out', 'c_int', 'retVal' )),
     ('property', 'CurrentDropEffect',
               ( 'out', 'BSTR', 'retVal' )),
-    ('property', 'CachedDropEffect',
-              ( 'out', 'BSTR', 'retVal' )),
+    # ('property', 'CachedDropEffect',
+              # ( 'out', 'BSTR', 'retVal' )),
     ('property', 'CurrentDropEffects',
               ( 'out', '_midlSAFEARRAY(BSTR)', 'retVal' )),
-    ('property', 'CachedDropEffects',
-              ( 'out', '_midlSAFEARRAY(BSTR)', 'retVal' )),
+    # ('property', 'CachedDropEffects',
+              # ( 'out', '_midlSAFEARRAY(BSTR)', 'retVal' )),
     ('method', 'GetCurrentGrabbedItems',
               ( 'out', 'POINTER(IUIAutomationElementArray)', 'retVal' )),
-    ('method', 'GetCachedGrabbedItems',
-              ( 'out', 'POINTER(IUIAutomationElementArray)', 'retVal' )),
+    # ('method', 'GetCachedGrabbedItems',
+              # ( 'out', 'POINTER(IUIAutomationElementArray)', 'retVal' )),
 ],
 "DropTargetPattern"         : [
     ('property', 'CurrentDropTargetEffect',
               ( 'out', 'BSTR', 'retVal' )),
-    ('property', 'CachedDropTargetEffect',
-              ( 'out', 'BSTR', 'retVal' )),
+    # ('property', 'CachedDropTargetEffect',
+              # ( 'out', 'BSTR', 'retVal' )),
     ('property', 'CurrentDropTargetEffects',
               ( 'out', '_midlSAFEARRAY(BSTR)', 'retVal' )),
-    ('property', 'CachedDropTargetEffects',
-              ( 'out', '_midlSAFEARRAY(BSTR)', 'retVal' )),
+    # ('property', 'CachedDropTargetEffects',
+              # ( 'out', '_midlSAFEARRAY(BSTR)', 'retVal' )),
 ],
 "ExpandCollapsePattern"     : [
     ('method', 'Expand'),
     ('method', 'Collapse'),
     ('property', 'CurrentExpandCollapseState',
               ( 'out', 'POINTER(ExpandCollapseState)', 'retVal' )),
-    ('property', 'CachedExpandCollapseState',
-              ( 'out', 'POINTER(ExpandCollapseState)', 'retVal' )),
+    # ('property', 'CachedExpandCollapseState',
+              # ( 'out', 'POINTER(ExpandCollapseState)', 'retVal' )),
 ],
 "GridItemPattern"           : [
     ('property', 'CurrentContainingGrid',
@@ -564,16 +537,16 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'c_int', 'retVal' )),
     ('property', 'CurrentColumnSpan',
               ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedContainingGrid',
-              ( 'out', 'POINTER(IUIAutomationElement)', 'retVal' )),
-    ('property', 'CachedRow',
-              ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedColumn',
-              ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedRowSpan',
-              ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedColumnSpan',
-              ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedContainingGrid',
+              # ( 'out', 'POINTER(IUIAutomationElement)', 'retVal' )),
+    # ('property', 'CachedRow',
+              # ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedColumn',
+              # ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedRowSpan',
+              # ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedColumnSpan',
+              # ( 'out', 'c_int', 'retVal' )),
 ],
 "GridPattern"               : [
     ('method', 'GetItem',
@@ -584,10 +557,10 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'c_int', 'retVal' )),
     ('property', 'CurrentColumnCount',
               ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedRowCount',
-              ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedColumnCount',
-              ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedRowCount',
+              # ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedColumnCount',
+              # ( 'out', 'c_int', 'retVal' )),
 ],
 "InvokePattern"             : [
     ('method', 'Invoke'),
@@ -625,28 +598,28 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(IUIAutomationElementArray)', 'pvarSelectedChildren' )),
     ('property', 'CurrentDefaultAction',
               ( 'out', 'BSTR', 'pszDefaultAction' )),
-    ('property', 'CachedChildId',
-              ( 'out', 'c_int', 'pRetVal' )),
-    ('property', 'CachedName',
-              ( 'out', 'BSTR', 'pszName' )),
-    ('property', 'CachedValue',
-              ( 'out', 'BSTR', 'pszValue' )),
-    ('property', 'CachedDescription',
-              ( 'out', 'BSTR', 'pszDescription' )),
-    ('property', 'CachedRole',
-              ( 'out', 'c_ulong', 'pdwRole' )),
-    ('property', 'CachedState',
-              ( 'out', 'c_ulong', 'pdwState' )),
-    ('property', 'CachedHelp',
-              ( 'out', 'BSTR', 'pszHelp' )),
-    ('property', 'CachedKeyboardShortcut',
-              ( 'out', 'BSTR', 'pszKeyboardShortcut' )),
-    ('method', 'GetCachedSelection',
-              ( 'out', 'POINTER(IUIAutomationElementArray)', 'pvarSelectedChildren' )),
-    ('property', 'CachedDefaultAction',
-              ( 'out', 'BSTR', 'pszDefaultAction' )),
-    ('method', 'GetIAccessible',
-              ( 'out', 'POINTER(IAccessible)', 'ppAccessible' )),
+    # ('property', 'CachedChildId',
+              # ( 'out', 'c_int', 'pRetVal' )),
+    # ('property', 'CachedName',
+              # ( 'out', 'BSTR', 'pszName' )),
+    # ('property', 'CachedValue',
+              # ( 'out', 'BSTR', 'pszValue' )),
+    # ('property', 'CachedDescription',
+              # ( 'out', 'BSTR', 'pszDescription' )),
+    # ('property', 'CachedRole',
+              # ( 'out', 'c_ulong', 'pdwRole' )),
+    # ('property', 'CachedState',
+              # ( 'out', 'c_ulong', 'pdwState' )),
+    # ('property', 'CachedHelp',
+              # ( 'out', 'BSTR', 'pszHelp' )),
+    # ('property', 'CachedKeyboardShortcut',
+              # ( 'out', 'BSTR', 'pszKeyboardShortcut' )),
+    # ('method', 'GetCachedSelection',
+              # ( 'out', 'POINTER(IUIAutomationElementArray)', 'pvarSelectedChildren' )),
+    # ('property', 'CachedDefaultAction',
+              # ( 'out', 'BSTR', 'pszDefaultAction' )),
+    # ('method', 'GetIAccessible',
+              # ( 'out', 'POINTER(IAccessible)', 'ppAccessible' )),
 ],
 "MultipleViewPattern"       : [
     ('method', 'GetViewName',
@@ -658,10 +631,10 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'c_int', 'retVal' )),
     ('method', 'GetCurrentSupportedViews',
               ( 'out', '_midlSAFEARRAY(c_int)', 'retVal' )),
-    ('property', 'CachedCurrentView',
-              ( 'out', 'c_int', 'retVal' )),
-    ('method', 'GetCachedSupportedViews',
-              ( 'out', '_midlSAFEARRAY(c_int)', 'retVal' )),
+    # ('property', 'CachedCurrentView',
+              # ( 'out', 'c_int', 'retVal' )),
+    # ('method', 'GetCachedSupportedViews',
+              # ( 'out', '_midlSAFEARRAY(c_int)', 'retVal' )),
 ],
 "ObjectModelPattern"        : [
     ('method', 'GetUnderlyingObjectModel',
@@ -682,18 +655,18 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'c_double', 'retVal' )),
     ('property', 'CurrentSmallChange',
               ( 'out', 'c_double', 'retVal' )),
-    ('property', 'CachedValue',
-              ( 'out', 'c_double', 'retVal' )),
-    ('property', 'CachedIsReadOnly',
-              ( 'out', 'c_int', 'retVal' )),
-    ('property', 'CachedMaximum',
-              ( 'out', 'c_double', 'retVal' )),
-    ('property', 'CachedMinimum',
-              ( 'out', 'c_double', 'retVal' )),
-    ('property', 'CachedLargeChange',
-              ( 'out', 'c_double', 'retVal' )),
-    ('property', 'CachedSmallChange',
-              ( 'out', 'c_double', 'retVal' )),
+    # ('property', 'CachedValue',
+              # ( 'out', 'c_double', 'retVal' )),
+    # ('property', 'CachedIsReadOnly',
+              # ( 'out', 'c_int', 'retVal' )),
+    # ('property', 'CachedMaximum',
+              # ( 'out', 'c_double', 'retVal' )),
+    # ('property', 'CachedMinimum',
+              # ( 'out', 'c_double', 'retVal' )),
+    # ('property', 'CachedLargeChange',
+              # ( 'out', 'c_double', 'retVal' )),
+    # ('property', 'CachedSmallChange',
+              # ( 'out', 'c_double', 'retVal' )),
 ],
 "ScrollItemPattern"         : [
     ('method', 'ScrollIntoView'),
@@ -717,18 +690,18 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(c_int)', 'retVal' )),
     ('property', 'CurrentVerticallyScrollable',
               ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedHorizontalScrollPercent',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedVerticalScrollPercent',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedHorizontalViewSize',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedVerticalViewSize',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedHorizontallyScrollable',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedVerticallyScrollable',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedHorizontalScrollPercent',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedVerticalScrollPercent',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedHorizontalViewSize',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedVerticalViewSize',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedHorizontallyScrollable',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedVerticallyScrollable',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
 ],
 "SelectionItemPattern"      : [
     ('method', 'Select'),
@@ -738,10 +711,10 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(c_int)', 'retVal' )),
     ('property', 'CurrentSelectionContainer',
               ( 'out', 'POINTER(POINTER(IUIAutomationElement))', 'retVal' )),
-    ('property', 'CachedIsSelected',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedSelectionContainer',
-              ( 'out', 'POINTER(POINTER(IUIAutomationElement))', 'retVal' )),
+    # ('property', 'CachedIsSelected',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedSelectionContainer',
+              # ( 'out', 'POINTER(POINTER(IUIAutomationElement))', 'retVal' )),
 ],
 "SelectionPattern"          : [
     ('method', 'GetCurrentSelection',
@@ -750,12 +723,12 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(c_int)', 'retVal' )),
     ('property', 'CurrentIsSelectionRequired',
               ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('method', 'GetCachedSelection',
-              ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
-    ('property', 'CachedCanSelectMultiple',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedIsSelectionRequired',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('method', 'GetCachedSelection',
+              # ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
+    # ('property', 'CachedCanSelectMultiple',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedIsSelectionRequired',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
 ],
 "SpreadsheetPattern"        : [
     ('method', 'GetItemByName',
@@ -769,12 +742,12 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
     ('method', 'GetCurrentAnnotationTypes',
               ( 'out', 'POINTER(_midlSAFEARRAY(c_int))', 'retVal' )),
-    ('property', 'CachedFormula',
-              ( 'out', 'POINTER(BSTR)', 'retVal' )),
-    ('method', 'GetCachedAnnotationObjects',
-              ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
-    ('method', 'GetCachedAnnotationTypes',
-              ( 'out', 'POINTER(_midlSAFEARRAY(c_int))', 'retVal' )),
+    # ('property', 'CachedFormula',
+              # ( 'out', 'POINTER(BSTR)', 'retVal' )),
+    # ('method', 'GetCachedAnnotationObjects',
+              # ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
+    # ('method', 'GetCachedAnnotationTypes',
+              # ( 'out', 'POINTER(_midlSAFEARRAY(c_int))', 'retVal' )),
 ],
 "StylesPattern"             : [
     ('property', 'CurrentStyleId',
@@ -794,23 +767,23 @@ UIA_control_pattern_interfaces = {
     ('method', 'GetCurrentExtendedPropertiesAsArray',
               ( 'out', 'POINTER(POINTER(ExtendedProperty))', 'propertyArray' ),
               ( 'out', 'POINTER(c_int)', 'propertyCount' )),
-    ('property', 'CachedStyleId',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedStyleName',
-              ( 'out', 'POINTER(BSTR)', 'retVal' )),
-    ('property', 'CachedFillColor',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedFillPatternStyle',
-              ( 'out', 'POINTER(BSTR)', 'retVal' )),
-    ('property', 'CachedShape',
-              ( 'out', 'POINTER(BSTR)', 'retVal' )),
-    ('property', 'CachedFillPatternColor',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedExtendedProperties',
-              ( 'out', 'POINTER(BSTR)', 'retVal' )),
-    ('method', 'GetCachedExtendedPropertiesAsArray',
-              ( 'out', 'POINTER(POINTER(ExtendedProperty))', 'propertyArray' ),
-              ( 'out', 'POINTER(c_int)', 'propertyCount' )),
+    # ('property', 'CachedStyleId',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedStyleName',
+              # ( 'out', 'POINTER(BSTR)', 'retVal' )),
+    # ('property', 'CachedFillColor',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedFillPatternStyle',
+              # ( 'out', 'POINTER(BSTR)', 'retVal' )),
+    # ('property', 'CachedShape',
+              # ( 'out', 'POINTER(BSTR)', 'retVal' )),
+    # ('property', 'CachedFillPatternColor',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedExtendedProperties',
+              # ( 'out', 'POINTER(BSTR)', 'retVal' )),
+    # ('method', 'GetCachedExtendedPropertiesAsArray',
+              # ( 'out', 'POINTER(POINTER(ExtendedProperty))', 'propertyArray' ),
+              # ( 'out', 'POINTER(c_int)', 'propertyCount' )),
 ],
 "SynchronizedInputPattern"  : [
     ('method', 'StartListening',
@@ -822,10 +795,10 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
     ('method', 'GetCurrentColumnHeaderItems',
               ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
-    ('method', 'GetCachedRowHeaderItems',
-              ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
-    ('method', 'GetCachedColumnHeaderItems',
-              ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
+    # ('method', 'GetCachedRowHeaderItems',
+              # ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
+    # ('method', 'GetCachedColumnHeaderItems',
+              # ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
 ],
 "TablePattern"              : [
     ('method', 'GetCurrentRowHeaders',
@@ -834,12 +807,12 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
     ('property', 'CurrentRowOrColumnMajor',
               ( 'out', 'POINTER(RowOrColumnMajor)', 'retVal' )),
-    ('method', 'GetCachedRowHeaders',
-              ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
-    ('method', 'GetCachedColumnHeaders',
-              ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
-    ('property', 'CachedRowOrColumnMajor',
-              ( 'out', 'POINTER(RowOrColumnMajor)', 'retVal' )),
+    # ('method', 'GetCachedRowHeaders',
+              # ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
+    # ('method', 'GetCachedColumnHeaders',
+              # ( 'out', 'POINTER(POINTER(IUIAutomationElementArray))', 'retVal' )),
+    # ('property', 'CachedRowOrColumnMajor',
+              # ( 'out', 'POINTER(RowOrColumnMajor)', 'retVal' )),
 ],
 "TextChildPattern"          : [
     ('property', 'TextContainer',
@@ -876,8 +849,8 @@ UIA_control_pattern_interfaces = {
     ('method', 'Toggle'),
     ('property', 'CurrentToggleState',
               ( 'out', 'POINTER(ToggleState)', 'retVal' )),
-    ('property', 'CachedToggleState',
-              ( 'out', 'POINTER(ToggleState)', 'retVal' )),
+    # ('property', 'CachedToggleState',
+              # ( 'out', 'POINTER(ToggleState)', 'retVal' )),
 ],
 "TransformPattern"          : [
     ('method', 'Move',
@@ -894,12 +867,12 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(c_int)', 'retVal' )),
     ('property', 'CurrentCanRotate',
               ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedCanMove',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedCanResize',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedCanRotate',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedCanMove',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedCanResize',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedCanRotate',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
 ],
 "TransformPattern2"         : [
     ('method', 'Zoom',
@@ -908,20 +881,20 @@ UIA_control_pattern_interfaces = {
               ( 'in', 'ZoomUnit', 'ZoomUnit' )),
     ('property', 'CurrentCanZoom',
               ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedCanZoom',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedCanZoom',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
     ('property', 'CurrentZoomLevel',
               ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedZoomLevel',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedZoomLevel',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
     ('property', 'CurrentZoomMinimum',
               ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedZoomMinimum',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedZoomMinimum',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
     ('property', 'CurrentZoomMaximum',
               ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedZoomMaximum',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedZoomMaximum',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
 ],
 "ValuePattern"              : [
     ('method', 'SetValue',
@@ -938,18 +911,18 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(c_double)', 'retVal' )),
     ('property', 'CurrentSmallChange',
               ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedValue',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedIsReadOnly',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedMaximum',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedMinimum',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedLargeChange',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
-    ('property', 'CachedSmallChange',
-              ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedValue',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedIsReadOnly',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedMaximum',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedMinimum',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedLargeChange',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
+    # ('property', 'CachedSmallChange',
+              # ( 'out', 'POINTER(c_double)', 'retVal' )),
 ],
 "VirtualizedItemPattern"    : [
     ('method', 'Realize'),
@@ -973,18 +946,18 @@ UIA_control_pattern_interfaces = {
               ( 'out', 'POINTER(WindowVisualState)', 'retVal' )),
     ('property', 'CurrentWindowInteractionState',
               ( 'out', 'POINTER(WindowInteractionState)', 'retVal' )),
-    ('property', 'CachedCanMaximize',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedCanMinimize',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedIsModal',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedIsTopmost',
-              ( 'out', 'POINTER(c_int)', 'retVal' )),
-    ('property', 'CachedWindowVisualState',
-              ( 'out', 'POINTER(WindowVisualState)', 'retVal' )),
-    ('property', 'CachedWindowInteractionState',
-              ( 'out', 'POINTER(WindowInteractionState)', 'retVal' )),
+    # ('property', 'CachedCanMaximize',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedCanMinimize',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedIsModal',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedIsTopmost',
+              # ( 'out', 'POINTER(c_int)', 'retVal' )),
+    # ('property', 'CachedWindowVisualState',
+              # ( 'out', 'POINTER(WindowVisualState)', 'retVal' )),
+    # ('property', 'CachedWindowInteractionState',
+              # ( 'out', 'POINTER(WindowInteractionState)', 'retVal' )),
 ],
 }
 
@@ -995,50 +968,101 @@ UIA_control_pattern_identifers = UIA_control_pattern_interfaces.keys()
 UIA_control_pattern_availability_property_identifiers = \
 [ "Is"+identifier+"Available" for identifier in UIA_control_pattern_identifers ]
 
+#check if enum exist in current version UIA namespace
+#set the value if exist
+for enum in UIA_enums.items():
+    enum_name = enum[0]
+    enum_contents = enum[1]
+    #check if enum name in current UIA namespace
+    enum_name_type = getattr(UIA_wrapper, enum_name, None)
+    if enum_name_type is not ctypes.c_int:
+        #enum type should be c_int in UIA wrapper namespace
+        #skip this enum if enum type is not c_int
+        LOGGER.debug("Enum: %s not exist in current UIA namespace" % enum_name)
+        continue
+    
+    for enum_content_name in enum_contents:
+        enum_content_value = getattr(UIA_wrapper, enum_content_name, None)
+        #set the value to UIA_enums dict
+        UIA_enums[enum_name][enum_content_name] = enum_content_value
+
+#build map for property identifiers
+UIA_automation_element_property_identifers_mapping = {}
+for identifier in UIA_automation_element_property_identifers:
+    value = getattr(UIA_wrapper, "UIA_"+identifier+"PropertyId", None)
+    if value is None:
+        LOGGER.debug("Automation element property identifier: %s not exist in current UIA namespace" % identifier)
+        continue
+    UIA_automation_element_property_identifers_mapping[identifier] = value
+
 #build map for Control Pattern Availability Property Identifiers
 UIA_control_pattern_availability_property_identifiers_mapping = {}
 for identifier in UIA_control_pattern_availability_property_identifiers:
     value = getattr(UIA_wrapper, "UIA_"+identifier+"PropertyId", None)
     if value is None:
-        LOGGER.warn("Control pattern property identifier: %s not supported by current UIA version" % property_identifier)
+        LOGGER.debug("Control pattern property identifier: %s not exist in current UIA namespace" % identifier)
         continue
-        
     UIA_control_pattern_availability_property_identifiers_mapping[identifier] = value
+    
+#build map for Control Pattern Identifiers
+UIA_control_pattern_identifers_mapping = {}
+for identifier in UIA_control_pattern_identifers:
+    identifier_value = getattr(UIA_wrapper, "UIA_"+identifier+"Id", None)
+    interface_value = getattr(UIA_wrapper, "IUIAutomation"+identifier, None)
+    if identifier_value is None:
+        LOGGER.debug("Control pattern identifier: %s not exist in current UIA namespace" % identifier)
+        continue
+    UIA_control_pattern_identifers_mapping[identifier] = (identifier_value, interface_value)
 
 def get_property_by_id(UIAElement, property_identifier):
-    '''
-    get property by identifier, return None if fail
+    '''get UIA element property by identifier, return None if fail
+    
+    Arguments:
+        UIAElement: UIA Element instance
+        property_identifier: property identifier
+    Returns:
+        property_value if success
+        None if property_identifier not valid or not supported by UIA Element
     '''
     if property_identifier in UIA_automation_element_property_identifers_mapping:
         property_value = UIAElement.GetCurrentPropertyValue(UIA_automation_element_property_identifers_mapping[property_identifier])
         if property_value is None:
-            LOGGER.warn("This property:%s is not supported by this UIAElment" % property_identifier)
+            LOGGER.debug("This property:%s is not supported by this UIAElment" % property_identifier)
         return property_value
         
     elif property_identifier in UIA_control_pattern_availability_property_identifiers_mapping:
         property_value = UIAElement.GetCurrentPropertyValue(UIA_control_pattern_availability_property_identifiers_mapping[property_identifier])
         if property_value is None:
-            LOGGER.warn("This property:%s is not supported by this UIAElment" % property_identifier)
+            LOGGER.debug("This property:%s is not supported by this UIAElment" % property_identifier)
         return property_value
-        
     else:
-        LOGGER.warn("This property identifier is not support: %s, cannot get it from UIA typelib" % property_identifier)
+        LOGGER.debug("This property identifier is not support: %s, cannot get it from UIA typelib" % property_identifier)
         return None
     
 def get_pattern_by_id(UIAElement, pattern_identifier):
-    '''
-    get pattern by identifier, return None if fail
-    '''
-    try:
-        UIA_pattern_identifier = getattr(UIA_wrapper, "UIA_"+pattern_identifier+"Id")
-        UIA_pattern_interface = getattr(UIA_wrapper, "IUIAutomation"+pattern_identifier)
-    except AttributeError:
-        LOGGER.error("This pattern identifier is not support: %s, cannot get it from UIA typelib" % pattern_identifier)
-        return None
+    '''get UIA element pattern by identifier, return None if fail
     
-    pattern = UIAElement.GetCurrentPatternAs(UIA_pattern_identifier, UIA_pattern_interface._iid_)
-    if pattern is None:
-        LOGGER.warn("This pattern:%s is not supported by this UIAElment" % property_identifier)
+    Arguments:
+        UIAElement: UIA Element instance
+        pattern_identifier: pattern identifier
+    Returns:
+        pattern instance if success
+        None if pattern_identifier not valid or not supported by UIA Element
+    '''
+    if pattern_identifier in UIA_control_pattern_identifers_mapping:
+        UIA_pattern_identifier = UIA_control_pattern_identifers_mapping[pattern_identifier][0]
+        UIA_pattern_interface = UIA_control_pattern_identifers_mapping[pattern_identifier][1]
+        
+        pattern = UIAElement.GetCurrentPatternAs(UIA_pattern_identifier, UIA_pattern_interface._iid_)
+        if pattern is None:
+            LOGGER.debug("This pattern:%s is not supported by this UIAElment" % property_identifier)
+            return None
+        return ctypes.POINTER(UIA_pattern_interface)(pattern)
+        '''
+        #Use GetCurrentPatternAs to check if get pattern success
+        pattern = UIAElement.GetCurrentPattern(UIA_pattern_identifier).QueryInterface(UIA_pattern_interface)
+        return pattern
+        '''
+    else:
+        LOGGER.debug("This pattern identifier is not support: %s, cannot get it from UIA typelib" % property_identifier)
         return None
-    return ctypes.POINTER(UIA_pattern_interface)(pattern)
-    

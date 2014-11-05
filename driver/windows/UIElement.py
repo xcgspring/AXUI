@@ -16,8 +16,11 @@ def _unpack(flag, name, *args):
     return flag, name, args
 
 class Method(object):
+    '''Wrapper class for UIA pattern method
+    
+    '''
     def __init__(self, function_object, name, args_expected=[]):
-        self.function_object = funtion_object
+        self.function_object = function_object
         self.name = name
         self.args = []
         self.outs = []
@@ -31,11 +34,10 @@ class Method(object):
                 self.outs.append([arg_type, arg_name])
             else:
                 #skip unsupport arg_direction
-                LOGGER.warn("Unsupport arg_direction: %s" % arg_direction)
-                continue
+                raise UIElementException("Unsupport arg_direction: %s" % arg_direction)
         
     def __repr__(self):
-        docstring += "Name:\t"+self.name+"\n"
+        docstring = "Name:\t"+self.name+"\n"
         argument_string = "Arguments:\n"
         for argument in self.args:
             argument_type = argument[0]
@@ -46,15 +48,15 @@ class Method(object):
             elif argument_type in UIA.UIA_enums:
                 argument_type = UIA.UIA_enums[argument_type]
                         
-            argument_string +="\tName:\t"+argument_name+"\n"
-            argument_string +="\tType:\t"+repr(argument_type)+"\n\n"
+            argument_string +="  Name:\t"+argument_name+"\n"
+            argument_string +="  Type:\t"+repr(argument_type)+"\n\n"
         
-        return_string = "Return:\n"
+        return_string = "Returns:\n"
         for out in self.outs:
-            return_name = out[0]
-            return_type = out[1]
-            return_string +="\tName:\t"+argument_name+"\n"
-            return_string +="\tType:\t"+argument_type+"\n\n"
+            return_name = out[1]
+            return_type = out[0]
+            return_string +="  Name:\t"+return_name+"\n"
+            return_string +="  Type:\t"+return_type+"\n\n"
                     
         docstring += argument_string
         docstring += return_string
@@ -90,7 +92,9 @@ class Method(object):
         return self.function_object(*args)
 
 class Pattern(object):
+    '''Wrapper class for UIA pattern interface
     
+    '''
     def __init__(self, UIAElement, pattern_identifier):
         self.UIAElement = UIAElement
         self.pattern_object = UIA.get_pattern_by_id(UIAElement, pattern_identifier)
@@ -125,18 +129,18 @@ class Pattern(object):
             value_type = argument[1]
             value = getattr(self.pattern_object, name)
             docstring += "#"*32+"\n"
-            docstring += "Name:\t"+name+"\n"
-            docstring += "Value Type:\t"+value_type+"\n"
-            docstring += "Value:\t"+repr(value)+"\n"
+            docstring += "  Name:\t"+name+"\n"
+            docstring += "  Value Type:\t"+value_type+"\n"
+            docstring += "  Value:\t"+repr(value)+"\n"
             
         docstring += "\nMethods:\n"
         for method_ in self.methods.items():
             name = method_[0]
             arguments = method_[1]
             docstring += "#"*32+"\n"
-            docstring += "Name:\t"+name+"\n"
-            argument_string = "Arguments:\n"
-            return_string = "Return:\n"
+            docstring += "  Name:\t"+name+"\n"
+            argument_string = "  Arguments:\n"
+            return_string = "  Return:\n"
             for argument in arguments:
                 argument_direction = argument[0]
                 argument_type = argument[1]
@@ -148,11 +152,11 @@ class Pattern(object):
                     elif argument_type in UIA.UIA_enums:
                         argument_type = UIA.UIA_enums[argument_type]
                         
-                    argument_string +="\tName:\t"+argument_name+"\n"
-                    argument_string +="\tType:\t"+repr(argument_type)+"\n\n"
+                    argument_string +="    Name:\t"+argument_name+"\n"
+                    argument_string +="    Type:\t"+repr(argument_type)+"\n\n"
                 elif argument_direction == "out":
-                    return_string +="\tName:\t"+argument_name+"\n"
-                    return_string +="\tType:\t"+argument_type+"\n\n"
+                    return_string +="    Name:\t"+argument_name+"\n"
+                    return_string +="    Type:\t"+argument_type+"\n\n"
                     
             docstring += argument_string
             docstring += return_string
@@ -178,10 +182,9 @@ class UIElement(object):
         get_root:   class method, get the root element
         find:       find the first descendant element which matches parsed_identifier
         verify:     verify current UI element still exist
-        keyboard:   get keyboard attached with this UI element
-        mouse:      get mouse attached with this UI element
-        touch:      get touch attached with this UI element
-        other attributes:      get other attributes or interfaces supported by this UI element
+
+        other attributes:      get other attributes or interfaces supported by this UI element,
+                               such like keyboard, mouse, touch, etc.
     '''
     @classmethod
     def get_root(cls):
@@ -189,57 +192,71 @@ class UIElement(object):
     
     def __init__(self, UIAElement):
         #UIAElement is a pointer to IUIAutomation
-        #
         self.UIAElement = UIAElement
-        LOGGER.debug("UIElement instance init: %s" % repr(self.UIAElement))
 
     def __repr__(self):
         docstring = ""
         #generate UIA automation element properties
         docstring += "UIA automation element properties:\n"
-        for identifier in UIA.UIA_automation_element_property_identifers:
-            value = UIA.get_property_by_id(self.UIAElement, identifier)
+        for identifier in UIA.UIA_automation_element_property_identifers_mapping:
+            value = self._get_property(identifier)
             if value is not None:
-                docstring += "\t%s:\t%s\n" % (identifier, repr(value))
+                docstring += "  %s:\t%s\n" % (identifier, repr(value))
                 
         docstring += "\n"
         #generate UIA control pattern availability properties
         docstring += "UIA control pattern availability properties:\n"
-        for identifier in UIA.UIA_control_pattern_availability_property_identifiers:
-            value = UIA.get_property_by_id(self.UIAElement, identifier)
+        for identifier in UIA.UIA_control_pattern_availability_property_identifiers_mapping:
+            value = self._get_property(identifier)
             if value is not None:
-                docstring += "\t%s:\t%s\n" % (identifier, repr(value))
+                docstring += "  %s:\t%s\n" % (identifier, repr(value))
                 
         return docstring
 
+    def _find_by_index(self, translated_identifier):
+        target_UIAElements = self.UIAElement.FindAll(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier[0])
+        index = translated_identifier[1]
+        if index+1 > target_UIAElements.Length:
+            LOGGER.warn("Find %d matched elements, index:%d out of range" % (target_UIAElements.Length, index))
+            return None
+        return UIElement(target_UIAElements.GetElement(index))
+    
+    def _find_by_UIA(self, translated_identifier):
+        target_UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier)
+        if target_UIAElement is None:
+            LOGGER.warn("Find no element matching identifier")
+            return None
+        return UIElement(target_UIAElement)
+        
     def find(self, parsed_identifier):
         '''
         find the UI element via identifier, return one UIAElement if success, return None if not find
         '''
-        LOGGER.debug("UIElement find")
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
             return CordinateElement(translated_identifier[1])
         elif translated_identifier[0] == "Index":
-            return UIElement(self.UIAElement.FindAll(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier[1][0])[translated_identifier[1][1]])
+            return self._find_by_index(translated_identifier[1])
         elif translated_identifier[0] == "UIA":
-            return UIElement(self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier[1]))
+            return self._find_by_UIA(translated_identifier[1])
  
     def verify(self):
         '''
         verify UI element is still exist
         '''
-        LOGGER.debug("UIElement verify")
         UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation.CreateTrueCondition())
+        if UIAElement is None:
+            LOGGER.warn("Current UIAElement is no longer exist")
+            return None
         return UIElement(UIAElement)
         
-    def get_property(self, name):
+    def _get_property(self, name):
         return UIA.get_property_by_id(self.UIAElement, name)
         
-    def get_pattern(self, name):
+    def _get_pattern(self, name):
         try:
-            pattern = Pattern(name)
-        except ValueError:
+            pattern = Pattern(self.UIAElement, name)
+        except UIElementException:
             pattern = None
             
         return pattern
@@ -247,31 +264,27 @@ class UIElement(object):
     def _get_coordinate(self):
         pass
     
-    def get_keyboard(self):
+    @property
+    def keyboard(self):
         return win32.Keyboard(self._get_coordinate())
     
-    def get_mouse(self):
+    @property
+    def mouse(self):
         return win32.Mouse(self._get_coordinate())
     
-    def get_touch(self):
+    @property
+    def touch(self):
         return win32.Touch(self._get_coordinate())
         
     def __getattr__(self, name):
     
-        if name == "keyboard":
-            return self.get_keyboard()
-        elif name == "mouse":
-            return self.get_mouse()
-        elif name == "touch":
-            return self.get_touch()
-        else:
-            attr = self.get_property(name)
-            if attr is not None:
-                return attr
-            attr = self.get_pattern(name)
-            if attr is not None:
-                return attr   
-            raise AttributeError("Attribute not exist: %s" % name)
+        attr = self._get_property(name)
+        if attr is not None:
+            return attr
+        attr = self._get_pattern(name)
+        if attr is not None:
+            return attr   
+        raise AttributeError("Attribute not exist: %s" % name)
 
 
 class CoordinateElement(UIElement):
@@ -292,22 +305,15 @@ class CoordinateElement(UIElement):
     def verify(self):
         return self
     
-    def get_property(self, name):
+    def _get_property(self, name):
         raise UIElementException("coordinate element don't support property")
         
-    def get_pattern(self, name):
+    def _get_pattern(self, name):
         raise UIElementException("coordinate element don't support pattern")
         
     def _get_coordinate(self):
         return self.coordinate
                 
     def __getattr__(self, name):
-        if name == "keyboard":
-            return self.get_keyboard()
-        elif name == "mouse":
-            return self.get_mouse()
-        elif name == "touch":
-            return self.get_touch()
-        else:
-            raise AttributeError("Attribute not exist: %s" % name)
+        raise AttributeError("Attribute not exist: %s" % name)
 
