@@ -1,19 +1,15 @@
 
 import os
-import AXUI.logger as AXUI_logger
-
-LOGGER = AXUI_logger.get_logger()
 
 config_section="XML"
 default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app_map"),
                   "schema_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas"),
+                  "root_identifier": "level=0",
                 }
 
 AppMapLocation=default_configs["app_map_location"]
 SchemaLocation=default_configs["schema_location"]
-
-class XMLConfigException(Exception):
-    pass
+RootIdentifier=default_configs["root_identifier"]
 
 def config(configs=default_configs):
     '''
@@ -21,14 +17,21 @@ def config(configs=default_configs):
     '''
     global AppMapLocation
     global SchemaLocation
+    global RootIdentifier
     AppMapLocation=configs["app_map_location"]
     SchemaLocation=configs["schema_location"]
+    RootIdentifier=configs["root_identifier"]
+
+#used by config module
+__all__=["config_section", "default_configs", "config"]
     
 def query_app_map_file(app_map_file):
+    '''search app_map_file in AppMapLocation, return abs path if found 
+    Arguments:
+        app_map_file: app_map file name
+    Returns:
+        abs_app_map_file: abs path of the app_map file
     '''
-    search app_map_file in AppMapLocation, return abs path if found 
-    '''
-    global AppMapLocation
     if os.path.isabs(app_map_file) and os.path.isfile(app_map_file):
         return app_map_file
     else:
@@ -37,13 +40,15 @@ def query_app_map_file(app_map_file):
             for file_ in files:
                 if file_ == basename:
                     return os.path.join(root, basename)
-        raise XMLConfigException("%s not found in %s" % (app_map_file, AppMapLocation))
+        raise ValueError("%s not found in %s" % (app_map_file, AppMapLocation))
     
 def query_schema_file(schema_file):
+    '''search schema_file in SchemaLocation, return abs path if found 
+    Arguments:
+        schema_file: schema file name
+    Returns:
+        abs_schema_file: abs path of the schema file
     '''
-    search schema_file in SchemaLocation, return abs path if found 
-    '''
-    global SchemaLocation
     if os.path.isabs(schema_file) and os.path.isfile(schema_file):
         return schema_file
     else:
@@ -52,4 +57,10 @@ def query_schema_file(schema_file):
             for file_ in files:
                 if file_ == basename:
                     return os.path.join(root, basename)
-        raise XMLConfigException("%s not found in %s" % (schema_file, SchemaLocation))
+        raise ValueError("%s not found in %s" % (schema_file, SchemaLocation))
+
+def query_root_id():
+    '''query root id for root element
+    Return: root identifier set in config
+    '''
+    return RootIdentifier

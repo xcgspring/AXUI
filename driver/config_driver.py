@@ -1,7 +1,3 @@
-import os
-import AXUI.logger as AXUI_logger
-
-LOGGER = AXUI_logger.get_logger()
 
 config_section="driver"
 default_configs={ "driver_used": "fake_driver",
@@ -12,12 +8,13 @@ DriverUsed = default_configs["driver_used"]
 TimeOut = default_configs["timeout"]
 
 def config(configs=default_configs):
+    '''callback function used by config module
+    
     '''
-    call back function used by config module
-    '''
-    global Driver
+    global DriverUsed
     global TimeOut
-    AppMapLocation=configs["driver_used"]
-    SchemaLocation=configs["timeout"]
+    DriverUsed=configs["driver_used"]
+    TimeOut=configs["timeout"]
 
-
+#used by config module
+__all__=["config_section", "default_configs", "config"]

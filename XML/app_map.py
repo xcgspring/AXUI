@@ -8,8 +8,6 @@ import element as element_module
 import func
 import XML_config
 
-LOGGER = AXUI_logger.get_logger()
-
 class AppMapException(Exception):
     pass
 
@@ -25,11 +23,11 @@ def singleton(class_):
     
 @singleton
 class AppMap(object):
+    '''represent a app map
+    
     '''
-    represent a app map
-    '''
-    #move this setting to driver module
-    RootIdentifier = "Name='Desktop'"
+    RootIdentifier = XML_config.query_root_id()
+    LOGGER = AXUI_logger.get_logger()
     
     def __init__(self, xml, uplevel_app_map_xmls=[]):
         self.app_map_xml = xml
@@ -51,7 +49,7 @@ class AppMap(object):
         try:
             import pyxb
         except ImportError:
-            LOGGER.info("pyxb not install, skip app map verification")
+            self.LOGGER.info("pyxb not install, skip app map verification")
             return
             
         from validate import check_app_map

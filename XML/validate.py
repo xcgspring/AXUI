@@ -5,8 +5,6 @@ import sys
 import platform
 import pyxb
 
-import AXUI.logger as AXUI_logger
-
 def generate_module(schema_location, module, module_root):
     #pyxbgen script from /usr/local/bin/pyxbgen or c:\python27\scripts\pyxbgen
     pyxbgen = '''

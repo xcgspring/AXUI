@@ -1,7 +1,6 @@
 
 import AXUI.logger as AXUI_logger
-from AXUI.driver import UIElement
-LOGGER = AXUI_logger.get_logger()
+import AXUI.driver as driver
 
 class ElementOperationFail(Exception):
     pass
@@ -21,6 +20,7 @@ class Element(object):
     '''
     
     fake_UI_element = FakeUIElement()
+    LOGGER = AXUI_logger.get_logger()
     
     def __init__(self):
         #Need init by app map
@@ -73,7 +73,7 @@ class Element(object):
         start and find this UIElement
         '''
         if self.verify():
-            LOGGER.debug("UI already start, skip start again")
+            self.LOGGER.debug("UI already start, skip start again")
             return
         else:
             if self.start_func:
@@ -83,14 +83,14 @@ class Element(object):
                     self.parent.start()
                 else:
                     #root element
-                    LOGGER.debug("Root element create: %s" % self.name)
-                    self.UIElement = UIElement.get_root()
+                    self.LOGGER.debug("Root element create: %s" % self.name)
+                    self.UIElement = driver.get_UIElement().get_root()
                 
             if self.identifier:
-                LOGGER.debug("Normal UI element create: %s" % self.name)
+                self.LOGGER.debug("Normal UI element create: %s" % self.name)
                 self.UIElement = self.parent.find(self.identifier)
             else:
-                LOGGER.debug("Fake UI element create: %s" % self.name)
+                self.LOGGER.debug("Fake UI element create: %s" % self.name)
                 #if identifier is not specified, use a fake UIElement to replace UIElement
                 self.UIElement = self.fake_UI_element
             
@@ -106,7 +106,7 @@ class Element(object):
         stop and verify this UIElement
         '''
         if not self.verify():
-            LOGGER.debug("UI not exist, skip stop")
+            self.LOGGER.debug("UI not exist, skip stop")
             return
         else:
             if self.stop_func:

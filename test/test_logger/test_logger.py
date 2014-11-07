@@ -13,9 +13,9 @@ class TestConfigLogger(unittest.TestCase):
                    "logging_file":"test_config_logger.log", 
                    "file_logging_mode":"a", 
                    "formatter":"%(message)s", 
-                   "color":"True" }
+                   "color_enable":"True" }
                    
-        self.AXUI_logger.config_logger(valid_configs)
+        self.AXUI_logger.config(valid_configs)
         logger = self.AXUI_logger.get_logger()
         self.assertTrue(logger)
         self.assertEqual(logger.name, "TestConfigLogger")
@@ -33,9 +33,9 @@ class TestLogger(unittest.TestCase):
                    "logging_file":"test_logger.log", 
                    "file_logging_mode":"a", 
                    "formatter":"%(message)s", 
-                   "color":"True" }
+                   "color_enable":"True" }
                    
-        self.AXUI_logger.config_logger(valid_configs)
+        self.AXUI_logger.config(valid_configs)
         self.logger = self.AXUI_logger.get_logger()
         
     def test_logger(self):

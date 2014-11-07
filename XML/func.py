@@ -1,13 +1,9 @@
 
-
 import xml.etree.ElementTree as ET
 
-import AXUI.logger as AXUI_logger
 import os
 import app_map
 import XML_config
-
-LOGGER = AXUI_logger.get_logger()
 
 class Step(object):
     def __init__(self, xml_element, app_map):
