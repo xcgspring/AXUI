@@ -2,7 +2,7 @@
 import sys
 import unittest
 
-class TestUIA(unittest.TestCase):            
+class TestUIElement(unittest.TestCase):            
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_root(self):
         import AXUI.driver.windows.UIElement as UIElement

@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+'''
+Keyboard module, porting from pywinauto project
+code.google.com/p/pywinauto
+'''
+
 """
 Check that SendInput can work the way we want it to
 

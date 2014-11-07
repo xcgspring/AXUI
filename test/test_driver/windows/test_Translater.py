@@ -2,7 +2,7 @@
 import sys
 import unittest
 
-class TestUIA(unittest.TestCase):            
+class TestTranslater(unittest.TestCase):            
     @unittest.skipUnless(sys.platform.startswith("win"), "requires Windows")
     def test_coordinate_identifier(self):
         import AXUI.driver.windows.Translater as translater

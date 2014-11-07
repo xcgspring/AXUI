@@ -1,4 +1,9 @@
 
+'''
+Mouse module, porting from pywinauto project
+code.google.com/p/pywinauto
+'''
+
 import ctypes
 from ctypes import \
     c_int, c_uint, c_long, c_ulong, c_void_p, c_wchar, c_char, \
@@ -169,8 +174,6 @@ class INPUT(Structure):
 assert sizeof(INPUT) == 28, sizeof(INPUT)
 assert alignment(INPUT) == 2, alignment(INPUT)
 
-
-
 def SendMouseInput(
     coords,
     button = "left",
@@ -240,3 +243,63 @@ def SendMouseInput(
             1,
             ctypes.pointer(inp_struct),
             ctypes.sizeof(inp_struct))
+
+class Mouse(object):
+    '''class for win32 mouse operations
+    
+    Attributes:
+        LeftClick:  left click the UI element, or taget coords
+        LeftDoubleClick:    left double click the UI element, or taget coords
+        RightClick: right click the UI element, or taget coords
+    '''
+    def __init__(self, UIElement):
+        self.UIElement = UIElement
+        
+    def __repr__(self):
+        docstring = '''
+Attributes:
+        '''
+        docstring += self.LeftClick.__doc__+"\n"
+        docstring += self.LeftDoubleClick.__doc__+"\n"
+        docstring += self.RightClick.__doc__+"\n"
+        
+        return docstring
+        
+    def LeftClick(self, coords = None):
+        '''LeftClick: left click the UI element, or taget coords
+        Arguments:
+            coords: coordinate indicate where mouse click, default use UI element click point
+        Returns:
+        '''
+        if coords is None:
+            coords = self.UIElement.GetClickablePoint()
+        
+        self.UIElement.SetFocus()
+        SendMouseInput(coords)
+        
+    def LeftDoubleClick(self, coords = None):
+        '''LeftDoubleClick: left double click the UI element, or taget coords
+        Arguments:
+            coords: coordinate indicate where mouse click, default use UI element click point
+        Returns:
+        '''
+        if coords is None:
+            coords = self.UIElement.GetClickablePoint()
+        
+        self.UIElement.SetFocus()
+        SendMouseInput(coords, double=True)
+    
+    def RightClick(self, coords = None):
+        '''RightClick: right click the UI element, or taget coords
+        Arguments:
+            coords: coordinate indicate where mouse click, default use UI element click point
+        Returns:
+        '''
+        if coords is None:
+            coords = self.UIElement.GetClickablePoint()
+        
+        self.UIElement.SetFocus()
+        SendMouseInput(coords, button="right")
+        
+
+
