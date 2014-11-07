@@ -20,9 +20,9 @@ class Element(object):
     '''
     
     fake_UI_element = FakeUIElement()
-    LOGGER = AXUI_logger.get_logger()
     
     def __init__(self):
+        self.LOGGER = AXUI_logger.get_logger()
         #Need init by app map
         self.name = ""
         self.parent_string = ""

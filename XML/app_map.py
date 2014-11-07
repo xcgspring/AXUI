@@ -4,9 +4,10 @@ import xml.etree.ElementTree as ET
 import AXUI.logger as AXUI_logger
 from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
 from  AXUI.parsing.command_parsing import command_parser as cd_parser
-import element as element_module
 import func
 import XML_config
+import element as element_module
+
 
 class AppMapException(Exception):
     pass
@@ -27,9 +28,9 @@ class AppMap(object):
     
     '''
     RootIdentifier = XML_config.query_root_id()
-    LOGGER = AXUI_logger.get_logger()
     
     def __init__(self, xml, uplevel_app_map_xmls=[]):
+        self.LOGGER = AXUI_logger.get_logger()
         self.app_map_xml = xml
         #prevent recursive include
         uplevel_app_map_xmls.append(self.app_map_xml)

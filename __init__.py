@@ -2,8 +2,8 @@
 import os
 import config
 import logger
-import XML
 import driver
+import XML
 
 def Config(config_file=""):
     '''config the system
