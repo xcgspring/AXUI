@@ -188,6 +188,9 @@ class UIElement(object):
     '''
     @classmethod
     def get_root(cls):
+        '''get root element
+        
+        '''
         return UIElement(UIA.IUIAutomation_object.GetRootElement())
     
     def __init__(self, UIAElement):
@@ -229,20 +232,20 @@ class UIElement(object):
         return UIElement(target_UIAElement)
         
     def find(self, parsed_identifier):
-        '''
-        find the UI element via identifier, return one UIAElement if success, return None if not find
+        '''find the UI element via identifier
+        
         '''
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
-            return CordinateElement(translated_identifier[1])
+            return CordinateElement(translated_identifier[1], self)
         elif translated_identifier[0] == "Index":
             return self._find_by_index(translated_identifier[1])
         elif translated_identifier[0] == "UIA":
             return self._find_by_UIA(translated_identifier[1])
  
     def verify(self):
-        '''
-        verify UI element is still exist
+        '''verify UI element is still exist
+        
         '''
         UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation.CreateTrueCondition())
         if UIAElement is None:
@@ -262,22 +265,49 @@ class UIElement(object):
         return pattern
     
     def _get_coordinate(self):
-        pass
+        #BoundingRectangle property value is (left, top, long, high)
+        #CurrentBoundingRectangle value is (left, top, right, bottom)
+        #use CurrentBoundingRectangle to be conpatible with Inspect.exe
+        value = self.UIAElement.CurrentBoundingRectangle
+        return value.left, value.top, value.right, value.bottom
+    
+    def SetFocus(self):
+        '''set foucs this element
+        
+        Will bring this element to the front, used by Keyboard, Mouse, Touch
+        
+        Arguments: 
+        Returns: 
+        '''
+        return self.UIAElement.SetFocus()
+        
+    def GetClickablePoint(self):
+        '''Retrieves a point on the element that can be clicked.
+        
+        Arguments:
+        Returns:
+            (x, y) coordinate if can get clickable point
+            None if cannot get clickable point
+        '''
+        point, flag = self.UIAElement.GetClickablePoint()
+        if flag:
+            return point.x, point.y
+        else:
+            return None
     
     @property
     def keyboard(self):
-        return win32.Keyboard(self._get_coordinate())
+        return win32.Keyboard(self)
     
     @property
     def mouse(self):
-        return win32.Mouse(self._get_coordinate())
+        return win32.Mouse(self)
     
     @property
     def touch(self):
-        return win32.Touch(self._get_coordinate())
+        return win32.Touch(self)
         
     def __getattr__(self, name):
-    
         attr = self._get_property(name)
         if attr is not None:
             return attr
@@ -292,11 +322,22 @@ class CoordinateElement(UIElement):
     coordinate element is for coordinate identifier
     functions are limited, only support keyboard, mouse and touch operation
     '''
-    def __init__(self, coordinate):
-        self.coordinate = coordinate
+    def __init__(self, coordinate, parent_element):
+        #coordinate should be like:
+        #"(left, top, right, bottom)", "[left, top, right, bottom]", "left, top, right, bottom"
+        coordinate_list = coordinate.strip("(").strip(")").strip("[").strip("]").split(",")
+        try:
+            left, top, right, bottom = [int(value) for value in coordinate_list]
+            if left > right or top > bottom:
+                raise ValueError()
+        except ValueError:
+            raise ValueError("Coordinate should contain 4 digitals, get:%s" % repr(coordinate))
+
+        self.coordinate = (left, top, right, bottom)
+        self.parent_element = parent_element
     
     def __repr__(self):
-        docstring = ""
+        docstring = "Coordinate element for coordinate: %s" % repr(self.coordinate)
     
     def find(self, parsed_identifier):
         #TODO maybe we should let coordinate element have children
@@ -304,6 +345,29 @@ class CoordinateElement(UIElement):
     
     def verify(self):
         return self
+        
+    def SetFocus(self):
+        '''set foucs this element
+        
+        Will bring this element to the front, used by Keyboard, Mouse, Touch
+        
+        Arguments: 
+        Returns: 
+        '''
+        #usually, a coordinate element will be set focus if its parent is set focus
+        return self.parent_element.SetFocus()
+        
+    def GetClickablePoint(self):
+        '''Retrieves a point on the element that can be clicked.
+        
+        Arguments:
+        Returns:
+            (x, y) coordinate if can get clickable point
+            None if cannot get clickable point
+        '''
+        x = (self.coordinate[0]+self.coordinate[2])/2
+        y = (self.coordinate[1]+self.coordinate[3])/2
+        return x, y
     
     def _get_property(self, name):
         raise UIElementException("coordinate element don't support property")
@@ -315,5 +379,5 @@ class CoordinateElement(UIElement):
         return self.coordinate
                 
     def __getattr__(self, name):
-        raise AttributeError("Attribute not exist: %s" % name)
+        raise AttributeError("Attribute not exist for coordinate element: %s" % name)
 

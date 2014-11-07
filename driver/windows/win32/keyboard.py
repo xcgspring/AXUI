@@ -480,7 +480,7 @@ def handle_code(code):
     if code in CODES:
         code_keys.append(VirtualKeyAction(CODES[code]))
 
-    # it is an escaped modifier e.g. {%}, {^}, {+}
+    # it is an escaped modifier e.g. {%}, {^}, {+}, {~}
     elif len(code) == 1:
         code_keys.append(KeyAction(code))
 
@@ -580,8 +580,8 @@ def parse_keys(string,
                 c == '\n' and not with_newlines):
                 continue
 
-            # output nuewline
-            if c in ('~', '\n'):
+            # output newline
+            if c in ('\n'):
                 keys.append(VirtualKeyAction(CODES["ENTER"]))
 
             # safest are the virtual keys - so if our key is a virtual key
@@ -613,71 +613,85 @@ def HiByte(val):
     "Return the high byte of the value"
     return (val & 0xff00) >> 8
 
-def SendKeyboardInput(keys,
-             pause=0.05,
-             with_spaces=False,
-             with_tabs=False,
-             with_newlines=False,
-             turn_off_numlock=True):
-    "Parse the keys and type them"
-    keys = parse_keys(keys, with_spaces, with_tabs, with_newlines)
-
-    for k in keys:
-        k.Run()
-        time.sleep(pause)
-
-
-def main():
-    "Send some test strings"
-
-    actions = """
-        {LWIN}
-        {PAUSE .25}
-        r
-        {PAUSE .25}
-        Notepad.exe{ENTER}
-        {PAUSE 1}
-        Hello{SPACE}World!
-        {PAUSE 1}
-        %{F4}
-        {PAUSE .25}
-        n
-        """
-    SendKeyboardInput(actions, pause = .1)
-
-    keys = parse_keys(actions)
-    for k in keys:
-        print(k)
-        k.Run()
-        time.sleep(.1)
-
-    test_strings = [
-        "\n"
-        "(aa)some text\n",
-        "(a)some{ }text\n",
-        "(b)some{{}text\n",
-        "(c)some{+}text\n",
-        "(d)so%me{ab 4}text",
-        "(e)so%me{LEFT 4}text",
-        "(f)so%me{ENTER 4}text",
-        "(g)so%me{^aa 4}text",
-        "(h)some +(asdf)text",
-        "(i)some %^+(asdf)text",
-        "(j)some %^+a text+",
-        "(k)some %^+a tex+{&}",
-        "(l)some %^+a tex+(dsf)",
-        "",
-        ]
-
-    for s in test_strings:
-        print(repr(s))
-        keys = parse_keys(s, with_newlines = True)
-        print(keys)
+class Keyboard(object):
+    '''class for win32 keyboard input
+    
+    Attributes:
+        Input:  Input key to target UI element
+    
+    '''
+    def __init__(self, UIElement):
+        self.UIElement = UIElement
+    
+    def __repr__(self):
+        docstring = '''
+Function:
+    Name:
+        Input
+    Description:'''
+        docstring +=self.Input.__doc__
+        return docstring
+    
+    def Input(self, string, pause=0.05):
+        '''take a string, translate to win32 event, and input to system
+        Arguments:
+            string: a string represent the keys input
+            pause: global pause time during each key input, default to 0.05s
+        Returns:
+        
+        Keyboard input string introduce:
+        (1) For normal charactors like [0~9][a~z][A~Z], input directly
+        (2) For special charactors like "space", "tab", "newline", "F1~F12"
+            You use {key_name} to replace them
+            Here are the support key list:
+            backspace       :       {BACK}, {BACKSPACE}, {BKSP}, {BS}
+            break           :       {BREAK}
+            capslock        :       {CAP}, {CAPSLOCK}
+            delete          :       {DEL}, {DELETE}
+            down            :       {DOWN}
+            end             :       {END}
+            enter           :       {ENTER}
+            ESC             :       {ESC}
+            F1~F24          :       {F1}~{F24}
+            help            :       {HELP}
+            home            :       {HOME}
+            insert          :       {INS}, {INSERT}
+            left            :       {LEFT}
+            left windows    :       {LWIN}
+            number lock     :       {NUMLOCK}
+            page down       :       {PGDN}
+            page up         :       {PGUP}
+            print screen    :       {PRTSC}
+            right           :       {RIGHT}
+            right menu      :       {RMENU}
+            right windows   :       {RWIN}
+            scroll lock     :       {SCROLLLOCK}
+            space           :       {SPACE}
+            tab             :       {TAB}
+            up              :       {UP}
+        (3) For key combinations
+            ctrl            :       ^
+            shift           :       +
+            menu key        :       %
+            windows key     :       ~
+            Samples like
+                ctrl+X          :       ^X
+                shift+X         :       +X
+                menu+X          :       %X
+                windows key+X   :       ~X
+                ctrl+shift+X    :       ^+X, +^X
+                ctrl+(XYZ)      :       ^(XYZ)
+        (4) repeat key input
+            repeat X for n time :       {X n}
+        (5) self defined pause time
+            pause n second      :       {PAUSE n}
+        '''
+        #set focus before input keys
+        self.UIElement.SetFocus()
+        
+        keys = parse_keys(string)
 
         for k in keys:
             k.Run()
-            time.sleep(.1)
-        print()
-
-if __name__ == "__main__":
-    main()
+            time.sleep(pause)
+ 
