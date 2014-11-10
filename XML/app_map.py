@@ -27,7 +27,7 @@ class AppMap(object):
     '''represent a app map
     
     '''
-    RootIdentifier = XML_config.query_root_id()
+    root_parent_string = XML_config.query_root_parent()
     
     def __init__(self, xml, uplevel_app_map_xmls=[]):
         self.LOGGER = AXUI_logger.get_logger()
@@ -103,10 +103,10 @@ class AppMap(object):
 
         #top level element must have parent
         #except root element
-        if UI_element.parent_string:
-            UI_element.parent = self.get_UI_element_by_name(UI_element.parent_string)
-        elif UI_element.identifier_string == self.RootIdentifier:
+        if UI_element.parent_string == self.root_parent_string:
             UI_element.parent = None
+        elif UI_element.parent_string:
+            UI_element.parent = self.get_UI_element_by_name(UI_element.parent_string)
         else:
             raise AppMapException("Top level element except root must have parent, miss parent in element: %s" % UI_element.name)
         

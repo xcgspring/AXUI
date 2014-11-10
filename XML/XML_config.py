@@ -4,12 +4,12 @@ import os
 config_section="XML"
 default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app_map"),
                   "schema_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas"),
-                  "root_identifier": "level=0",
+                  "root_parent": "None",
                 }
 
 AppMapLocation=default_configs["app_map_location"]
 SchemaLocation=default_configs["schema_location"]
-RootIdentifier=default_configs["root_identifier"]
+RootParent=default_configs["root_parent"]
 
 def config(configs=default_configs):
     '''
@@ -17,10 +17,10 @@ def config(configs=default_configs):
     '''
     global AppMapLocation
     global SchemaLocation
-    global RootIdentifier
+    global RootParent
     AppMapLocation=configs["app_map_location"]
     SchemaLocation=configs["schema_location"]
-    RootIdentifier=configs["root_identifier"]
+    RootParent=configs["root_parent"]
 
 #used by config module
 __all__=["config_section", "default_configs", "config"]
@@ -59,8 +59,8 @@ def query_schema_file(schema_file):
                     return os.path.join(root, basename)
         raise ValueError("%s not found in %s" % (schema_file, SchemaLocation))
 
-def query_root_id():
+def query_root_parent():
     '''query root id for root element
     Return: root identifier set in config
     '''
-    return RootIdentifier
+    return RootParent

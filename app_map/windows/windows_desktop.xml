@@ -2,6 +2,6 @@
 
 <AXUI:app_map xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
     <AXUI:UI_elements>
-        <AXUI:UI_element name="desktop" identifier="level=0"/>
+        <AXUI:UI_element name="desktop" parent="None"/>
     </AXUI:UI_elements>
 </AXUI:app_map>
