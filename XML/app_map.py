@@ -43,6 +43,20 @@ class AppMap(object):
         #parse the app map and build objects in memory
         self.parse_all()
 
+    def __repr__(self):
+        docstring = "AppMap:\n"
+        docstring += "  Include AppMaps:\n"
+        for appmap in self.app_maps:
+            docstring += "    %s\n" % appmap
+        docstring += "  Include Functions:\n"
+        for func in self.funcs:
+            docstring += "    %s\n" % func
+        docstring += "  Include UI elements:\n"
+        for element in self.UI_elements:
+            docstring += "    %s\n" % element
+        
+        return docstring
+        
     def verification(self):
         '''
         verify the app map xml using according schema, need pyxb module

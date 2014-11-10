@@ -10,6 +10,9 @@ class FakeUIElement(object):
     '''
     use to replace UIElement in Element without identifier
     ''' 
+    def __repr__(self):
+        return "Fake element, Use when there is no identifier for this element"
+    
     def verify(self):
         return self
 
@@ -53,6 +56,15 @@ class Element(object):
         
         #UIElement is assigned automatically during runtime
         self.UIElement = None
+        
+    def __repr__(self):
+        docstring = "Element for: %s\n" % self.name
+        if self.UIElement is None:
+            docstring += "  UIElement not init for this Element\n"
+        else:
+            docstring += self.UIElement.__repr__()
+            
+        return docstring
         
     def _verify(self):
         '''verify UIElement is valid or not

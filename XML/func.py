@@ -5,7 +5,7 @@ import os
 import app_map
 import XML_config
 
-class Step(object):
+class _Step(object):
     def __init__(self, xml_element, app_map):
         self.xml_element = xml_element
         self.type = xml_element.attrib["type"]
@@ -37,9 +37,12 @@ class Func(object):
         self.steps = []
         self.parse_steps()
     
+    def __repr__(self):
+        return "Func instance for %s" % self.name
+    
     def parse_steps(self):
         for step_xml_element in self.xml_element.findall("AXUI:step", namespaces={"AXUI":"AXUI"}):
-            self.steps.append(Step(step_xml_element, self.app_map))
+            self.steps.append(_Step(step_xml_element, self.app_map))
             
     def run(self):
         for step in self.steps:
