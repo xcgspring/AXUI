@@ -12,15 +12,15 @@
         </AXUI:func>
         
         <AXUI:func name="func2" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.keyboard.input" />
+            <AXUI:step type="GUI" cmd="wmplayer.keyboard.Input ^m" />
         </AXUI:func>
         
         <AXUI:func name="func3" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.mouse.move" />
+            <AXUI:step type="GUI" cmd="wmplayer.mouse.RightClick" />
         </AXUI:func>
         
         <AXUI:func name="func4" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.WindowPattern.SetWindowVisualState "/>
+            <AXUI:step type="GUI" cmd="wmplayer.WindowPattern.SetWindowVisualState WindowVisualState_Maximized"/>
         </AXUI:func>
     
     </AXUI:funcs>

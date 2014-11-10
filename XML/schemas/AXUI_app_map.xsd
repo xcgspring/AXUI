@@ -66,6 +66,7 @@
             <xs:attribute name="identifier" type="xs:string" />
             <xs:attribute name="start_func" type="xs:string" />
             <xs:attribute name="stop_func" type="xs:string" />
+            <xs:attribute name="timeout" type="xs:decimal" />
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="AXUI:UI_element" />
             </xs:choice>

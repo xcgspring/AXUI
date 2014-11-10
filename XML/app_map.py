@@ -78,6 +78,8 @@ class AppMap(object):
         UI_element = element_module.Element()
 
         UI_element.name = xml_element.attrib["name"]
+        if xml_element.attrib.has_key("timeout"):
+            UI_element.timeout = float(xml_element.attrib["timeout"])
         if xml_element.attrib.has_key("parent"):
             UI_element.parent_string = xml_element.attrib["parent"]
         if xml_element.attrib.has_key("start_func"):
