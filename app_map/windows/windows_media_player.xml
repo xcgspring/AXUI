@@ -8,7 +8,7 @@
 
     <AXUI:funcs>
         <AXUI:func name="func1" description="">
-            <AXUI:step type="CLI" cmd="C:\Program Files\Windows Media Player\wmplayer"/>
+            <AXUI:step type="CLI" cmd='"C:\Program Files\Windows Media Player\wmplayer.exe"'/>
         </AXUI:func>
         
         <AXUI:func name="func2" description="">
@@ -27,7 +27,7 @@
     
     <AXUI:UI_elements>
         <AXUI:UI_element name="wmplayer" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_func="func1">
-            <AXUI:UI_element name="menu_bar" identifier="Name='menu bar' AND LocalizedControlType='menu bar'" start_func="func2">
+            <AXUI:UI_element name="menu_bar" identifier="Name='Application' AND LocalizedControlType='menu bar'" start_func="func2">
                 <AXUI:UI_element name="File" identifier="Name='File' AND LocalizedControlType='menu item'" />
                 <AXUI:UI_element name="View" identifier="Name='View' AND LocalizedControlType='menu item'" />
                 <AXUI:UI_element name="Play" identifier="Name='Play' AND LocalizedControlType='menu item'" />

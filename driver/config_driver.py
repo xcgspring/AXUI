@@ -1,6 +1,7 @@
 
 config_section="driver"
-default_configs={ "driver_used": "fake_driver",
+default_configs={ #"driver_used": "fake_driver",
+                  "driver_used": "windows",
                   "timeout": 5,
                 }
 

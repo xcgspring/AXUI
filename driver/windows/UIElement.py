@@ -226,14 +226,13 @@ class UIElement(object):
     
     def _find_by_UIA(self, translated_identifier):
         target_UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier)
-        if target_UIAElement is None:
+        if target_UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
             LOGGER.warn("Find no element matching identifier")
             return None
         return UIElement(target_UIAElement)
         
     def find(self, parsed_identifier):
         '''find the UI element via identifier
-        
         '''
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
@@ -245,10 +244,12 @@ class UIElement(object):
  
     def verify(self):
         '''verify UI element is still exist
-        
         '''
-        UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation.CreateTrueCondition())
-        if UIAElement is None:
+        if self.UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
+            LOGGER.warn("Current UIAElement is no longer exist")
+            return None
+        UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation_object.CreateTrueCondition())
+        if UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
             LOGGER.warn("Current UIAElement is no longer exist")
             return None
         return UIElement(UIAElement)

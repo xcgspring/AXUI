@@ -1,11 +1,13 @@
 
 import xml.etree.ElementTree as ET
+import subprocess
 
-import os
 import app_map
 import XML_config
+import AXUI.logger as AXUI_logger
 
 class _Step(object):
+    _LOGGER = AXUI_logger.get_logger()
     def __init__(self, xml_element, app_map):
         self.xml_element = xml_element
         self.type = xml_element.attrib["type"]
@@ -22,13 +24,16 @@ class _Step(object):
         
     def run(self):
         if self.type == "GUI":
-            self.app_map.execute(cmd)
+            self._LOGGER.debug("run app map command: %s" % self.command)
+            self.app_map.execute(self.command)
         elif self.type == "CLI":
-            os.system(cmd)
+            self._LOGGER.debug("run system command: %s" % self.command)
+            subprocess.Popen(self.command)
         else:
             raise AppMapException("step type must be GUI or CLI, get: %s" % self.type)
 
 class Func(object):
+    _LOGGER = AXUI_logger.get_logger()
     def __init__(self, xml_element, app_map):
         self.xml_element = xml_element
         self.app_map = app_map

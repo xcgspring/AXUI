@@ -5,7 +5,7 @@ class UIElement(object):
     this is a template driver module need to implement
     '''
     @classmethod
-    def get_root():
+    def get_root(cls):
         raise NotImplementedError("Not implement")
     property_keys = []
     pattern_keys = []

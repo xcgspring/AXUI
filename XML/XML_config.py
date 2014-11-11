@@ -5,11 +5,13 @@ config_section="XML"
 default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app_map"),
                   "schema_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas"),
                   "root_parent": "None",
+                  "timeout": 5,
                 }
 
 AppMapLocation=default_configs["app_map_location"]
 SchemaLocation=default_configs["schema_location"]
 RootParent=default_configs["root_parent"]
+TimeOut=default_configs["timeout"]
 
 def config(configs=default_configs):
     '''
@@ -18,9 +20,11 @@ def config(configs=default_configs):
     global AppMapLocation
     global SchemaLocation
     global RootParent
+    global TimeOut
     AppMapLocation=configs["app_map_location"]
     SchemaLocation=configs["schema_location"]
     RootParent=configs["root_parent"]
+    TimeOut=configs["timeout"]
 
 #used by config module
 __all__=["config_section", "default_configs", "config"]
@@ -64,3 +68,9 @@ def query_root_parent():
     Return: root identifier set in config
     '''
     return RootParent
+    
+def query_timeout():
+    '''query timeout from config
+    Return: timeout set in config
+    '''
+    return TimeOut

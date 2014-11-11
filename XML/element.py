@@ -2,6 +2,7 @@
 import time
 import AXUI.logger as AXUI_logger
 import AXUI.driver as driver
+import XML_config
 
 class TimeOutError(Exception):
     pass
@@ -47,7 +48,7 @@ class Element(object):
         self.name = ""
         self.parent_string = ""
         self.identifier_string = ""
-        self.timeout = 0
+        self.timeout = XML_config.query_timeout()
         self.children = {}
         self.parent = None
         self.start_func = None
@@ -66,11 +67,11 @@ class Element(object):
             
         return docstring
         
-    def _verify(self):
+    def verify(self):
         '''verify UIElement is valid or not
         return None if not valid
         '''
-        if self.UIElement:
+        if not self.UIElement is None:
             self.UIElement = self.UIElement.verify()
 
         return self.UIElement
@@ -79,7 +80,7 @@ class Element(object):
         '''find element by identifier
         identifier should already be parsed
         '''
-        result = self._verify()
+        result = self.verify()
         if result is self.fake_UI_element:
             return self.parent.find(identifier)
         elif result is None:
@@ -93,36 +94,46 @@ class Element(object):
     def start(self):
         '''start and find this UIElement
         '''
-        if self._verify() is None:
-            #UIElement is None
-            if self.start_func:
-                self._start()
-            else:
-                if self.parent:
-                    self.parent.start()
-                else:
-                    #root element
-                    self.LOGGER.debug("Root element found: %s" % self.name)
-                    self.UIElement = driver.get_UIElement().get_root()
-                    
-            #keep finding the element by identifier, until found or timeout
-            start_time = time.time()
-            while True:
-                if self.identifier:
-                    self.LOGGER.debug("Normal UIElement found: %s" % self.name)
-                    self.UIElement = self.parent.find(self.identifier)
-                else:
-                    self.LOGGER.debug("Fake UI element found: %s" % self.name)
-                    #if identifier is not specified, use a fake UIElement to replace UIElement
-                    self.UIElement = self.fake_UI_element
-                    
-                if not self.UIElement is None:
-                    break
+        if self.verify() is None:
+            #check if root element
+            if self.parent is None:
+                #root element
+                self.LOGGER.debug("Root element found: %s" % self.name)
+                self.UIElement = driver.get_UIElement().get_root()
+                return
                 
-                time.sleep(0.1)
-                current_time = time.time()
-                if current_time - start_time > self.timeout:
-                    raise TimeOutError("time out encounter, during element:%s start" % self.name)
+            #check parent's UIElement
+            if self.parent.verify() is None:
+                self.parent.start()
+            
+            #check if element already exist
+            if self.identifier:
+                self.UIElement = self.parent.find(self.identifier)
+                if self.UIElement is None:
+                    #run start func
+                    if self.start_func:
+                        self._start()
+                    #keep finding the element by identifier, until found or timeout
+                    start_time = time.time()
+                    while True:
+                        self.LOGGER.debug("Normal UIElement found: %s" % self.name)
+                        self.UIElement = self.parent.find(self.identifier)
+                            
+                        if not self.UIElement is None:
+                            break
+                        
+                        time.sleep(0.1)
+                        current_time = time.time()
+                        if current_time - start_time > self.timeout:
+                            raise TimeOutError("time out encounter, during element:%s start" % self.name)
+            else:
+                #run start func
+                if self.start_func:
+                    self._start()
+      
+                self.LOGGER.debug("Fake UI element found: %s" % self.name)
+                #if identifier is not specified, use a fake UIElement to replace UIElement
+                self.UIElement = self.fake_UI_element
             
     def _stop(self):
         if not self.stop_func is None:
@@ -131,10 +142,13 @@ class Element(object):
     def stop(self):
         '''stop and verify this UIElement
         '''
-        if not self._verify() is None:
+        if not self.verify() is None:
+            #stop all children
+            for name in self.children:
+                self.children[name].stop()
+            #stop self
             if self.stop_func:
                 self._stop()
-                
             #keep verify the element, until not found or timeout
             start_time = time.time()
             while True:
