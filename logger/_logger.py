@@ -16,15 +16,14 @@ default_configs = {"logger_name":"AXUI",
                    "logging_stream":"stdout", 
                    "logging_file":"AXUI.log", 
                    "file_logging_mode":"a", 
-                   "formatter":"%(message)s", 
+                   "formatter":"[ %(levelname)s ][ %(filename)s:%(lineno)d ] %(message)s", 
                    "color_enable":"True" }
                    
 logging_levels = {"CRITICAL":logging.CRITICAL, 
                   "ERROR":logging.ERROR, 
                   "WARNING": logging.WARNING, 
                   "INFO": logging.INFO, 
-                  "DEBUG": logging.DEBUG, 
-                  "NOTSET": logging.NOTSET }
+                  "DEBUG": logging.DEBUG}
                   
 logging_streams = {"STDOUT":sys.stdout, 
                  "FALSE":False }
@@ -43,19 +42,19 @@ def config(configs=default_configs):
     if configs["logging_level"].upper() in logging_levels:
         logging_level=logging_levels[configs["logging_level"].upper()]
     else:
-        print("Error logging_level value, use default")
+        #print("Error logging_level value, use default")
         logging_level=logging_levels[default_configs["logging_level"].upper()]
         
     if configs["logging_stream"].upper() in logging_streams:
         logging_stream=logging_streams[configs["logging_stream"].upper()]
     else:
-        print("Error logging_stream value, use default")
+        #print("Error logging_stream value, use default")
         logging_stream=logging_streams[default_configs["logging_stream"].upper()]
         
     if configs["file_logging_mode"].upper() in file_logging_modes:
         file_logging_mode=file_logging_modes[configs["file_logging_mode"].upper()]
     else:
-        print("Error file_logging_mode value, use default")
+        #print("Error file_logging_mode value, use default")
         file_logging_mode=file_logging_modes[default_configs["file_logging_mode"].upper()]
         
     formatter_string=configs["formatter"]
@@ -63,7 +62,7 @@ def config(configs=default_configs):
     if configs["color_enable"].upper() in logging_color_configs:
         logging_color_config=logging_color_configs[configs["color_enable"].upper()]
     else:
-        print("Error color_enable value, use default")
+        #print("Error color_enable value, use default")
         logging_color_config=logging_color_configs[default_configs["color_enable"].upper()]
         
     #config logger according input configs
@@ -101,12 +100,11 @@ def config(configs=default_configs):
 
 #used by config module
 __all__=["config_section", "default_configs", "config"]
-    
-def get_logger():
+
+def LOGGER():
     global LOGNAME
     if LOGNAME == None:
         config()
     return logging.getLogger(LOGNAME)
 
-
-
+    

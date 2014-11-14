@@ -12,7 +12,7 @@ this module will parse this identifier to a list like:
 import ply.lex as lex
 import ply.yacc as yacc
 
-import AXUI.logger as AXUI_logger
+from AXUI.logger import LOGGER
 
 ##################################
 #lexical analysis
@@ -51,8 +51,7 @@ def t_STRING(t):
     return t
     
 def t_error(t):
-    LOGGER = AXUI_logger.get_logger()
-    LOGGER.warn("Illegal character %s in Ln: %d" % (repr(t.value[0]), t.lexer.lineno))
+    LOGGER().debug("Illegal character %s in Ln: %d" % (repr(t.value[0]), t.lexer.lineno), level="WARNING")
     raise Exception("")
     t.lexer.skip(1)
     
@@ -90,8 +89,7 @@ def p_value_bool(p):
     p[0]=p[1]
     
 def p_error(p):
-    LOGGER = AXUI_logger.get_logger()
-    LOGGER.warn("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))
+    LOGGER().debug("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno), level="WARNING")
     raise Exception("")
     
 identifier_parser = yacc.yacc(write_tables=0)

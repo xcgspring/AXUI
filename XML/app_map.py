@@ -1,16 +1,12 @@
 
 import xml.etree.ElementTree as ET
 
-import AXUI.logger as AXUI_logger
+from AXUI.logger import LOGGER
 from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
 from  AXUI.parsing.command_parsing import command_lexer, command_parser
 import func
 import XML_config
 import element as element_module
-
-
-class AppMapException(Exception):
-    pass
 
 def singleton(class_):
     instances = {}
@@ -30,7 +26,6 @@ class AppMap(object):
     root_parent_string = XML_config.query_root_parent()
     
     def __init__(self, xml, uplevel_app_map_xmls=[]):
-        self.LOGGER = AXUI_logger.get_logger()
         self.app_map_xml = xml
         #prevent recursive include
         uplevel_app_map_xmls.append(self.app_map_xml)
@@ -64,7 +59,7 @@ class AppMap(object):
         try:
             import pyxb
         except ImportError:
-            self.LOGGER.info("pyxb not install, skip app map verification")
+            LOGGER().info("pyxb not install, skip app map verification")
             return
             
         from validate import check_app_map
@@ -78,7 +73,7 @@ class AppMap(object):
                 path = include_element.attrib["path"]
                 #prevent recursive include
                 if XML_config.query_app_map_file(path) in self.uplevel_app_map_xmls:
-                    raise AppMapException("Recursive include for app map: %s" % XML_config.query_app_map_file(path))
+                    raise ValueError("Recursive include for app map: %s" % XML_config.query_app_map_file(path))
                 self.app_maps[name] = AppMap(path, uplevel_app_map_xmls=self.uplevel_app_map_xmls)
             
     def _parse_func_elements(self, root_element):
@@ -124,7 +119,7 @@ class AppMap(object):
         elif UI_element.parent_string:
             UI_element.parent = self.get_UI_element_by_name(UI_element.parent_string)
         else:
-            raise AppMapException("Top level element except root must have parent, miss parent in element: %s" % UI_element.name)
+            raise ValueError("Top level element except root must have parent, miss parent in element: %s" % UI_element.name)
         
         return UI_element
 
@@ -169,7 +164,7 @@ class AppMap(object):
         '''
         object_ = self._get_object_by_name_list(name_list.split("."))
         if not isinstance(object_, AppMap):
-            raise AppMapException("Expect app map, get %s, please check your name and app map" % type(object_))
+            raise ValueError("Expect app map, get %s, please check your name and app map" % type(object_))
 
     def get_UI_element_by_name(self, name_list):
         '''
@@ -178,7 +173,7 @@ class AppMap(object):
         '''
         return self._get_object_by_name_list(name_list.split("."))
         if not isinstance(object_, element_module.Element):
-            raise AppMapException("Expect UI element, get %s, please check your name and app map" % type(object_))
+            raise ValueError("Expect UI element, get %s, please check your name and app map" % type(object_))
         
     def get_func_by_name(self, name_list):
         '''
@@ -187,7 +182,7 @@ class AppMap(object):
         '''
         return self._get_object_by_name_list(name_list.split("."))
         if not isinstance(object_, func.Func):
-            raise AppMapException("Expect func, get %s, please check your name and app map" % type(object_))
+            raise ValueError("Expect func, get %s, please check your name and app map" % type(object_))
 
     def execute(self, command):
         '''
@@ -196,6 +191,7 @@ class AppMap(object):
         '''
         (object_name_list, parameter_list) = command_parser.parse(command, lexer=command_lexer)
         object_= self._get_object_by_name_list(object_name_list)
+        LOGGER().debug("Execute %s %s" %(object_name_list, parameter_list))
         object_(*parameter_list)
         
     def __getattr__(self, name):

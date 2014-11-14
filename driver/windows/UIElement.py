@@ -1,13 +1,11 @@
 
-import AXUI.logger as AXUI_logger
+from AXUI.logger import LOGGER
 
 import UIA
 import win32
 import ctypes
 
 import Translater
-
-LOGGER = AXUI_logger.get_logger()
 
 class UIElementException(Exception):
     pass
@@ -73,7 +71,7 @@ class Method(object):
             3. Other, no change
         '''
         if len(self.args) != len(args):
-            LOGGER.warn("Input arguments number not match expected")
+            LOGGER().warn("Input arguments number not match expected")
             return None
         for index, expected_arg in enumerate(self.args):
             expected_arg_type = expected_arg[0]
@@ -86,7 +84,7 @@ class Method(object):
                     args[index] = UIA.UIA_enums[expected_arg_type][args[index]]
                 
                 if args[index] not in UIA.UIA_enums[expected_arg_type].values():
-                    LOGGER.warn("Input argument not in expected value: %s" % args[index])
+                    LOGGER().warn("Input argument not in expected value: %s" % args[index])
                     return None
         
         return self.function_object(*args)
@@ -110,7 +108,7 @@ class Pattern(object):
             try:
                 getattr(self.pattern_object, name)
             except AttributeError:
-                LOGGER.warn("%s not exist in Pattern:%s"%(name, pattern_identifier))
+                LOGGER().warn("%s not exist in Pattern:%s"%(name, pattern_identifier))
                 continue
                 
             if flag == "method":
@@ -220,14 +218,14 @@ class UIElement(object):
         target_UIAElements = self.UIAElement.FindAll(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier[0])
         index = translated_identifier[1]
         if index+1 > target_UIAElements.Length:
-            LOGGER.warn("Find %d matched elements, index:%d out of range" % (target_UIAElements.Length, index))
+            LOGGER().warn("Find %d matched elements, index:%d out of range" % (target_UIAElements.Length, index))
             return None
         return UIElement(target_UIAElements.GetElement(index))
     
     def _find_by_UIA(self, translated_identifier):
         target_UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier)
         if target_UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
-            LOGGER.warn("Find no element matching identifier")
+            LOGGER().warn("Find no element matching identifier")
             return None
         return UIElement(target_UIAElement)
         
@@ -246,11 +244,11 @@ class UIElement(object):
         '''verify UI element is still exist
         '''
         if self.UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
-            LOGGER.warn("Current UIAElement is no longer exist")
+            LOGGER().warn("Current UIAElement is no longer exist")
             return None
         UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation_object.CreateTrueCondition())
         if UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
-            LOGGER.warn("Current UIAElement is no longer exist")
+            LOGGER().warn("Current UIAElement is no longer exist")
             return None
         return UIElement(UIAElement)
         

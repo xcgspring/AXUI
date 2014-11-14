@@ -2,10 +2,8 @@
 translate AXUI identifier to Windows UIA searchCondition
 '''
 import re
-import AXUI.logger as AXUI_logger
+from AXUI.logger import LOGGER
 import UIA
-
-LOGGER = AXUI_logger.get_logger()
 
 #Custom identifiers is defined for UI elements not properly recongnized by UIA
 #Custom identifiers used with UIA identifiers should its special rules
@@ -37,7 +35,7 @@ class ID_Translater(object):
             return UIA.IUIAutomation_object.CreatePropertyCondition(UIA.UIA_automation_element_property_identifers_mapping[parsed_atomic_id[0]], parsed_atomic_id[1])
         else:
             #use no UIA identifier will be skipped
-            LOGGER.warn("identifier: %s not in UIA property maps" % parsed_atomic_id[0])
+            LOGGER().warn("identifier: %s not in UIA property maps" % parsed_atomic_id[0])
             return None
     
     def _translated_relational_identifier(self, relation, translated_id_1, translated_id_2):
@@ -65,7 +63,7 @@ class ID_Translater(object):
         else:
             raise TranslaterException("Get error parsed_id: %s" % repr(parsed_id))
             
-        LOGGER.debug("Get translated: %s" % repr(translated))
+        LOGGER().debug("Get translated: %s" % repr(translated))
         return translated
         
     def translated_top_level_identifier(self, parsed_id):

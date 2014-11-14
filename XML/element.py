@@ -1,6 +1,6 @@
 
 import time
-import AXUI.logger as AXUI_logger
+from AXUI.logger import LOGGER
 import AXUI.driver as driver
 import XML_config
 
@@ -43,7 +43,6 @@ class Element(object):
     fake_UI_element = FakeUIElement()
     
     def __init__(self):
-        self.LOGGER = AXUI_logger.get_logger()
         #Need init by app map
         self.name = ""
         self.parent_string = ""
@@ -98,7 +97,7 @@ class Element(object):
             #check if root element
             if self.parent is None:
                 #root element
-                self.LOGGER.debug("Root element found: %s" % self.name)
+                LOGGER().debug("Root element found: %s" % self.name)
                 self.UIElement = driver.get_UIElement().get_root()
                 return
                 
@@ -116,7 +115,7 @@ class Element(object):
                     #keep finding the element by identifier, until found or timeout
                     start_time = time.time()
                     while True:
-                        self.LOGGER.debug("Normal UIElement found: %s" % self.name)
+                        LOGGER().debug("Normal UIElement found: %s" % self.name)
                         self.UIElement = self.parent.find(self.identifier)
                             
                         if not self.UIElement is None:
@@ -131,7 +130,7 @@ class Element(object):
                 if self.start_func:
                     self._start()
       
-                self.LOGGER.debug("Fake UI element found: %s" % self.name)
+                LOGGER().debug("Fake UI element found: %s" % self.name)
                 #if identifier is not specified, use a fake UIElement to replace UIElement
                 self.UIElement = self.fake_UI_element
             
@@ -153,10 +152,10 @@ class Element(object):
             start_time = time.time()
             while True:
                 if self.identifier:
-                    self.LOGGER.debug("Normal UIElement stop: %s" % self.name)
+                    LOGGER().debug("Normal UIElement stop: %s" % self.name)
                     self.UIElement = self._verify()
                 else:
-                    self.LOGGER.debug("Fake UI element stop: %s" % self.name)
+                    LOGGER().debug("Fake UI element stop: %s" % self.name)
                     #if identifier is not specified, use a fake UIElement to replace UIElement
                     self.UIElement = None
                 

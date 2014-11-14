@@ -1,1 +1,1 @@
-from UIElement import UIElement as UIElement
+from UIElement import UIElement

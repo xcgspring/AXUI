@@ -16,12 +16,9 @@ class TestConfigLogger(unittest.TestCase):
                    "color_enable":"True" }
                    
         self.AXUI_logger.config(valid_configs)
-        logger = self.AXUI_logger.get_logger()
+        logger = self.AXUI_logger.LOGGER()
         self.assertTrue(logger)
-        self.assertEqual(logger.name, "TestConfigLogger")
-        
-    def tearDown(self):
-        pass
+        self.assertEqual(logger.name, valid_configs["logger_name"])
         
 class TestLogger(unittest.TestCase):
     def setUp(self):
@@ -36,7 +33,7 @@ class TestLogger(unittest.TestCase):
                    "color_enable":"True" }
                    
         self.AXUI_logger.config(valid_configs)
-        self.logger = self.AXUI_logger.get_logger()
+        self.logger = self.AXUI_logger.LOGGER()
         
     def test_logger(self):
         self.logger.debug("test debug")
@@ -44,8 +41,6 @@ class TestLogger(unittest.TestCase):
         self.logger.warn("test warn")
         self.logger.error("test error")
         self.logger.critical("test critical")
-        
-    def tearDown(self):
-        pass
+
         
         

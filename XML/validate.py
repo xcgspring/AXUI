@@ -5,6 +5,8 @@ import sys
 import platform
 import pyxb
 
+from AXUI.logger import LOGGER
+
 def generate_module(schema_location, module, module_root):
     #pyxbgen script from /usr/local/bin/pyxbgen or c:\python27\scripts\pyxbgen
     pyxbgen = '''
@@ -102,12 +104,12 @@ def check_app_map(XSD_file, app_map_file):
     with open(app_map_file) as app_map:
         try:
             app_map_instance = XSD_module.CreateFromDocument(app_map.read())
-            print("Check successful")
+            LOGGER().info("Check successful")
         except pyxb.UnrecognizedContentError as e:
-            print(e.details())
+            LOGGER().warn(e.details())
         except pyxb.IncompleteElementContentError as e:
-        	print(e.details())
+        	LOGGER().warn(e.details())
         except pyxb.ValidationError as e:
-            print(e.details())	
+            LOGGER().warn(e.details())	
         
 
