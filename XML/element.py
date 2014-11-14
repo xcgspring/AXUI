@@ -8,8 +8,7 @@ class TimeOutError(Exception):
     pass
 
 class FakeUIElement(object):
-    '''
-    use to replace UIElement in Element without identifier
+    '''used for Elements without identifier
     ''' 
     def __repr__(self):
         return "Fake element, Use when there is no identifier for this element"
@@ -19,24 +18,25 @@ class FakeUIElement(object):
 
 class Element(object):
     '''wrapper for UIElement
-    hold infomations from app map, and provide UIElement inferface for app map
+    hold informations from app map, and provide UIElement interface for app map
     
     Attributes:
-        name:
-        parent_string:
-        identifier_string:
-        timeout:
-        children:
-        parent:
-        start_func:
-        stop_func:
-        identifier:
+        name:               Element's name, from XML
+        parent_string:      Element's parent string, from XML
+        identifier_string:  Identifier string, from XML
+        timeout:            Time out for this element, from XML
+        children:           children elements
+        parent:             parent element
+        start_func:         function to start this element
+        stop_func:          function to stop this element
+        identifier:         parsed identifier 
         
-        UIElement:
+        UIElement:          driver interface for UIElement
         
-        find:
-        start:
-        stop:
+        verify:             function to verify if self still exist
+        find:               function to find children element
+        start:              function to start this element
+        stop:               function to stop this element
 
     '''
     #fake UI element is for elements without identifier 
@@ -92,6 +92,7 @@ class Element(object):
 
     def start(self):
         '''start and find this UIElement
+        first need to check if parent is exist, if not start the parent first
         '''
         if self.verify() is None:
             #check if root element
@@ -140,14 +141,17 @@ class Element(object):
     
     def stop(self):
         '''stop and verify this UIElement
+        Need to stop all children first
         '''
         if not self.verify() is None:
             #stop all children
             for name in self.children:
                 self.children[name].stop()
+                
             #stop self
             if self.stop_func:
                 self._stop()
+                
             #keep verify the element, until not found or timeout
             start_time = time.time()
             while True:
@@ -168,8 +172,7 @@ class Element(object):
                     raise TimeOutError("time out encounter, during element:%s stop" % self.name)
 
     def get_child_by_name(self, name):
-        '''
-        get child UIElement
+        '''get child UIElement by name
         '''
         return self.children[name]
             

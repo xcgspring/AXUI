@@ -14,8 +14,8 @@ RootParent=default_configs["root_parent"]
 TimeOut=default_configs["timeout"]
 
 def config(configs=default_configs):
-    '''
-    call back function used by config module
+    '''call back function used by config module
+    set the global variables according to configuration
     '''
     global AppMapLocation
     global SchemaLocation

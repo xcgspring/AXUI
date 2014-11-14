@@ -21,7 +21,9 @@ def singleton(class_):
 @singleton
 class AppMap(object):
     '''represent a app map
-    
+    one instance for one app map
+    app map includes UI elements, functions and other app maps
+    app maps should not recursive include each other
     '''
     root_parent_string = XML_config.query_root_parent()
     
@@ -53,8 +55,7 @@ class AppMap(object):
         return docstring
         
     def verification(self):
-        '''
-        verify the app map xml using according schema, need pyxb module
+        '''verify the app map xml using according schema, need pyxb module
         '''
         try:
             import pyxb
@@ -139,8 +140,7 @@ class AppMap(object):
                 self._build_children_UI_elements(xml_element, UI_element)
             
     def parse_all(self):
-        '''
-        parse all elements (app_maps, funcs, UI_elements) in the app map
+        '''parse all elements (app_maps, funcs, UI_elements) in the app map
         '''
         element_tree = ET.parse(self.app_map_xml)
         root_element = element_tree.getroot()
@@ -158,8 +158,7 @@ class AppMap(object):
         return object_
 
     def get_include_app_map_by_name(self, name_list):
-        '''
-        get app_map by name list
+        '''get app_map by name list
         name_list should be like "app_map1.app_map2...app_mapX"
         '''
         object_ = self._get_object_by_name_list(name_list.split("."))
@@ -167,8 +166,7 @@ class AppMap(object):
             raise ValueError("Expect app map, get %s, please check your name and app map" % type(object_))
 
     def get_UI_element_by_name(self, name_list):
-        '''
-        get element by name
+        '''get element by name
         name_list should be like "app_map1.app_map2...element1.element2...elementX"
         '''
         return self._get_object_by_name_list(name_list.split("."))
@@ -176,8 +174,7 @@ class AppMap(object):
             raise ValueError("Expect UI element, get %s, please check your name and app map" % type(object_))
         
     def get_func_by_name(self, name_list):
-        '''
-        get func by name
+        '''get func by name
         name_list should be like "app_map1.app_map2...app_mapX...func_name"
         '''
         return self._get_object_by_name_list(name_list.split("."))
@@ -185,8 +182,7 @@ class AppMap(object):
             raise ValueError("Expect func, get %s, please check your name and app map" % type(object_))
 
     def execute(self, command):
-        '''
-        execute command
+        '''execute command
         command like "app_map1.app_map2...element1.element2...operation [parameter1 parameter2 ...]"
         '''
         (object_name_list, parameter_list) = command_parser.parse(command, lexer=command_lexer)
@@ -195,8 +191,7 @@ class AppMap(object):
         object_(*parameter_list)
         
     def __getattr__(self, name):
-        '''
-        get app_map attribute
+        '''get app_map attribute
         will query object from app_maps > UI_elements > funcs
         '''
         if name in self.app_maps:

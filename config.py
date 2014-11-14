@@ -1,4 +1,9 @@
-
+'''
+config module used to configure modules with contents in a config file
+Functions:
+    config_self:        set the config file to use
+    config:             config the module with contents from config file
+'''
 import ConfigParser
 
 raw_parser = None
@@ -12,6 +17,12 @@ def config_self(config_file):
     raw_parser.read(config_file)
 
 def config(module):
+    '''
+    module needs to contain interfaces as below: 
+        config_section:     config_section is a string represent the section string in config file
+        default_configs:    default configs to use when config not specified by config file
+        config:             true method to do the configuration
+    '''
     if raw_parser is None:
         raise ConfigException("Before config other module, need config config_module first")
     

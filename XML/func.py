@@ -7,6 +7,8 @@ import XML_config
 from AXUI.logger import LOGGER
 
 class _Step(object):
+    '''represent one step element in the function element
+    '''
     def __init__(self, xml_element, app_map):
         self.xml_element = xml_element
         self.type = xml_element.attrib["type"]
@@ -32,18 +34,25 @@ class _Step(object):
             raise AppMapException("step type must be GUI or CLI, get: %s" % self.type)
 
 class Func(object):
+    '''represent a function element in the XML
+    
+    attributes:
+        run:        run this function
+    
+    '''
     def __init__(self, xml_element, app_map):
         self.xml_element = xml_element
         self.app_map = app_map
         self.name = xml_element.attrib["name"]
         self.description = xml_element.attrib["description"]
         self.steps = []
-        self.parse_steps()
+        #parse all included steps
+        self._parse_steps()
     
     def __repr__(self):
         return "Func instance for %s" % self.name
     
-    def parse_steps(self):
+    def _parse_steps(self):
         for step_xml_element in self.xml_element.findall("AXUI:step", namespaces={"AXUI":"AXUI"}):
             self.steps.append(_Step(step_xml_element, self.app_map))
             
