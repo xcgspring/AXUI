@@ -14,8 +14,9 @@ class TestUIElement(unittest.TestCase):
     def test_wmplayer(self):
         import AXUI.driver.windows.UIElement as UIElement
         root_element = UIElement.get_root()
-        import subprocess
+        import subprocess, time
         subprocess.Popen("\"C:\\Program Files\\Windows Media Player\\wmplayer.exe\"")
+        time.sleep(2)
         from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
         identifier = "Name='Windows Media Player' AND LocalizedControlType='window'"
         parsed_identifier = identifier_parser.parse(identifier, lexer=identifier_lexer)
@@ -27,8 +28,9 @@ class TestUIElement(unittest.TestCase):
     def test_wmplayer_pattern(self):
         import AXUI.driver.windows.UIElement as UIElement
         root_element = UIElement.get_root()
-        import subprocess
+        import subprocess, time
         subprocess.Popen("\"C:\\Program Files\\Windows Media Player\\wmplayer.exe\"")
+        time.sleep(2)
         from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
         identifier = "Name='Windows Media Player' AND LocalizedControlType='window'"
         parsed_identifier = identifier_parser.parse(identifier, lexer=identifier_lexer)
@@ -42,7 +44,7 @@ class TestUIElement(unittest.TestCase):
         root_element = UIElement.get_root()
         import subprocess, time
         subprocess.Popen("\"C:\\Program Files\\Windows Media Player\\wmplayer.exe\"")
-        time.sleep(1)
+        time.sleep(2)
         from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
         identifier = "Name='Windows Media Player' AND LocalizedControlType='window'"
         parsed_identifier = identifier_parser.parse(identifier, lexer=identifier_lexer)

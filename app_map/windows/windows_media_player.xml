@@ -12,7 +12,7 @@
         </AXUI:func>
         
         <AXUI:func name="func2" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.keyboard.Input ^m" />
+            <AXUI:step type="GUI" cmd="wmplayer.keyboard.Input '^m'" />
         </AXUI:func>
         
         <AXUI:func name="func3" description="">

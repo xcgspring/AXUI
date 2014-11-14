@@ -89,11 +89,7 @@ def p_parameter_list_2(p):
     p[0].append(p[2])
     
 def p_parameter(p):
-    '''parameter : NUMBER
-                 | STRING
-                 | BOOL
-                 | list
-                 | tuple'''
+    '''parameter : member'''
     p[0] = p[1]
 
 def p_list(p):
@@ -115,11 +111,15 @@ def p_members_2(p):
     
 def p_member(p):
     '''member : NUMBER
-              | STRING
+              | string
               | BOOL
               | list
               | tuple'''
     p[0] = p[1]
+
+def p_string(p):
+    "string : STRING"
+    p[0] = p[1].strip("\"").strip("\'")
               
 def p_error(p):
     LOGGER = AXUI_logger.get_logger()

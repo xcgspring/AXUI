@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 import AXUI.logger as AXUI_logger
 from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
-from  AXUI.parsing.command_parsing import command_parser as cd_parser
+from  AXUI.parsing.command_parsing import command_lexer, command_parser
 import func
 import XML_config
 import element as element_module
@@ -194,9 +194,9 @@ class AppMap(object):
         execute command
         command like "app_map1.app_map2...element1.element2...operation [parameter1 parameter2 ...]"
         '''
-        (object_name_list, parameter_list) = cd_parser.parse(command)
+        (object_name_list, parameter_list) = command_parser.parse(command, lexer=command_lexer)
         object_= self._get_object_by_name_list(object_name_list)
-        object_(parameter_list)
+        object_(*parameter_list)
         
     def __getattr__(self, name):
         '''
