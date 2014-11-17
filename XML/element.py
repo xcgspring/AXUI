@@ -59,8 +59,8 @@ class Element(object):
         
     def __repr__(self):
         docstring = "Element for: %s\n" % self.name
-        if self.UIElement is None:
-            docstring += "  UIElement not init for this Element\n"
+        if self.verify() is None:
+            docstring += "  UIElement not init or stopped for this Element\n"
         else:
             docstring += self.UIElement.__repr__()
             
@@ -101,14 +101,21 @@ class Element(object):
                 LOGGER().debug("Root element found: %s" % self.name)
                 self.UIElement = driver.get_UIElement().get_root()
                 return
-                
+
             #check parent's UIElement
             if self.parent.verify() is None:
                 self.parent.start()
-            
+
             #check if element already exist
             if self.identifier:
-                self.UIElement = self.parent.find(self.identifier)
+                #root element should use special find
+                print self.name
+                print self.parent.name
+                if self.parent.parent is None:
+                    self.UIElement = self.parent.root_find(self.identifier)
+                else:
+                    self.UIElement = self.parent.find(self.identifier)
+
                 if self.UIElement is None:
                     #run start func
                     if self.start_func:
@@ -117,7 +124,10 @@ class Element(object):
                     start_time = time.time()
                     while True:
                         LOGGER().debug("Normal UIElement found: %s" % self.name)
-                        self.UIElement = self.parent.find(self.identifier)
+                        if self.parent.parent is None:
+                            self.UIElement = self.parent.root_find(self.identifier)
+                        else:
+                            self.UIElement = self.parent.find(self.identifier)
                             
                         if not self.UIElement is None:
                             break

@@ -4,6 +4,7 @@ from AXUI.logger import LOGGER
 import UIA
 import win32
 import ctypes
+import _ctypes
 
 import Translater
 
@@ -178,6 +179,7 @@ class UIElement(object):
     
     Attributes:
         get_root:   class method, get the root element
+        root_find:  special find method for root element
         find:       find the first descendant element which matches parsed_identifier
         verify:     verify current UI element still exist
 
@@ -214,21 +216,34 @@ class UIElement(object):
                 
         return docstring
 
-    def _find_by_index(self, translated_identifier):
-        target_UIAElements = self.UIAElement.FindAll(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier[0])
+    def _find_by_index(self, translated_identifier, scope=UIA.UIA_wrapper.TreeScope_Descendants):
+        target_UIAElements = self.UIAElement.FindAll(scope, translated_identifier[0])
         index = translated_identifier[1]
         if index+1 > target_UIAElements.Length:
             LOGGER().warn("Find %d matched elements, index:%d out of range" % (target_UIAElements.Length, index))
             return None
         return UIElement(target_UIAElements.GetElement(index))
-    
-    def _find_by_UIA(self, translated_identifier):
-        target_UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Descendants, translated_identifier)
+
+    def _find_by_UIA(self, translated_identifier, scope=UIA.UIA_wrapper.TreeScope_Descendants):
+        target_UIAElement = self.UIAElement.FindFirst(scope, translated_identifier)
         if target_UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
             LOGGER().warn("Find no element matching identifier")
             return None
+        
         return UIElement(target_UIAElement)
         
+    def root_find(self, parsed_identifier):
+        '''root find should only find in the first level
+        '''
+        LOGGER().warn("Root only search elements in the first level")
+        translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
+        if translated_identifier[0] == "Coordinate":
+            return CordinateElement(translated_identifier[1], self)
+        elif translated_identifier[0] == "Index":
+            return self._find_by_index(translated_identifier[1], scope=UIA.UIA_wrapper.TreeScope_Children)
+        elif translated_identifier[0] == "UIA":
+            return self._find_by_UIA(translated_identifier[1], scope=UIA.UIA_wrapper.TreeScope_Children)
+
     def find(self, parsed_identifier):
         '''find the UI element via identifier
         '''
@@ -243,13 +258,23 @@ class UIElement(object):
     def verify(self):
         '''verify UI element is still exist
         '''
+        flag = True
         if self.UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
-            LOGGER().warn("Current UIAElement is no longer exist")
-            return None
-        UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation_object.CreateTrueCondition())
+            flag = False
+            
+        try:
+            UIAElement = self.UIAElement.FindFirst(UIA.UIA_wrapper.TreeScope_Element, UIA.IUIAutomation_object.CreateTrueCondition())
+        except _ctypes.COMError:
+            flag = False
+            UIAElement = ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)()
+            
         if UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
+            flag = False
+            
+        if not flag:
             LOGGER().warn("Current UIAElement is no longer exist")
             return None
+            
         return UIElement(UIAElement)
         
     def _get_property(self, name):
