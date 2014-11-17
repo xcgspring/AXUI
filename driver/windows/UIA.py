@@ -1053,7 +1053,7 @@ def get_pattern_by_id(UIAElement, pattern_identifier):
         
         pattern = UIAElement.GetCurrentPatternAs(UIA_pattern_identifier, UIA_pattern_interface._iid_)
         if pattern is None:
-            LOGGER().debug("This pattern:%s is not supported by this UIAElment" % pattern_identifier)
+            LOGGER().debug("This pattern:%s is not supported by this UIAElment" % property_identifier)
             return None
         return ctypes.POINTER(UIA_pattern_interface)(pattern)
         '''
@@ -1062,5 +1062,5 @@ def get_pattern_by_id(UIAElement, pattern_identifier):
         return pattern
         '''
     else:
-        LOGGER().debug("This pattern identifier is not support: %s, cannot get it from UIA typelib" % pattern_identifier)
+        LOGGER().debug("This pattern identifier is not support: %s, cannot get it from UIA typelib" % property_identifier)
         return None

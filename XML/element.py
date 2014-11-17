@@ -109,6 +109,8 @@ class Element(object):
             #check if element already exist
             if self.identifier:
                 #root element should use special find
+                print self.name
+                print self.parent.name
                 if self.parent.parent is None:
                     self.UIElement = self.parent.root_find(self.identifier)
                 else:
