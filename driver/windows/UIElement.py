@@ -235,7 +235,7 @@ class UIElement(object):
     def root_find(self, parsed_identifier):
         '''root find should only find in the first level
         '''
-        LOGGER().warn("Root only search elements in the first level")
+        LOGGER().debug("Root only search elements in the first level")
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
             return CordinateElement(translated_identifier[1], self)
