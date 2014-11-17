@@ -12,7 +12,7 @@ LOGNAME = None
 config_section = "logging"
 
 default_configs = {"logger_name":"AXUI", 
-                   "logging_level":"DEBUG", 
+                   "logging_level":"INFO", 
                    "logging_stream":"stdout", 
                    "logging_file":"AXUI.log", 
                    "file_logging_mode":"a", 
