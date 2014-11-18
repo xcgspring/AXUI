@@ -157,27 +157,28 @@ class Element(object):
                 self.children[name].stop()
                 
             #stop self
+            #only stop and check element which has stop_func attribute
             if self.stop_func:
                 self._stop()
                 
-            #keep verify the element, until not found or timeout
-            start_time = time.time()
-            while True:
-                if self.identifier:
-                    LOGGER().debug("Normal UIElement stop: %s" % self.name)
-                    self.UIElement = self._verify()
-                else:
-                    LOGGER().debug("Fake UI element stop: %s" % self.name)
-                    #if identifier is not specified, use a fake UIElement to replace UIElement
-                    self.UIElement = None
-                
-                if self.UIElement is None:
-                    break 
+                #keep verify the element, until not found or timeout
+                start_time = time.time()
+                while True:
+                    if self.identifier:
+                        LOGGER().debug("Normal UIElement stop: %s" % self.name)
+                        self.UIElement = self.verify()
+                    else:
+                        LOGGER().debug("Fake UI element stop: %s" % self.name)
+                        #if identifier is not specified, use a fake UIElement to replace UIElement
+                        self.UIElement = None
+                    
+                    if self.UIElement is None:
+                        break 
 
-                time.sleep(0.1)
-                current_time = time.time()
-                if current_time - start_time > self.timeout:
-                    raise TimeOutError("time out encounter, during element:%s stop" % self.name)
+                    time.sleep(0.1)
+                    current_time = time.time()
+                    if current_time - start_time > self.timeout:
+                        raise TimeOutError("time out encounter, during element:%s stop" % self.name)
 
     def get_child_by_name(self, name):
         '''get child UIElement by name

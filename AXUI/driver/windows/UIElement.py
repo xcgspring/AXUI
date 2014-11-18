@@ -62,7 +62,7 @@ class Method(object):
         
         return docstring
         
-    def __call__(self, *args):
+    def __call__(self, *in_args):
         '''
         For output value, use original value
         For input arguments:
@@ -71,6 +71,7 @@ class Method(object):
                get required pointer object from UIElement, and send it to function
             3. Other, no change
         '''
+        args = list(in_args)
         if len(self.args) != len(args):
             LOGGER().warn("Input arguments number not match expected")
             return None
