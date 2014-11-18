@@ -5,6 +5,7 @@ setup(
 
     name = "AXUI",
     packages = ["AXUI", "AXUI.logger", "AXUI.parsing", "AXUI.XML", "AXUI.driver", "AXUI.driver.windows", "AXUI.driver.windows.win32"],
+    package_data = {"AXUI":["global.cfg"], "AXUI.XML":["schemas/AXUI_app_map.xsd"]},
     version = "0.1.0",
     description = "UI auto framework",
     author = "xcgspring",
