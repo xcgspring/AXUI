@@ -4,11 +4,12 @@ from distutils.core import setup
 setup(
 
     name = "AXUI",
-    packages = ["AXUI", "AXUI.logger", "AXUI.parsing", "AXUI.XML"],
+    packages = ["AXUI", "AXUI.logger", "AXUI.parsing", "AXUI.XML", "AXUI.driver", "AXUI.driver.windows", "AXUI.driver.windows.win32"],
     version = "0.1.0",
     description = "UI auto framework",
     author = "xcgspring",
     author_email = "xcgspring@gmail.com",
+    license = "Apache Licence Version 2.0",
     url = "https://github.com/xcgspring/AXUI",
     download_url = "",
     keywords = ["UI", "auto"],
