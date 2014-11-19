@@ -182,7 +182,6 @@ class UIElement(object):
         get_root:   class method, get the root element
         root_find:  special find method for root element
         find:       find the first descendant element which matches parsed_identifier
-        verify:     verify current UI element still exist
 
         other attributes:      get other attributes or interfaces supported by this UI element,
                                such like keyboard, mouse, touch, etc.

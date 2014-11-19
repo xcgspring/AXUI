@@ -70,21 +70,31 @@ class Element(object):
         '''verify UIElement is valid or not
         return None if not valid
         '''
-        if not self.UIElement is None:
-            self.UIElement = self.UIElement.verify()
-
-        return self.UIElement
+        if self.UIElement is None:
+            return self.UIElement
+        else:
+            #root element
+            if self.parent is None:
+                return driver.get_UIElement().get_root()
+            #other
+            else:
+                return self.parent.find(self.identifier)
         
     def find(self, identifier):
         '''find element by identifier
         identifier should already be parsed
         '''
         result = self.verify()
-        if result is self.fake_UI_element:
+        if result is None:
+            LOGGER().warn("UIElement not set yet, cannot use find method")
+            return None
+        elif result is self.fake_UI_element:
             return self.parent.find(identifier)
-        elif result is None:
-            self.start()
-        return self.UIElement.find(identifier)
+        else:
+            if self.parent is None:
+                return self.UIElement.root_find(identifier)
+            else:
+                return self.UIElement.find(identifier)
         
     def _start(self):
         if not self.start_func is None:
@@ -108,11 +118,7 @@ class Element(object):
 
             #check if element already exist
             if self.identifier:
-                #root element should use special find
-                if self.parent.parent is None:
-                    self.UIElement = self.parent.root_find(self.identifier)
-                else:
-                    self.UIElement = self.parent.find(self.identifier)
+                self.UIElement = self.parent.find(self.identifier)
 
                 if self.UIElement is None:
                     #run start func
@@ -122,10 +128,7 @@ class Element(object):
                     start_time = time.time()
                     while True:
                         LOGGER().debug("Normal UIElement found: %s" % self.name)
-                        if self.parent.parent is None:
-                            self.UIElement = self.parent.root_find(self.identifier)
-                        else:
-                            self.UIElement = self.parent.find(self.identifier)
+                        self.UIElement = self.parent.find(self.identifier)
                             
                         if not self.UIElement is None:
                             break
