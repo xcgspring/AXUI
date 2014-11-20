@@ -288,7 +288,8 @@ class UIElement(object):
             
         return pattern
     
-    def _get_coordinate(self):
+    @property
+    def coordinate(self):
         #BoundingRectangle property value is (left, top, long, high)
         #CurrentBoundingRectangle value is (left, top, right, bottom)
         #use CurrentBoundingRectangle to be conpatible with Inspect.exe
@@ -303,7 +304,11 @@ class UIElement(object):
         Arguments: 
         Returns: 
         '''
-        return self.UIAElement.SetFocus()
+        try:
+            self.UIAElement.SetFocus()
+        except _ctypes.COMError:
+            LOGGER().warn("SetFocus fail on current element, SetFocus its parent instead")
+            self.parent.SetFocus()
         
     def GetClickablePoint(self):
         '''Retrieves a point on the element that can be clicked.
@@ -399,7 +404,8 @@ class CoordinateElement(UIElement):
     def _get_pattern(self, name):
         raise UIElementException("coordinate element don't support pattern")
         
-    def _get_coordinate(self):
+    @property
+    def coordinate(self):
         return self.coordinate
                 
     def __getattr__(self, name):
