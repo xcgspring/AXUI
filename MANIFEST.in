@@ -12,7 +12,7 @@ include AXUI/global.cfg
 graft AXUI/XML/schemas
 
 # Include all unit tests
-recursive-include tests *.py *.xsd *.xml *.sh *.cfg
+graft test
 
 # Include all tools for maintainer
 recursive-include tools * *.sh *.py
