@@ -3,11 +3,9 @@ import os
 import re
 import sys
 import platform
-try:
-    import pyxb
-except ImportError:
-    print("Need install pyxb first")
-    sys.exit(1)
+import pyxb
+
+from AXUI.logger import LOGGER
 
 def generate_module(schema_location, module, module_root):
     #pyxbgen script from /usr/local/bin/pyxbgen or c:\python27\scripts\pyxbgen
@@ -95,11 +93,23 @@ except Exception as e:
 '''
     exec(pyxbgen, {"arguments":["--schema-location=%s"%schema_location, "--module=%s"%module, "--binding-root=%s"%module_root]})
     
-if __name__=="__main__":
-    current_dir=os.path.dirname(os.path.abspath(__file__))
-    xs_dir=os.path.join(current_dir, "AXUI", "XML", "schemas")
-    for root, dirs, files in os.walk(xs_dir):
-        for name in files:
-            if re.match(".*\.xsd$", name) != None:
-                module_name = name.split(".")[0]
-                generate_module(os.path.join(root, name), module_name, root)
+def check_app_map(XSD_file, app_map_file):
+    XSD_module_name = os.path.basename(XSD_file).split(".")[0]
+    XSD_module_dir = os.path.dirname(XSD_file)
+    generate_module(XSD_file, XSD_module_name, XSD_module_dir)
+    
+    sys.path.insert(0, XSD_module_dir)
+    XSD_module = __import__(XSD_module_name)
+
+    with open(app_map_file) as app_map:
+        try:
+            app_map_instance = XSD_module.CreateFromDocument(app_map.read())
+            LOGGER().info("Check successful")
+        except pyxb.UnrecognizedContentError as e:
+            LOGGER().warn(e.details())
+        except pyxb.IncompleteElementContentError as e:
+        	LOGGER().warn(e.details())
+        except pyxb.ValidationError as e:
+            LOGGER().warn(e.details())	
+        
+

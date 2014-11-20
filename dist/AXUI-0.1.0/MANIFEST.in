@@ -1,0 +1,26 @@
+# Legal stuff
+include LICENSE
+
+# Miscellaneous other
+include MANIFEST.in
+include MANIFEST
+
+# Include global config
+include AXUI/global.cfg
+
+# Include all XML schema
+graft AXUI/XML/schemas
+
+# Include all unit tests
+graft test
+
+# Include all tools for maintainer
+recursive-include tools * *.sh *.py
+
+# Include all docs
+global-include README*
+recursive-include doc *
+
+# Include all examples
+recursive-include example *
+

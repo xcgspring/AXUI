@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<AXUI:app_map xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
+
+    <AXUI:includes>
+        <AXUI:include name="desktop" path="windows_desktop.xml" />
+    </AXUI:includes>
+
+    <AXUI:funcs>
+        <AXUI:func name="func1" description="">
+            <AXUI:step type="CLI" cmd='"C:\Program Files\Windows Media Player\wmplayer.exe"'/>
+        </AXUI:func>
+        
+        <AXUI:func name="func2" description="">
+            <AXUI:step type="GUI" cmd="wmplayer.keyboard.Input '^m'" />
+        </AXUI:func>
+        
+        <AXUI:func name="func3" description="">
+            <AXUI:step type="GUI" cmd="wmplayer.mouse.RightClick" />
+        </AXUI:func>
+        
+        <AXUI:func name="func4" description="">
+            <AXUI:step type="GUI" cmd="wmplayer.WindowPattern.SetWindowVisualState WindowVisualState_Maximized"/>
+        </AXUI:func>
+    
+    </AXUI:funcs>
+    
+    <AXUI:UI_elements>
+        <AXUI:UI_element name="wmplayer" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_func="func1">
+            <AXUI:UI_element name="menu_bar" identifier="Name='Application' AND LocalizedControlType='menu bar'" start_func="func2">
+                <AXUI:UI_element name="File" identifier="Name='File' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="View" identifier="Name='View' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Play" identifier="Name='Play' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Tools" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Help" identifier="Name='Help' AND LocalizedControlType='menu item'" />
+            </AXUI:UI_element>
+            <AXUI:UI_element name="transport_button_group" start_func="func3">
+                <AXUI:UI_element name="stop" identifier="Name='stop' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="previous" identifier="Name='previous' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="play" identifier="Name='play' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="next" identifier="Name='next' AND LocalizedControlType='button'"/>
+            </AXUI:UI_element>
+            <AXUI:UI_element name="volume" identifier="Name='volume' AND LocalizedControlType='slider'" start_func="func4"/>
+            <AXUI:UI_element name="seek" identifier="Name='seek' AND LocalizedControlType='slider'"/>
+        </AXUI:UI_element>
+    </AXUI:UI_elements>
+    
+</AXUI:app_map>
+
