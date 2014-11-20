@@ -7,42 +7,80 @@
     </AXUI:includes>
 
     <AXUI:funcs>
-        <AXUI:func name="func1" description="">
+        <AXUI:func name="wmplayer_start" description="">
             <AXUI:step type="CLI" cmd='"C:\Program Files\Windows Media Player\wmplayer.exe"'/>
         </AXUI:func>
         
-        <AXUI:func name="func2" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.keyboard.Input '^m'" />
+        <AXUI:func name="wmplayer_stop" description="">
+            <AXUI:step type="GUI" cmd='wmplayer_Window.WindowPattern.Close'/>
         </AXUI:func>
         
-        <AXUI:func name="func3" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.mouse.RightClick" />
+        <AXUI:func name="wmplayer_ctrl_o" description="">
+            <AXUI:step type="GUI" cmd="wmplayer_Window.keyboard.Input '^o'" />
         </AXUI:func>
         
-        <AXUI:func name="func4" description="">
-            <AXUI:step type="GUI" cmd="wmplayer.WindowPattern.SetWindowVisualState WindowVisualState_Maximized"/>
+        <AXUI:func name="open_dialog_stop" description="">
+            <AXUI:step type="GUI" cmd="wmplayer_Window.Open_Dialog.WindowPattern.Close"/>
         </AXUI:func>
-    
+        
+        <AXUI:func name="wmplayer_ctrl_m" description="">
+            <AXUI:step type="GUI" cmd="wmplayer_Window.keyboard.Input '^m'" />
+        </AXUI:func>
+
+        <AXUI:func name="wmplayer_maximize" description="">
+            <AXUI:step type="GUI" cmd="wmplayer_Window.WindowPattern.SetWindowVisualState 'WindowVisualState_Maximized'"/>
+        </AXUI:func>
+        
+        <AXUI:func name="play_menu_start" description="">
+            <AXUI:step type="GUI" cmd="wmplayer_Window.MenuBar.Play_MenuItem.ExpandCollapsePattern.Expand"/>
+        </AXUI:func>
+        
+        <AXUI:func name="volume_menu_start" description="">
+            <AXUI:step type="GUI" cmd="wmplayer_Window.Play_Menu.Volume_MenuItem.ExpandCollapsePattern.Expand"/>
+        </AXUI:func>
+        
     </AXUI:funcs>
     
     <AXUI:UI_elements>
-        <AXUI:UI_element name="wmplayer" parent="desktop.desktop" identifier="Name='Windows Media Player' AND LocalizedControlType='window'" start_func="func1">
-            <AXUI:UI_element name="menu_bar" identifier="Name='Application' AND LocalizedControlType='menu bar'" start_func="func2">
-                <AXUI:UI_element name="File" identifier="Name='File' AND LocalizedControlType='menu item'" />
-                <AXUI:UI_element name="View" identifier="Name='View' AND LocalizedControlType='menu item'" />
-                <AXUI:UI_element name="Play" identifier="Name='Play' AND LocalizedControlType='menu item'" />
-                <AXUI:UI_element name="Tools" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
-                <AXUI:UI_element name="Help" identifier="Name='Help' AND LocalizedControlType='menu item'" />
+        <AXUI:UI_element name="wmplayer_Window" parent="desktop.desktop" identifier="Name='Windows Media Player' OR Name='Now Playing' AND LocalizedControlType='window'" start_func="wmplayer_start" stop_func="wmplayer_stop">
+            <AXUI:UI_element name="MenuBar" identifier="Name='Application' AND LocalizedControlType='menu bar'" start_func="wmplayer_ctrl_m">
+                <AXUI:UI_element name="File_MenuItem" identifier="Name='File' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="View_MenuItem" identifier="Name='View' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Play_MenuItem" identifier="Name='Play' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Tools_MenuItem" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Help_MenuItem" identifier="Name='Help' AND LocalizedControlType='menu item'" />
             </AXUI:UI_element>
-            <AXUI:UI_element name="transport_button_group" start_func="func3">
-                <AXUI:UI_element name="stop" identifier="Name='stop' AND LocalizedControlType='button'"/>
-                <AXUI:UI_element name="previous" identifier="Name='previous' AND LocalizedControlType='button'"/>
-                <AXUI:UI_element name="play" identifier="Name='play' AND LocalizedControlType='button'"/>
-                <AXUI:UI_element name="next" identifier="Name='next' AND LocalizedControlType='button'"/>
+            
+            <AXUI:UI_element name="Play_Menu" identifier="Name='Play' AND LocalizedControlType='menu'" start_func="play_menu_start">
+                <AXUI:UI_element name="Volume_MenuItem" identifier="Name='Volume' AND LocalizedControlType='menu item'" />
             </AXUI:UI_element>
-            <AXUI:UI_element name="volume" identifier="Name='volume' AND LocalizedControlType='slider'" start_func="func4"/>
-            <AXUI:UI_element name="seek" identifier="Name='seek' AND LocalizedControlType='slider'"/>
+            
+            <AXUI:UI_element name="Volume_Menu" identifier="Name='Volume' AND LocalizedControlType='menu'" start_func="volume_menu_start">
+                <AXUI:UI_element name="Up_MenuItem" identifier="Name='Up' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Down_MenuItem" identifier="Name='Down' AND LocalizedControlType='menu item'" />
+                <AXUI:UI_element name="Mute_MenuItem" identifier="Name='Mute' AND LocalizedControlType='menu item'" />
+            </AXUI:UI_element>
+            
+            <AXUI:UI_element name="TransportSubview_Group" identifier="Name='TransportSubview' AND LocalizedControlType='group'">
+                <AXUI:UI_element name="repeat_Button" identifier="Name='Turn repeat on' OR Name='Turn repeat off' AND LocalizedControlType='button'" start_func="wmplayer_maximize"/>
+                <AXUI:UI_element name="Stop_Button" identifier="Name='Stop' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="Previous_Button" identifier="Name='Previous' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="Play_Pause_Button" identifier="Name='Play' OR Name='Pause' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="Next_Button" identifier="Name='Next' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="Mute_Button" identifier="Name='Mute' AND LocalizedControlType='button'"/>
+                <AXUI:UI_element name="Volume_Slider" identifier="Name='Volume' AND LocalizedControlType='slider'" start_func="wmplayer_maximize"/>
+            </AXUI:UI_element>
+            
+            <AXUI:UI_element name="Seek_Slider" identifier="Name='Seek' AND LocalizedControlType='slider'"/>
+            
+            <AXUI:UI_element name="Open_Dialog" identifier="Name='Open' AND LocalizedControlType='dialog'" start_func="wmplayer_ctrl_o" stop_func="open_dialog_stop">
+                <AXUI:UI_element name="FileName_ComboBox" identifier="Name='File name:' AND LocalizedControlType='combo box'">
+                    <AXUI:UI_element name="FileName_Edit" identifier="Name='File name:' AND LocalizedControlType='edit'"/>
+                </AXUI:UI_element>
+                <AXUI:UI_element name="Open_Button" identifier="Name='Open' AND LocalizedControlType='button' AND Index=2"/>
+            </AXUI:UI_element>
         </AXUI:UI_element>
+        
     </AXUI:UI_elements>
     
 </AXUI:app_map>
