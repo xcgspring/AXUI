@@ -109,7 +109,7 @@ def p_members_2(p):
     p[0].append(p[3])
     
 def p_member(p):
-    '''member : NUMBER
+    '''member : number
               | string
               | BOOL
               | list
@@ -119,6 +119,10 @@ def p_member(p):
 def p_string(p):
     "string : STRING"
     p[0] = p[1].strip("\"").strip("\'")
+    
+def p_number(p):
+    "number : NUMBER"
+    p[0] = int(p[1])
               
 def p_error(p):
     LOGGER().debug("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))

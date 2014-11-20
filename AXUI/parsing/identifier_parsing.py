@@ -60,6 +60,11 @@ identifier_lexer = lex.lex()
 ##################################
 #Syntactic analysis
 ##################################
+
+precedence = (
+    ('left', 'AND', 'OR'),
+)
+
 def p_identifier_and(p):
     'identifier : identifier AND identifier'
     p[0]=("AND", p[1], p[3])
@@ -78,7 +83,7 @@ def p_identifier(p):
     
 def p_value_number(p):
     'value : NUMBER'
-    p[0]=p[1]
+    p[0]=int(p[1])
     
 def p_value_string(p):
     'value : STRING'
