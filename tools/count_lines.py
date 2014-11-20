@@ -1,6 +1,6 @@
 
 import os
-test_dir = ".."
+test_dir = "../AXUI"
 total_lines = 0
 for _root, _dirs, _files in os.walk(test_dir):
     for _file in _files:

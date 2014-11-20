@@ -97,7 +97,7 @@ except Exception as e:
     
 if __name__=="__main__":
     current_dir=os.path.dirname(os.path.abspath(__file__))
-    xs_dir=os.path.join(current_dir, "..", "XML", "schemas")
+    xs_dir=os.path.join(current_dir, "AXUI", "XML", "schemas")
     for root, dirs, files in os.walk(xs_dir):
         for name in files:
             if re.match(".*\.xsd$", name) != None:
