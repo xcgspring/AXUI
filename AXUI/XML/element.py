@@ -70,15 +70,15 @@ class Element(object):
         '''verify UIElement is valid or not
         return None if not valid
         '''
-        if self.UIElement is None:
-            return self.UIElement
-        else:
+        if not self.UIElement is None:
             #root element
             if self.parent is None:
-                return driver.get_UIElement().get_root()
+                self.UIElement = driver.get_UIElement().get_root()
             #other
             else:
-                return self.parent.find(self.identifier)
+                self.UIElement = self.parent.find(self.identifier)
+                
+        return self.UIElement
         
     def find(self, identifier):
         '''find element by identifier
