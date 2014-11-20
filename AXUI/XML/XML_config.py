@@ -2,7 +2,7 @@
 import os
 
 config_section="XML"
-default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "example"),
+default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "app_map"),
                   "schema_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas"),
                   "root_parent": "None",
                   "timeout": 5,
