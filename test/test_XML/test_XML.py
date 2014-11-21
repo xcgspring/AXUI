@@ -21,9 +21,9 @@ class TestAppMap(unittest.TestCase):
         app_map_instance = app_map.AppMap(self.app_map_xml)
         desktop_element = app_map_instance.get_UI_element_by_name("desktop.desktop")
         self.assertTrue(desktop_element)
-        wmplayer_element = app_map_instance.get_UI_element_by_name("wmplayer")
+        wmplayer_element = app_map_instance.get_UI_element_by_name("wmplayer_Window")
         self.assertTrue(wmplayer_element)
-        play_button_element = app_map_instance.get_UI_element_by_name("wmplayer.transport_button_group.play")
-        self.assertIs(play_button_element, app_map_instance.wmplayer.transport_button_group.play)
+        play_button_element = app_map_instance.get_UI_element_by_name("wmplayer_Window.TransportSubview_Group.Play_Pause_Button")
+        self.assertIs(play_button_element, app_map_instance.wmplayer_Window.TransportSubview_Group.Play_Pause_Button)
 
 

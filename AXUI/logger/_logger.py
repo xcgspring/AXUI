@@ -12,7 +12,8 @@ LOGNAME = None
 config_section = "logging"
 
 default_configs = {"logger_name":"AXUI", 
-                   "logging_level":"INFO", 
+                   "logging_level_file":"DEBUG",
+                   "logging_level_stream":"ERROR", 
                    "logging_stream":"stdout", 
                    "logging_file":"AXUI.log", 
                    "file_logging_mode":"a", 
@@ -39,11 +40,17 @@ def config(configs=default_configs):
     '''
     logger_name=configs["logger_name"]
     
-    if configs["logging_level"].upper() in logging_levels:
-        logging_level=logging_levels[configs["logging_level"].upper()]
+    if configs["logging_level_file"].upper() in logging_levels:
+        logging_level_file=logging_levels[configs["logging_level_file"].upper()]
     else:
-        #print("Error logging_level value, use default")
-        logging_level=logging_levels[default_configs["logging_level"].upper()]
+        #print("Error logging_level_file value, use default")
+        logging_level_file=logging_levels[default_configs["logging_level_file"].upper()]
+        
+    if configs["logging_level_stream"].upper() in logging_levels:
+        logging_level_stream=logging_levels[configs["logging_level_stream"].upper()]
+    else:
+        #print("Error logging_level_stream value, use default")
+        logging_level_stream=logging_levels[default_configs["logging_level_stream"].upper()]
         
     if configs["logging_stream"].upper() in logging_streams:
         logging_stream=logging_streams[configs["logging_stream"].upper()]
@@ -68,18 +75,18 @@ def config(configs=default_configs):
     #config logger according input configs
     logger = logging.getLogger(logger_name)
     logger.propagate = False
-    logger.setLevel(logging_level)
+    #logger.setLevel(logging_level)
     logger.handlers = []
 
     if logging_stream:
         stream_handler = logging.StreamHandler(logging_stream)
-        stream_handler.setLevel(logging_level)
+        stream_handler.setLevel(logging_level_stream)
         formatter = logging.Formatter(formatter_string)
         stream_handler.setFormatter(formatter)
         logger.addHandler(stream_handler)
         
     file_handler = logging.FileHandler(configs["logging_file"], mode=file_logging_mode)
-    file_handler.setLevel(logging_level)
+    file_handler.setLevel(logging_level_file)
     formatter = logging.Formatter(formatter_string)
     file_handler.setFormatter(formatter)
     logger.addHandler(file_handler)

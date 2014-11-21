@@ -8,7 +8,8 @@ class TestConfigLogger(unittest.TestCase):
         
     def test_valid_config(self):
         valid_configs = {"logger_name":"TestConfigLogger", 
-                   "logging_level":"DEBUG", 
+                   "logging_level_file":"DEBUG", 
+                   "logging_level_stream":"DEBUG", 
                    "logging_stream":"stdout", 
                    "logging_file":"test_config_logger.log", 
                    "file_logging_mode":"a", 
@@ -25,7 +26,8 @@ class TestLogger(unittest.TestCase):
         import AXUI.logger
         self.AXUI_logger = AXUI.logger
         valid_configs = {"logger_name":"TestLogger", 
-                   "logging_level":"DEBUG", 
+                   "logging_level_file":"DEBUG", 
+                   "logging_level_stream":"DEBUG", 
                    "logging_stream":"stdout", 
                    "logging_file":"test_logger.log", 
                    "file_logging_mode":"a", 
