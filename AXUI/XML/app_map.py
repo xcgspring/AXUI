@@ -13,7 +13,13 @@ def singleton(class_):
     def getinstance(xml, **kwargs):
         full_xml = XML_config.query_app_map_file(xml)
         if full_xml not in instances:
-            instances[full_xml] = class_(full_xml, **kwargs)
+            #uplevel_app_map_xmls is a global value in decorater
+            #will overwrite it if there is argument passed in
+            #if no argument passed in, set to [] manually
+            if len(kwargs) == 0:
+                instances[full_xml] = class_(full_xml, uplevel_app_map_xmls=[])
+            else:
+                instances[full_xml] = class_(full_xml, **kwargs)
         return instances[full_xml]
         
     return getinstance
@@ -27,7 +33,7 @@ class AppMap(object):
     '''
     root_parent_string = XML_config.query_root_parent()
     
-    def __init__(self, xml, uplevel_app_map_xmls=[]):
+    def __init__(self, xml, uplevel_app_map_xmls):
         self.app_map_xml = xml
         #prevent recursive include
         uplevel_app_map_xmls.append(self.app_map_xml)
