@@ -194,5 +194,23 @@ class Element(object):
         else:
             self.start()
             return getattr(self.UIElement, name)
-
-
+    
+    def build_all_children(self, name):
+        '''build all UI element under this element
+        this function is add temporary for checking dynamic element and for debug use
+        Should handle dynamic element in XML in future
+        '''
+        self.start()
+        children_UIElements = self.UIElement._find_all_by_UIA()
+        element_array = []
+        for child_UIElement in children_UIElements.items():
+            child_element = Element()
+            child_element.parent = self
+            child_element.identifier = ["Index", child_UIElement[0]]
+            child_element.UIElement = child_UIElement[1]
+            
+            element_array.append(child_element)
+            
+        return child_element
+        
+        

@@ -217,8 +217,17 @@ class UIElement(object):
         return docstring
 
     def _find_by_index(self, translated_identifier, scope=UIA.UIA_wrapper.TreeScope_Descendants):
-        target_UIAElements = self.UIAElement.FindAll(scope, translated_identifier[0])
-        index = translated_identifier[1]
+        if len(translated_identifier) == 2:
+            identifier = translated_identifier[0]
+            index = translated_identifier[1]
+        elif len(translated_identifier) == 1:
+            identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+            index = translated_identifier
+        else:
+            LOGGER().warn("Index identifier is wrong, get %s" % repr(translated_identifier))
+            return None
+            
+        target_UIAElements = self.UIAElement.FindAll(scope, identifier)
         if index+1 > target_UIAElements.Length:
             LOGGER().warn("Find %d matched elements, index:%d out of range" % (target_UIAElements.Length, index))
             return None
@@ -231,6 +240,18 @@ class UIElement(object):
             return None
         
         return UIElement(target_UIAElement)
+        
+    def _find_all_by_UIA(self):
+        '''for debug use
+        '''
+        identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        scope = UIA.UIA_wrapper.TreeScope_Descendants
+        UIAElementArray = self.UIAElement.FindAll(scope, identifier)
+        UIElements = {}
+        for i in range(UIAElementArray.Length):
+            UIElements[i] = UIElement(UIAElementArray.GetElement(i))
+            
+        return UIElements
         
     def root_find(self, parsed_identifier):
         '''root find should only find in the first level

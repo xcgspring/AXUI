@@ -74,6 +74,9 @@ class ID_Translater(object):
         if len(parsed_id) == 2 and parsed_id[0] == "Coordinate":
             #handle "Coordinate" identifier
             return parsed_id
+        elif len(parsed_id) == 2 and parsed_id[0] == "Index":
+            #handle "Index" identifier
+            return parsed_id
         elif len(parsed_id) == 3 and parsed_id[0] == "AND" and (parsed_id[1][0] == "Index" or parsed_id[2][0] == "Index"):
             #handle "Index" identifier
             if parsed_id[1][0] == "Index":
