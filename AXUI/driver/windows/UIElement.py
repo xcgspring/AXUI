@@ -217,10 +217,10 @@ class UIElement(object):
         return docstring
 
     def _find_by_index(self, translated_identifier, scope=UIA.UIA_wrapper.TreeScope_Descendants):
-        if len(translated_identifier) == 2:
+        if isinstance(translated_identifier, tuple) and len(translated_identifier) == 2:
             identifier = translated_identifier[0]
             index = translated_identifier[1]
-        elif len(translated_identifier) == 1:
+        elif isinstance(translated_identifier, int):
             identifier = UIA.IUIAutomation_object.CreateTrueCondition()
             index = translated_identifier
         else:
@@ -246,6 +246,18 @@ class UIElement(object):
         '''
         identifier = UIA.IUIAutomation_object.CreateTrueCondition()
         scope = UIA.UIA_wrapper.TreeScope_Descendants
+        UIAElementArray = self.UIAElement.FindAll(scope, identifier)
+        UIElements = {}
+        for i in range(UIAElementArray.Length):
+            UIElements[i] = UIElement(UIAElementArray.GetElement(i))
+            
+        return UIElements
+        
+    def _root_find_all_by_UIA(self):
+        '''for debug use
+        '''
+        identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        scope = UIA.UIA_wrapper.TreeScope_Children
         UIAElementArray = self.UIAElement.FindAll(scope, identifier)
         UIElements = {}
         for i in range(UIAElementArray.Length):

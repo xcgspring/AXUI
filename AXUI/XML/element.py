@@ -195,13 +195,17 @@ class Element(object):
             self.start()
             return getattr(self.UIElement, name)
     
-    def build_all_children(self, name):
+    def build_all_children(self):
         '''build all UI element under this element
         this function is add temporary for checking dynamic element and for debug use
         Should handle dynamic element in XML in future
         '''
         self.start()
-        children_UIElements = self.UIElement._find_all_by_UIA()
+        if self.parent is None:
+            children_UIElements = self.UIElement._root_find_all_by_UIA()
+        else:
+            children_UIElements = self.UIElement._find_all_by_UIA()
+            
         element_array = []
         for child_UIElement in children_UIElements.items():
             child_element = Element()
@@ -211,6 +215,6 @@ class Element(object):
             
             element_array.append(child_element)
             
-        return child_element
+        return element_array
         
         
