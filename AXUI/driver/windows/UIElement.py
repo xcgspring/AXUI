@@ -2,10 +2,11 @@
 from AXUI.logger import LOGGER
 
 import UIA
-import win32
 import ctypes
 import _ctypes
 
+import win32
+import screenshot
 import Translater
 
 class UIElementException(Exception):

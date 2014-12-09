@@ -1,4 +1,5 @@
 
+import os
 import subprocess
 from AXUI.logger import LOGGER
 
@@ -10,11 +11,14 @@ def screenshot(filename, coordinate=None):
         filename:    screenshot filename, should be .bmp file
         coordinate:  (left, top, right, bottom) coordinate for target area
     '''
+    current_dir = os.path.dirname(__file__)
+    screenshot_app = os.path.join(current_dir, "screenshot.exe")
+    
     if coordinate is None:
-        cmd = "screenshot.exe -f %s" % filename
+        cmd = '"%s" -f %s' % (screenshot_app, filename)
     else:
-        cmd = "screenshot.exe -f %s -l %s -t %s -r %s -b %s" %\
-               (filename, coordinate[0], coordinate[1], coordinate[2], coordinate[3])
+        cmd = '"%s" -f %s -l %s -t %s -r %s -b %s' %\
+               (screenshot_app, filename, coordinate[0], coordinate[1], coordinate[2], coordinate[3])
         
     LOGGER().debug("screenshot command: %s" % cmd)
     process = subprocess.Popen(cmd)

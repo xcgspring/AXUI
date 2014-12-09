@@ -222,9 +222,11 @@ class Element(object):
     def screenshot(self):
         '''take a screen shot for this element
         '''
+        self.start()
+        
         filename = self.name+"_"+time.strftime("%y%m%d_%H%M%S")+".bmp"
         absfile = os.path.join(self.screenshot_location, filename)
-        if os.file.isfile(absfile):
+        if os.path.isfile(absfile):
             os.remove(absfile)
             
         self.UIElement.screenshot(absfile)

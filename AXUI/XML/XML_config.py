@@ -6,7 +6,7 @@ default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspa
                   "schema_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas"),
                   "root_parent": "None",
                   "timeout": 5,
-                  "screenshot_location": os.path.dirname(os.path.abspath(__file__),
+                  "screenshot_location": os.path.dirname(os.path.abspath(__file__)),
                 }
 
 AppMapLocation=default_configs["app_map_location"]
