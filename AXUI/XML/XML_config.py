@@ -6,12 +6,14 @@ default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspa
                   "schema_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas"),
                   "root_parent": "None",
                   "timeout": 5,
+                  "screenshot_location": os.path.dirname(os.path.abspath(__file__),
                 }
 
 AppMapLocation=default_configs["app_map_location"]
 SchemaLocation=default_configs["schema_location"]
 RootParent=default_configs["root_parent"]
 TimeOut=default_configs["timeout"]
+ScreenshotLocation=default_configs["screenshot_location"]
 
 def config(configs=default_configs):
     '''call back function used by config module
@@ -21,10 +23,12 @@ def config(configs=default_configs):
     global SchemaLocation
     global RootParent
     global TimeOut
+    global ScreenshotLocation
     AppMapLocation=configs["app_map_location"]
     SchemaLocation=configs["schema_location"]
     RootParent=configs["root_parent"]
     TimeOut=configs["timeout"]
+    ScreenshotLocation=configs["screenshot_location"]
 
 #used by config module
 __all__=["config_section", "default_configs", "config"]
@@ -74,3 +78,13 @@ def query_timeout():
     Return: timeout set in config
     '''
     return TimeOut
+    
+def query_screenshot_location():
+    '''query screenshot_location from config
+    Return: screenshot_location
+    '''
+    if not os.path.isdir(ScreenshotLocation):
+        os.makedirs(ScreenshotLocation)
+        
+    return ScreenshotLocation
+

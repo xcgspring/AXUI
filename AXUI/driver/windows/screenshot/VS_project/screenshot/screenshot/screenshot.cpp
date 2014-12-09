@@ -154,7 +154,7 @@ done:
 int _tmain(int argc, _TCHAR* argv[])
 {
 	BOOL result = 1;
-	char* USAGE = "Usage:\n\tscreenshot.exe -h hWnd -f filename [-l left_coordinate][-r right_coordinate][-t top_coordinate][-b bottom_coordinate]";
+	char* USAGE = "Usage:\n\tscreenshot.exe -f filename [-l left_coordinate][-r right_coordinate][-t top_coordinate][-b bottom_coordinate]";
 
 	HWND hWnd = NULL;
 	char* filename = NULL;
@@ -162,17 +162,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	BOOL flag_hWnd = FALSE, flag_filename = FALSE;
 	BOOL flag_left = FALSE, flag_right = FALSE, flag_top = FALSE, flag_bottom = FALSE;
 
-	char* optstr = "h:l:r:t:b:f:";
+	char* optstr = "l:r:t:b:f:";
 	int	opt;
 
 	while ((opt = getopt(argc, argv, optstr)) != -1)
 	{
 		switch (opt)
 		{
-		case 'h':
-			flag_hWnd = TRUE;
-			hWnd = (HWND)(atoi(optarg));
-			break;
 		case 'f':
 			flag_filename = TRUE;
 			filename = optarg;
@@ -203,11 +199,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 
-	if (!flag_hWnd || !flag_filename)
+	if (!flag_filename)
 	{
 		printf(USAGE);
 		return result;
 	}
+	// Get desktop handle
+	hWnd = GetDesktopWindow();
 
 	// Get the client area for size calculation
 	RECT rcClient;

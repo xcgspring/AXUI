@@ -343,6 +343,10 @@ class UIElement(object):
             LOGGER().warn("SetFocus fail on current element, SetFocus its parent instead")
             self.parent.SetFocus()
         
+    def screenshot(self, filename):
+        self.SetFocus()
+        return screenshot.screenshot(filename, self.coordinate)
+        
     def GetClickablePoint(self):
         '''Retrieves a point on the element that can be clicked.
         
@@ -419,6 +423,10 @@ class CoordinateElement(UIElement):
         #usually, a coordinate element will be set focus if its parent is set focus
         return self.parent_element.SetFocus()
         
+    def screenshot(self, filename):
+        self.SetFocus()
+        return screenshot.screenshot(filename, self.coordinate)
+        
     def GetClickablePoint(self):
         '''Retrieves a point on the element that can be clicked.
         
@@ -436,10 +444,6 @@ class CoordinateElement(UIElement):
         
     def _get_pattern(self, name):
         raise UIElementException("coordinate element don't support pattern")
-        
-    @property
-    def coordinate(self):
-        return self.coordinate
                 
     def __getattr__(self, name):
         raise AttributeError("Attribute not exist for coordinate element: %s" % name)

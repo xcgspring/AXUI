@@ -1,4 +1,5 @@
 
+import os
 import time
 from AXUI.logger import LOGGER
 import AXUI.driver as driver
@@ -48,6 +49,7 @@ class Element(object):
         self.parent_string = ""
         self.identifier_string = ""
         self.timeout = XML_config.query_timeout()
+        self.screenshot_location = XML_config.query_screenshot_location()
         self.children = {}
         self.parent = None
         self.start_func = None
@@ -216,5 +218,17 @@ class Element(object):
             element_array.append(child_element)
             
         return element_array
+        
+    def screenshot(self):
+        '''take a screen shot for this element
+        '''
+        filename = self.name+"_"+time.strftime("%y%m%d_%H%M%S")+".bmp"
+        absfile = os.path.join(self.screenshot_location, filename)
+        if os.file.isfile(absfile):
+            os.remove(absfile)
+            
+        self.UIElement.screenshot(absfile)
+        LOGGER().debug("screenshot take: %s" % absfile)
+        
         
         
