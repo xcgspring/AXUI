@@ -75,7 +75,7 @@ def config(configs=default_configs):
     #config logger according input configs
     logger = logging.getLogger(logger_name)
     logger.propagate = False
-    #logger.setLevel(logging_level)
+    logger.setLevel(logging.DEBUG)
     logger.handlers = []
 
     if logging_stream:
