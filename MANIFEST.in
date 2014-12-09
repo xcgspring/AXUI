@@ -24,3 +24,6 @@ recursive-include doc *
 # Include all examples
 recursive-include example *
 
+# Include VS projects for windows driver
+recursive-include AXUI/driver/windows/screenshot/VS_project *
+
