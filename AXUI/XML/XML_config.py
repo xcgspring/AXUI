@@ -7,6 +7,7 @@ default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspa
                   "root_parent": "None",
                   "timeout": 5,
                   "screenshot_location": os.path.dirname(os.path.abspath(__file__)),
+                  "screenshot_on_failure": "False",
                 }
 
 AppMapLocation=default_configs["app_map_location"]
@@ -14,6 +15,7 @@ SchemaLocation=default_configs["schema_location"]
 RootParent=default_configs["root_parent"]
 TimeOut=default_configs["timeout"]
 ScreenshotLocation=default_configs["screenshot_location"]
+ScreenshotOnFailure=default_configs["screenshot_on_failure"]
 
 def config(configs=default_configs):
     '''call back function used by config module
@@ -24,11 +26,13 @@ def config(configs=default_configs):
     global RootParent
     global TimeOut
     global ScreenshotLocation
+    global ScreenshotOnFailure
     AppMapLocation=configs["app_map_location"]
     SchemaLocation=configs["schema_location"]
     RootParent=configs["root_parent"]
     TimeOut=configs["timeout"]
     ScreenshotLocation=configs["screenshot_location"]
+    ScreenshotOnFailure=configs["screenshot_on_failure"]
 
 #used by config module
 __all__=["config_section", "default_configs", "config"]
@@ -87,4 +91,14 @@ def query_screenshot_location():
         os.makedirs(ScreenshotLocation)
         
     return ScreenshotLocation
-
+    
+def query_screenshot_on_failure():
+    '''query screenshot_on_failure from config
+    '''
+    results = {"True":True, "False":False}
+    
+    if ScreenshotOnFailure in results:
+        return results[ScreenshotOnFailure]
+    else:
+        #use default
+        return results[default_configs["screenshot_on_failure"]]

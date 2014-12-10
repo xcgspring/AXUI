@@ -50,6 +50,7 @@ class Element(object):
         self.identifier_string = ""
         self.timeout = XML_config.query_timeout()
         self.screenshot_location = XML_config.query_screenshot_location()
+        self.screenshot_on_failure = XML_config.query_screenshot_on_failure()
         self.children = {}
         self.parent = None
         self.start_func = None
@@ -160,6 +161,17 @@ class Element(object):
                         time.sleep(0.1)
                         current_time = time.time()
                         if current_time - start_time > self.timeout:
+                            #do a desktop screenshot here as required
+                            if self.screenshot_on_failure:
+                                #get root
+                                element = self
+                                parent = element.parent
+                                while not parent is None:
+                                    element = parent
+                                    parent = element.parent
+                                #screenshot
+                                element.screenshot()
+                            
                             raise TimeOutError("time out encounter, during element:%s start" % self.name)
             else:
                 #run start func
