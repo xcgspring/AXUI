@@ -95,7 +95,6 @@ class Element(object):
         '''verify UIElement is valid or not
         return None if not valid
         '''
-        #if not self.UIElement is None:
         #root element
         if self.parent is None:
             self.UIElement = driver.get_UIElement().get_root()
@@ -109,7 +108,7 @@ class Element(object):
         '''find element by identifier
         identifier should already be parsed
         '''
-        result = self.verify()
+        result = self.start()
         if result is None:
             #LOGGER().warn("UIElement not set yet, cannot use find method")
             return None
@@ -135,44 +134,37 @@ class Element(object):
                 #root element
                 LOGGER().debug("Root element found: %s" % self.name)
                 self.UIElement = driver.get_UIElement().get_root()
-                return
-
-            #check parent's UIElement
-            if self.parent.verify() is None:
-                self.parent.start()
+                return self.UIElement
 
             #check if element already exist
             if self.identifier:
-                self.UIElement = self.parent.find(self.identifier)
-
-                if self.UIElement is None:
-                    #run start func
-                    if self.start_func:
-                        self._start()
-                    #keep finding the element by identifier, until found or timeout
-                    start_time = time.time()
-                    while True:
-                        LOGGER().debug("Normal UIElement found: %s" % self.name)
-                        self.UIElement = self.parent.find(self.identifier)
+                #run start func
+                if self.start_func:
+                    self._start()
+                #keep finding the element by identifier, until found or timeout
+                start_time = time.time()
+                while True:
+                    LOGGER().debug("Normal UIElement found: %s" % self.name)
+                    self.UIElement = self.verify()
                             
-                        if not self.UIElement is None:
-                            break
+                    if not self.UIElement is None:
+                        break
                         
-                        time.sleep(0.1)
-                        current_time = time.time()
-                        if current_time - start_time > self.timeout:
-                            #do a desktop screenshot here as required
-                            if self.screenshot_on_failure:
-                                #get root
-                                element = self
+                    time.sleep(0.1)
+                    current_time = time.time()
+                    if current_time - start_time > self.timeout:
+                        #do a desktop screenshot here as required
+                        if self.screenshot_on_failure:
+                            #get root
+                            element = self
+                            parent = element.parent
+                            while not parent is None:
+                                element = parent
                                 parent = element.parent
-                                while not parent is None:
-                                    element = parent
-                                    parent = element.parent
-                                #screenshot
-                                element.screenshot()
+                            #screenshot
+                            element.screenshot()
                             
-                            raise TimeOutError("time out encounter, during element:%s start" % self.name)
+                        raise TimeOutError("time out encounter, during element:%s start" % self.name)
             else:
                 #run start func
                 if self.start_func:
@@ -181,6 +173,8 @@ class Element(object):
                 LOGGER().debug("Fake UI element found: %s" % self.name)
                 #if identifier is not specified, use a fake UIElement to replace UIElement
                 self.UIElement = self.fake_UI_element
+                
+        return self.UIElement
             
     def _stop(self):
         if not self.stop_func is None:
@@ -219,14 +213,9 @@ class Element(object):
                     if current_time - start_time > self.timeout:
                         raise TimeOutError("time out encounter, during element:%s stop" % self.name)
 
-    def get_child_by_name(self, name):
-        '''get child UIElement by name
-        '''
-        return self.children[name]
-            
     def __getattr__(self, name):
         if self.children.has_key(name):
-            return self.get_child_by_name(name)
+            return self.children[name] 
         else:
             self.start()
             return getattr(self.UIElement, name)
