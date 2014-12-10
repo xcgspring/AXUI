@@ -65,7 +65,7 @@ int CaptureAnImage(HWND hWnd, RECT rcClient, char* filename)
 		0, 0,
 		rcClient.right - rcClient.left, rcClient.bottom - rcClient.top,
 		hdcWindow,
-		0, 0,
+		rcClient.left, rcClient.top,
 		SRCCOPY))
 	{
 		//MessageBox(hWnd, L"BitBlt has failed", L"Failed", MB_OK);
