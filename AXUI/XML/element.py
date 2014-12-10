@@ -60,9 +60,31 @@ class Element(object):
         self.UIElement = None
         
     def __repr__(self):
-        docstring = "Element for: %s\n" % self.name
+        docstring = "element instance for: %s" % self.name
+        return docstring
+        
+    @property
+    def details(self):
+        '''return details of this element
+        '''
+        docstring = "Element details for: %s\n" % self.name
+        
+        docstring += "#"*24
+        docstring += "\n"
+        docstring += "  Parent: %s\n" % repr(self.parent)
+        
+        docstring += "#"*24
+        docstring += "\n"
+        docstring += "  Children:\n"
+        for key in self.children:
+            docstring += "    %s\n" % repr(self.children[key])
+        
+        docstring += "#"*24
+        docstring += "\n"
+        docstring += "  UIElement details:\n"
+        
         if self.verify() is None:
-            docstring += "  UIElement not init or stopped for this Element\n"
+            docstring += "    UIElement not init or stopped for this Element\n"
         else:
             docstring += self.UIElement.__repr__()
             
@@ -214,6 +236,7 @@ class Element(object):
             child_element.parent = self
             child_element.identifier = ["Index", child_UIElement[0]]
             child_element.UIElement = child_UIElement[1]
+            child_element.name = child_UIElement[1].Name
             
             element_array.append(child_element)
             
