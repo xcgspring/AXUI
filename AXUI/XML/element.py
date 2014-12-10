@@ -95,13 +95,13 @@ class Element(object):
         '''verify UIElement is valid or not
         return None if not valid
         '''
-        if not self.UIElement is None:
-            #root element
-            if self.parent is None:
-                self.UIElement = driver.get_UIElement().get_root()
-            #other
-            else:
-                self.UIElement = self.parent.find(self.identifier)
+        #if not self.UIElement is None:
+        #root element
+        if self.parent is None:
+            self.UIElement = driver.get_UIElement().get_root()
+        #other
+        else:
+            self.UIElement = self.parent.find(self.identifier)
                 
         return self.UIElement
         
@@ -111,7 +111,7 @@ class Element(object):
         '''
         result = self.verify()
         if result is None:
-            LOGGER().warn("UIElement not set yet, cannot use find method")
+            #LOGGER().warn("UIElement not set yet, cannot use find method")
             return None
         elif result is self.fake_UI_element:
             return self.parent.find(identifier)
