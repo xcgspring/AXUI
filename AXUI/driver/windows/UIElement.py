@@ -242,27 +242,29 @@ class UIElement(object):
         
         return UIElement(target_UIAElement)
         
-    def _find_all_by_UIA(self):
+    def _find_all_by_UIA(self, parsed_identifier):
         '''for debug use
         '''
-        identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        if parsed_identifier is None:
+            parsed_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
         scope = UIA.UIA_wrapper.TreeScope_Descendants
-        UIAElementArray = self.UIAElement.FindAll(scope, identifier)
-        UIElements = {}
+        UIAElementArray = self.UIAElement.FindAll(scope, parsed_identifier)
+        UIElements = []
         for i in range(UIAElementArray.Length):
-            UIElements[i] = UIElement(UIAElementArray.GetElement(i))
+            UIElements.append(UIElement(UIAElementArray.GetElement(i)))
             
         return UIElements
         
-    def _root_find_all_by_UIA(self):
+    def _root_find_all_by_UIA(self, parsed_identifier):
         '''for debug use
         '''
-        identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        if parsed_identifier is None:
+            parsed_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
         scope = UIA.UIA_wrapper.TreeScope_Children
-        UIAElementArray = self.UIAElement.FindAll(scope, identifier)
-        UIElements = {}
+        UIAElementArray = self.UIAElement.FindAll(scope, parsed_identifier)
+        UIElements = []
         for i in range(UIAElementArray.Length):
-            UIElements[i] = UIElement(UIAElementArray.GetElement(i))
+            UIElements.append(UIElement(UIAElementArray.GetElement(i)))
             
         return UIElements
         

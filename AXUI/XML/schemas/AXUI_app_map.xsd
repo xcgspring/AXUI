@@ -55,6 +55,7 @@
         <xs:complexType>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="AXUI:UI_element" />
+                <xs:element ref="AXUI:UI_element_group" />
             </xs:choice>
         </xs:complexType>
     </xs:element>
@@ -69,7 +70,19 @@
             <xs:attribute name="timeout" type="xs:decimal" />
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="AXUI:UI_element" />
+                <xs:element ref="AXUI:UI_element_group" />
             </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    
+    <xs:element name="UI_element_group">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="parent" type="xs:string" />
+            <xs:attribute name="identifier" type="xs:string" />
+            <xs:attribute name="start_func" type="xs:string" />
+            <xs:attribute name="stop_func" type="xs:string" />
+            <xs:attribute name="timedelay" type="xs:decimal" />
         </xs:complexType>
     </xs:element>
     

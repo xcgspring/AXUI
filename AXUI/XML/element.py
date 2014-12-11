@@ -126,7 +126,6 @@ class Element(object):
 
     def start(self):
         '''start and find this UIElement
-        first need to check if parent is exist, if not start the parent first
         '''
         if self.verify() is None:
             #check if root element
@@ -135,8 +134,7 @@ class Element(object):
                 LOGGER().debug("Root element found: %s" % self.name)
                 self.UIElement = driver.get_UIElement().get_root()
                 return self.UIElement
-
-            #check if element already exist
+                
             if self.identifier:
                 #run start func
                 if self.start_func:
@@ -213,35 +211,16 @@ class Element(object):
                     if current_time - start_time > self.timeout:
                         raise TimeOutError("time out encounter, during element:%s stop" % self.name)
 
-    def __getattr__(self, name):
-        if self.children.has_key(name):
-            return self.children[name] 
-        else:
-            self.start()
-            return getattr(self.UIElement, name)
-    
-    def build_all_children(self):
-        '''build all UI element under this element
-        this function is add temporary for checking dynamic element and for debug use
-        Should handle dynamic element in XML in future
+    def findall(self, identifier):
+        '''find all elements match identifier
         '''
         self.start()
         if self.parent is None:
-            children_UIElements = self.UIElement._root_find_all_by_UIA()
+            children_UIElements = self.UIElement._root_find_all_by_UIA(identifier)
         else:
-            children_UIElements = self.UIElement._find_all_by_UIA()
+            children_UIElements = self.UIElement._find_all_by_UIA(identifier)
             
-        element_array = []
-        for child_UIElement in children_UIElements.items():
-            child_element = Element()
-            child_element.parent = self
-            child_element.identifier = ["Index", child_UIElement[0]]
-            child_element.UIElement = child_UIElement[1]
-            child_element.name = child_UIElement[1].Name
-            
-            element_array.append(child_element)
-            
-        return element_array
+        return children_UIElements
         
     def screenshot(self):
         '''take a screen shot for this element
@@ -255,6 +234,81 @@ class Element(object):
             
         self.UIElement.screenshot(absfile)
         LOGGER().debug("screenshot take: %s" % absfile)
+
+    def __getattr__(self, name):
+        if self.children.has_key(name):
+            return self.children[name] 
+        else:
+            self.start()
+            return getattr(self.UIElement, name)
+
+class ElementGroup(object):
+    '''
+    '''
+    def __init__(self):
+        #Need init by app map
+        self.name = ""
+        self.parent_string = ""
+        self.identifier_string = ""
+        #move this to config later
+        self.timedelay = 2
+        self.parent = None
+        self.start_func = None
+        self.stop_func = None
+        self.identifier = None
         
+        #Elements is assigned dynamicly during runtime
+        self.Elements = []
         
+    def __repr__(self):
+        docstring = "elementgroup instance for: %s" % self.name
+        return docstring
         
+    def _start(self):
+        if not self.start_func is None:
+            self.start_func.run()
+
+    def start(self):
+        '''start and findall UIElements, build Elements automatically
+        '''
+        #run start func
+        if self.start_func:
+            self._start()
+        #delay some time
+        time.sleep(self.timedelay)
+        #find and create all matched elements
+        UIElements = self.parent.findall(self.identifier)
+        
+        for i, UIElement in enumerate(UIElements):
+            element = Element()
+            element.parent = self.parent
+            if self.identifier is None:
+                child_element.identifier = ["Index", i]
+            else:
+                child_element.identifier = ("AND", self.identifier, ("Index", i))
+            element.UIElement = UIElement
+            element.name = UIElement.Name
+            
+            self.Elements.append(child_element)
+        
+        return self.Elements
+        
+    def _stop(self):
+        if not self.stop_func is None:
+            self.stop_func.run()
+    
+    def stop(self):
+        '''stop this Element group 
+        '''
+        #stop self
+        #only stop element which has stop_func attribute
+        if self.stop_func:
+            self._stop()
+        
+    def __getitem__(self, index):
+        self.start()
+        return self.Elements[index]
+        
+    def __iter__(self):
+        self.start()
+        return iter(self.Elements)

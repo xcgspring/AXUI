@@ -91,22 +91,41 @@ class AppMap(object):
                 self.funcs[name] = func.Func(func_element, self)
 
     def _init_UI_element(self, xml_element):
-        UI_element = element_module.Element()
-
-        UI_element.name = xml_element.attrib["name"]
-        if xml_element.attrib.has_key("timeout"):
-            UI_element.timeout = float(xml_element.attrib["timeout"])
-        if xml_element.attrib.has_key("parent"):
-            UI_element.parent_string = xml_element.attrib["parent"]
-        if xml_element.attrib.has_key("start_func"):
-            UI_element.start_func = self.get_func_by_name(xml_element.attrib["start_func"])
-        if xml_element.attrib.has_key("stop_func"):
-            UI_element.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
-        if xml_element.attrib.has_key("identifier"):
-            UI_element.identifier_string = xml_element.attrib["identifier"]
-            UI_element.identifier = identifier_parser.parse(UI_element.identifier_string, lexer=identifier_lexer)
+        if xml_element.tag == "{AXUI}UI_element":
+            UI_element = element_module.Element()
             
-        return UI_element
+            UI_element.name = xml_element.attrib["name"]
+            if xml_element.attrib.has_key("timeout"):
+                UI_element.timeout = float(xml_element.attrib["timeout"])
+            if xml_element.attrib.has_key("parent"):
+                UI_element.parent_string = xml_element.attrib["parent"]
+            if xml_element.attrib.has_key("start_func"):
+                UI_element.start_func = self.get_func_by_name(xml_element.attrib["start_func"])
+            if xml_element.attrib.has_key("stop_func"):
+                UI_element.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
+            if xml_element.attrib.has_key("identifier"):
+                UI_element.identifier_string = xml_element.attrib["identifier"]
+                UI_element.identifier = identifier_parser.parse(UI_element.identifier_string, lexer=identifier_lexer)
+             
+            return UI_element
+             
+        elif xml_element.tag == "{AXUI}UI_element_group":
+            UI_element_group = element_module.ElementGroup()
+
+            UI_element_group.name = xml_element.attrib["name"]
+            if xml_element.attrib.has_key("timedelay"):
+                UI_element_group.timedelay = float(xml_element.attrib["timedelay"])
+            if xml_element.attrib.has_key("parent"):
+                UI_element_group.parent_string = xml_element.attrib["parent"]
+            if xml_element.attrib.has_key("start_func"):
+                UI_element_group.start_func = self.get_func_by_name(xml_element.attrib["start_func"])
+            if xml_element.attrib.has_key("stop_func"):
+                UI_element_group.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
+            if xml_element.attrib.has_key("identifier"):
+                UI_element_group.identifier_string = xml_element.attrib["identifier"]
+                UI_element_group.identifier = identifier_parser.parse(UI_element.identifier_string, lexer=identifier_lexer)
+                
+            return UI_element_group
 
     def _build_UI_element(self, xml_element, parent_UI_element):
         UI_element = self._init_UI_element(xml_element)
@@ -131,16 +150,14 @@ class AppMap(object):
         return UI_element
 
     def _build_children_UI_elements(self, parent_xml_element, parent_element):  
-        for xml_element in \
-        parent_xml_element.findall("AXUI:UI_element", namespaces={"AXUI":"AXUI"}):
+        for xml_element in list(parent_xml_element):
             UI_element = self._build_UI_element(xml_element, parent_element)            
             self._build_children_UI_elements(xml_element, UI_element)
 
     def _parse_UI_elements(self, root_element):
         UI_element_root = root_element.find("AXUI:UI_elements", namespaces={"AXUI":"AXUI"})
         if UI_element_root is not None:
-            for xml_element in \
-            UI_element_root.findall("AXUI:UI_element", namespaces={"AXUI":"AXUI"}):
+            for xml_element in list(UI_element_root):
                 UI_element = self._build_top_level_UI_element(xml_element)                
                 self.UI_elements[UI_element.name] = UI_element
                 self._build_children_UI_elements(xml_element, UI_element)
