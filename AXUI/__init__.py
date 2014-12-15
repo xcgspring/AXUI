@@ -26,4 +26,7 @@ def Config(config_file=""):
 #port AppMap here
 AppMap=XML.AppMap
 
-__all__=["Config", "AppMap"]
+#port image_compare here
+from image import image_compare
+
+__all__=["Config", "AppMap", "image_compare"]
