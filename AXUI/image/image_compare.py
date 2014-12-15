@@ -9,8 +9,8 @@ def image_compare(image1, image2):
     #code from http://rosettacode.org/wiki/Percentage_difference_between_images#Python
     '''
 
-    i1 = Image.open("image1.jpg")
-    i2 = Image.open("image2.jpg")
+    i1 = Image.open(image1)
+    i2 = Image.open(image2)
     assert i1.mode == i2.mode, "Different kinds of images: %s VS %s" % (i1.mode, i2.mode)
     assert i1.size == i2.size, "Different sizes: %s" % (i1.size, i2.size)
      
