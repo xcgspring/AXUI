@@ -4,7 +4,7 @@ from distutils.core import setup
 setup(
 
     name = "AXUI",
-    packages = ["AXUI", "AXUI.logger", "AXUI.parsing", "AXUI.XML", "AXUI.driver", "AXUI.driver.windows", "AXUI.driver.windows.win32", "AXUI.driver.windows.screenshot"],
+    packages = ["AXUI", "AXUI.logger", "AXUI.parsing", "AXUI.XML", "AXUI.image", "AXUI.driver", "AXUI.driver.windows", "AXUI.driver.windows.win32", "AXUI.driver.windows.screenshot"],
     package_data = {"AXUI":["global.cfg"], "AXUI.XML":["schemas/AXUI_app_map.xsd"], "AXUI.driver.windows":["screenshot/screenshot.exe"]},
     version = "0.1.4",
     description = "UI auto framework",
