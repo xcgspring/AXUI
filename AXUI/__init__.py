@@ -4,6 +4,7 @@ import config
 import logger
 import driver
 import XML
+import image
 
 def Config(config_file=""):
     '''config the system
@@ -22,6 +23,7 @@ def Config(config_file=""):
     config.config(logger)
     config.config(XML)
     config.config(driver)
+    config.config(image)
 
 #port AppMap here
 AppMap=XML.AppMap

@@ -1,19 +1,31 @@
 
+import os
 from itertools import izip
-from PIL import Image
+from PIL import Image, ImageChops
 
+import image_config
 from AXUI.logger import LOGGER
 
-def image_compare(image1, image2):
+def image_compare(image1, image2, diff_image_name="diff.bmp"):
     '''compare two images, return difference percentage
     #code from http://rosettacode.org/wiki/Percentage_difference_between_images#Python
     '''
+    gen_diff_image = image_config.query_gen_diff_image()
+    diff_image_location = image_config.query_diff_image_location()
 
     i1 = Image.open(image1)
     i2 = Image.open(image2)
     assert i1.mode == i2.mode, "Different kinds of images: %s VS %s" % (i1.mode, i2.mode)
     assert i1.size == i2.size, "Different sizes: %s" % (i1.size, i2.size)
-     
+    
+    #generate diff bitmap
+    if gen_diff_image:
+        diff = ImageChops.difference(i1, i2)
+        diff_image_path = os.path.join(diff_image_location, diff_image_name)
+        diff.save(diff_image_path)
+        LOGGER().debug("Diff image save to: %s" % diff_image_path)
+    
+    #caculate the diff percentage
     pairs = izip(i1.getdata(), i2.getdata())
     if len(i1.getbands()) == 1:
         # for gray-scale jpegs
