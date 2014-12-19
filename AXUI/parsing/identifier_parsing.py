@@ -91,7 +91,10 @@ def p_value_string(p):
     
 def p_value_bool(p):
     'value : BOOL'
-    p[0]=p[1]
+    if p[1].upper() == "TRUE":
+        p[0]=True
+    elif p[1].upper() == "False":
+        p[0]=False
     
 def p_error(p):
     LOGGER().debug("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))

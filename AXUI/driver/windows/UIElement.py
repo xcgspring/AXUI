@@ -249,6 +249,13 @@ class UIElement(object):
             translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
         else:
             translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
+            
+            if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
+                LOGGER().warn("Only support UIA identifier, skip other identifier")
+                translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+            else:
+                translated_identifier = translated_identifier[1]
+            
         scope = UIA.UIA_wrapper.TreeScope_Descendants
         UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
         UIElements = []
@@ -264,6 +271,13 @@ class UIElement(object):
             translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
         else:
             translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
+            
+            if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
+                LOGGER().warn("Only support UIA identifier, skip other identifier")
+                translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+            else:
+                translated_identifier = translated_identifier[1]
+            
         scope = UIA.UIA_wrapper.TreeScope_Children
         UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
         UIElements = []
