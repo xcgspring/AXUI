@@ -246,9 +246,11 @@ class UIElement(object):
         '''for debug use
         '''
         if parsed_identifier is None:
-            parsed_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+            translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        else:
+            translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         scope = UIA.UIA_wrapper.TreeScope_Descendants
-        UIAElementArray = self.UIAElement.FindAll(scope, parsed_identifier)
+        UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
         UIElements = []
         for i in range(UIAElementArray.Length):
             UIElements.append(UIElement(UIAElementArray.GetElement(i)))
@@ -259,9 +261,11 @@ class UIElement(object):
         '''for debug use
         '''
         if parsed_identifier is None:
-            parsed_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+            translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        else:
+            translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         scope = UIA.UIA_wrapper.TreeScope_Children
-        UIAElementArray = self.UIAElement.FindAll(scope, parsed_identifier)
+        UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
         UIElements = []
         for i in range(UIAElementArray.Length):
             UIElements.append(UIElement(UIAElementArray.GetElement(i)))

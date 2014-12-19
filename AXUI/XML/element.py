@@ -313,3 +313,7 @@ class ElementGroup(object):
     def __iter__(self):
         self.start()
         return iter(self.Elements)
+        
+    def __len__(self):
+        self.start()
+        return len(self.Elements)

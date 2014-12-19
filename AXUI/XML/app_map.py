@@ -123,7 +123,7 @@ class AppMap(object):
                 UI_element_group.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
             if xml_element.attrib.has_key("identifier"):
                 UI_element_group.identifier_string = xml_element.attrib["identifier"]
-                UI_element_group.identifier = identifier_parser.parse(UI_element.identifier_string, lexer=identifier_lexer)
+                UI_element_group.identifier = identifier_parser.parse(UI_element_group.identifier_string, lexer=identifier_lexer)
                 
             return UI_element_group
 
