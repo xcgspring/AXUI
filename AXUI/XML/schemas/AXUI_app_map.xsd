@@ -5,10 +5,26 @@
     <xs:element name="app_map">
         <xs:complexType>
             <xs:all>
+                <xs:element ref="AXUI:variables" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="AXUI:includes" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="AXUI:funcs" minOccurs="0" maxOccurs="1"/>
                 <xs:element ref="AXUI:UI_elements" minOccurs="0" maxOccurs="1"/>
             </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="variables">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element ref="AXUI:variable" />
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="variables">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required" />
+            <xs:attribute name="value" type="xs:string" use="required" />
         </xs:complexType>
     </xs:element>
 

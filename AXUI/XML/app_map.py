@@ -1,9 +1,11 @@
-
+import re
+import subprocess
 import xml.etree.ElementTree as ET
 
 from AXUI.logger import LOGGER
 from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
-from  AXUI.parsing.command_parsing import command_lexer, command_parser
+from  AXUI.parsing.gui_command_parsing import gui_command_lexer, gui_command_parser
+from  AXUI.parsing.cli_command_parsing import cli_command_lexer, cli_command_parser
 import func
 import XML_config
 import element as element_module
@@ -38,6 +40,7 @@ class AppMap(object):
         #prevent recursive include
         uplevel_app_map_xmls.append(self.app_map_xml)
         self.uplevel_app_map_xmls = uplevel_app_map_xmls
+        self.variables = {}
         self.app_maps = {}
         self.funcs = {}
         self.UI_elements = {}
@@ -71,6 +74,14 @@ class AppMap(object):
             
         from validate import check_app_map
         check_app_map(XML_config.query_schema_file("AXUI_app_map.xsd"), self.app_map_xml)
+        
+    def _parse_variable_elements(self, root_element):
+        variable_root = root_element.find("AXUI:variables", namespaces={"AXUI":"AXUI"})
+        if variable_root is not None:
+            for variable_element in variable_root.findall("AXUI:variable", namespaces={"AXUI":"AXUI"}):
+                name = variable_element.attrib["name"]
+                value = variable_element.attrib["value"]
+                self.variables[name] = value
         
     def _parse_include_elements(self, root_element):
         include_root = root_element.find("AXUI:includes", namespaces={"AXUI":"AXUI"})
@@ -168,6 +179,7 @@ class AppMap(object):
         element_tree = ET.parse(self.app_map_xml)
         root_element = element_tree.getroot()
         
+        self._parse_variable_elements(root_element)
         self._parse_include_elements(root_element)
         self._parse_func_elements(root_element)
         self._parse_UI_elements(root_element)
@@ -204,15 +216,35 @@ class AppMap(object):
         if not isinstance(object_, func.Func):
             raise ValueError("Expect func, get %s, please check your name and app map" % type(object_))
 
-    def execute(self, command):
-        '''execute command
+    def gui_execute(self, command):
+        '''execute gui command
         command like "app_map1.app_map2...element1.element2...operation [parameter1 parameter2 ...]"
         '''
-        (object_name_list, parameter_list) = command_parser.parse(command, lexer=command_lexer)
+        (object_name_list, parameter_list) = gui_command_parser.parse(command, lexer=gui_command_lexer)
         object_= self._get_object_by_name_list(object_name_list)
         LOGGER().debug("Execute %s %s" %(object_name_list, parameter_list))
         object_(*parameter_list)
         
+    def cli_execute(self, command):
+        '''execute cli command
+        command like "app parameter1 parameter 2"
+        may contain variables
+        '''
+        args = cli_command_parser.parse(command, lexer=cli_command_lexer)
+        #replace variables
+        for i, arg in enumerate(args):
+            if not re.match("^{.*}$", arg) is None:
+                args[i] = self.variables[arg.strip("{").strip("}")]
+        p = subprocess.Popen(args)
+        p.communicate()
+        return p.returncode
+
+    def __setattr__(self, name, value):
+        '''set app_map attribute
+        this will add a variable in the app_map
+        '''
+        self.variables[name] = value
+
     def __getattr__(self, name):
         '''get app_map attribute
         will query object from app_maps > UI_elements > funcs

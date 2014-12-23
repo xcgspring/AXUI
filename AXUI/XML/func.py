@@ -1,6 +1,5 @@
 
 import xml.etree.ElementTree as ET
-import subprocess
 
 import app_map
 import XML_config
@@ -25,11 +24,11 @@ class _Step(object):
         
     def run(self):
         if self.type == "GUI":
-            LOGGER().debug("run app map command: %s" % self.command)
-            self.app_map.execute(self.command)
+            LOGGER().debug("run gui command: %s" % self.command)
+            self.app_map.gui_execute(self.command)
         elif self.type == "CLI":
-            LOGGER().debug("run system command: %s" % self.command)
-            subprocess.Popen(self.command)
+            LOGGER().debug("run cli command: %s" % self.command)
+            self.app_map.cli_execute(self.command)
         else:
             raise AppMapException("step type must be GUI or CLI, get: %s" % self.type)
 
