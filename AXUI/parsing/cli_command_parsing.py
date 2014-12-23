@@ -52,25 +52,30 @@ def p_objects_1(p):
     "objects : objects variable"
     p[1].append(p[2])
     p[0] = p[1]
+    
+def p_objects_2(p):
+    "objects : objects variable"
+    p[1].append(p[2])
+    p[0] = p[1]
 
 def p_variable(p):
     "variable : LBRACE objects RBRACE"
     p[0] = "{"+" ".join(p[2])+"}"
 
-def p_objects_2(p):
+def p_objects_3(p):
     "objects : SQUOTA objects SQUOTA"
     p[0] = [" ".join(p[2])]
 
-def p_objects_3(p):
+def p_objects_4(p):
     "objects : DQUOTA objects DQUOTA"
     p[0] = [" ".join(p[2])] 
     
-def p_objects_4(p):
+def p_objects_5(p):
     "objects : objects OBJECT"
     p[1].append(p[2])
     p[0] = p[1]
     
-def p_objects_5(p):
+def p_objects_6(p):
     "objects : OBJECT"
     p[0] = [p[1]]
               
