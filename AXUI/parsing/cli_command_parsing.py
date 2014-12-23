@@ -42,7 +42,7 @@ def t_error(t):
     LOGGER().debug("Illegal character %s in Ln: %d" % (repr(t.value[0]), t.lexer.lineno))
     t.lexer.skip(1)
 
-command_lexer = lex.lex()
+cli_command_lexer = lex.lex()
 
 ##################################
 #Syntactic analysis
@@ -77,5 +77,5 @@ def p_objects(p):
 def p_error(p):
     LOGGER().debug("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))
 
-command_parser = yacc.yacc(write_tables=0)
+cli_command_parser = yacc.yacc(write_tables=0)
 
