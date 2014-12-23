@@ -21,10 +21,10 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="variables">
+    <xs:element name="variable">
         <xs:complexType>
             <xs:attribute name="name" type="xs:string" use="required" />
-            <xs:attribute name="value" type="xs:string" use="required" />
+            <xs:attribute name="value" use="required" />
         </xs:complexType>
     </xs:element>
 

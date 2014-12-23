@@ -3,7 +3,7 @@ import unittest
 
 class TestAppMap(unittest.TestCase):
     def setUp(self):
-        self.command = '''"c:\test\test 1\1.exe" {variable} parameter2'''
+        self.command = r'''"c:\test\test 1\1.exe" {variable} parameter2 parameter3'''
         
     def test_lex(self):
         from AXUI.parsing.cli_command_parsing import cli_command_lexer

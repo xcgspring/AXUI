@@ -17,7 +17,7 @@ class TestAppMap(unittest.TestCase):
         
     def test_yacc(self):
         from AXUI.parsing.gui_command_parsing import gui_command_lexer, gui_command_parser
-        print command_parser.parse(self.command, lexer=gui_command_lexer)
+        print gui_command_parser.parse(self.command, lexer=gui_command_lexer)
 
 if __name__=="__main__":
     unittest.main(verbosity=2)

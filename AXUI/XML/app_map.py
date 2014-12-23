@@ -51,6 +51,9 @@ class AppMap(object):
 
     def __repr__(self):
         docstring = "AppMap:\n"
+        docstring += "  Include Variables:\n"
+        for variable in self.variables:
+            docstring += "    %s: %s\n" % (variable, repr(self.variables[variable]))
         docstring += "  Include AppMaps:\n"
         for appmap in self.app_maps:
             docstring += "    %s\n" % appmap
@@ -238,12 +241,6 @@ class AppMap(object):
         p = subprocess.Popen(args)
         p.communicate()
         return p.returncode
-
-    def __setattr__(self, name, value):
-        '''set app_map attribute
-        this will add a variable in the app_map
-        '''
-        self.variables[name] = value
 
     def __getattr__(self, name):
         '''get app_map attribute
