@@ -239,8 +239,9 @@ class AppMap(object):
             if not re.match("^{.*}$", arg) is None:
                 args[i] = self.variables[arg.strip("{").strip("}")]
         p = subprocess.Popen(args)
-        p.communicate()
-        return p.returncode
+        #some app is blocking, do not wait here
+        #p.communicate()
+        #return p.returncode
 
     def __getattr__(self, name):
         '''get app_map attribute

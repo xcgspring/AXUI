@@ -49,9 +49,8 @@ cli_command_lexer = lex.lex()
 ##################################    
 
 def p_objects_1(p):
-    "objects : objects variable"
-    p[1].append(p[2])
-    p[0] = p[1]
+    "objects : variable"
+    p[0] = [p[1]]
     
 def p_objects_2(p):
     "objects : objects variable"
