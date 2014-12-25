@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 import xml.etree.ElementTree as ET
@@ -225,7 +226,7 @@ class AppMap(object):
         '''
         (object_name_list, parameter_list) = gui_command_parser.parse(command, lexer=gui_command_lexer)
         object_= self._get_object_by_name_list(object_name_list)
-        LOGGER().debug("Execute %s %s" %(object_name_list, parameter_list))
+        LOGGER().debug("GUI execute %s %s" %(object_name_list, parameter_list))
         object_(*parameter_list)
         
     def cli_execute(self, command):
@@ -238,6 +239,13 @@ class AppMap(object):
         for i, arg in enumerate(args):
             if not re.match("^{.*}$", arg) is None:
                 args[i] = self.variables[arg.strip("{").strip("}")]
+                
+        #some app need to execute in their folder
+        app_path = os.path.dirname(args[0])
+        if app_path:
+            os.chdir(app_path)
+                
+        LOGGER().debug("CLI execute: %s" % repr(args))
         p = subprocess.Popen(args)
         #some app is blocking, do not wait here
         #p.communicate()
