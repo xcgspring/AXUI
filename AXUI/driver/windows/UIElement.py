@@ -380,7 +380,10 @@ class UIElement(object):
         if flag:
             return point.x, point.y
         else:
-            return None
+            #use coordinate
+            x = (self.coordinate[0]+self.coordinate[2])/2
+            y = (self.coordinate[1]+self.coordinate[3])/2
+            return x, y
     
     @property
     def keyboard(self):
