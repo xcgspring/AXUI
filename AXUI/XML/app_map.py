@@ -246,7 +246,7 @@ class AppMap(object):
             os.chdir(app_path)
                 
         LOGGER().debug("CLI execute: %s" % repr(args))
-        p = subprocess.Popen(args)
+        p = subprocess.Popen(args, shell=True)
         #some app is blocking, do not wait here
         #p.communicate()
         #return p.returncode

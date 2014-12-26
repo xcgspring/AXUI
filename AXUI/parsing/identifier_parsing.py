@@ -93,7 +93,7 @@ def p_value_bool(p):
     'value : BOOL'
     if p[1].upper() == "TRUE":
         p[0]=True
-    elif p[1].upper() == "False":
+    elif p[1].upper() == "FALSE":
         p[0]=False
     
 def p_error(p):

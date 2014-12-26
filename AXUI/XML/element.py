@@ -284,13 +284,13 @@ class ElementGroup(object):
             element = Element()
             element.parent = self.parent
             if self.identifier is None:
-                child_element.identifier = ["Index", i]
+                element.identifier = ["Index", i]
             else:
-                child_element.identifier = ("AND", self.identifier, ("Index", i))
+                element.identifier = ("AND", self.identifier, ("Index", i))
             element.UIElement = UIElement
             element.name = UIElement.Name
             
-            self.Elements.append(child_element)
+            self.Elements.append(element)
         
         return self.Elements
         
