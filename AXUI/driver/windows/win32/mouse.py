@@ -265,38 +265,47 @@ Attributes:
         
         return docstring
         
-    def LeftClick(self, coords = None):
+    def LeftClick(self, relative_coords = None):
         '''LeftClick: left click the UI element, or taget coords
         Arguments:
             coords: coordinate indicate where mouse click, default use UI element click point
         Returns:
         '''
-        if coords is None:
+        if relative_coords is None:
             coords = self.UIElement.GetClickablePoint()
+        else:
+            coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
+            coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
         self.UIElement.SetFocus()
         SendMouseInput(coords)
         
-    def LeftDoubleClick(self, coords = None):
+    def LeftDoubleClick(self, relative_coords = None):
         '''LeftDoubleClick: left double click the UI element, or taget coords
         Arguments:
             coords: coordinate indicate where mouse click, default use UI element click point
         Returns:
         '''
-        if coords is None:
+        if relative_coords is None:
             coords = self.UIElement.GetClickablePoint()
+        else:
+            coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
+            coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
         self.UIElement.SetFocus()
         SendMouseInput(coords, double=True)
     
-    def RightClick(self, coords = None):
+    def RightClick(self, relative_coords = None):
         '''RightClick: right click the UI element, or taget coords
         Arguments:
             coords: coordinate indicate where mouse click, default use UI element click point
         Returns:
         '''
-        if coords is None:
+        if relative_coords is None:
             coords = self.UIElement.GetClickablePoint()
+        else:
+            coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
+            coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
         self.UIElement.SetFocus()
         SendMouseInput(coords, button="right")
