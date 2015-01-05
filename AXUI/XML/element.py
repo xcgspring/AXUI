@@ -98,19 +98,63 @@ class Element(object):
         #root element
         if self.parent is None:
             self.UIElement = driver.get_UIElement().get_root()
-        #other
+        #no identifier
+        elif self.identifier is None:
+            self.UIElement = self.fake_UI_element
+        #has identifier and not root
         else:
             self.UIElement = self.parent.find(self.identifier)
-                
+
         return self.UIElement
         
+    def wait_start(self):
+        '''wait until UIElement is valid or timeout
+        '''
+        #keep finding the element by identifier, until found or timeout
+        start_time = time.time()
+        while True:
+            self.UIElement = self.verify()
+            if not self.UIElement is None:
+                break
+                        
+            time.sleep(0.1)
+            current_time = time.time()
+            if current_time - start_time > self.timeout:
+                #do a desktop screenshot here as required
+                if self.screenshot_on_failure:
+                    #get root
+                    element = self
+                    parent = element.parent
+                    while not parent is None:
+                        element = parent
+                        parent = element.parent
+                    #screenshot
+                    element.screenshot()
+                            
+                raise TimeOutError("time out encounter, during element:%s start" % self.name)
+        
+    def wait_stop(self):
+        '''wait until UIElement is not valid or timeout
+        '''
+        if not self.identifier is None:
+            #keep verify the element, until not found or timeout
+            start_time = time.time()
+            while True:
+                self.UIElement = self.verify()
+                if self.UIElement is None:
+                    break
+
+                time.sleep(0.1)
+                current_time = time.time()
+                if current_time - start_time > self.timeout:
+                    raise TimeOutError("time out encounter, during element:%s stop" % self.name)
+
     def find(self, identifier):
         '''find element by identifier
         identifier should already be parsed
         '''
-        result = self.start()
-        if result is None:
-            #LOGGER().warn("UIElement not set yet, cannot use find method")
+        self.start()
+        if self.UIElement is None:
             return None
         elif result is self.fake_UI_element:
             return self.parent.find(identifier)
@@ -128,51 +172,10 @@ class Element(object):
         '''start and find this UIElement
         '''
         if self.verify() is None:
-            #check if root element
-            if self.parent is None:
-                #root element
-                LOGGER().debug("Root element found: %s" % self.name)
-                self.UIElement = driver.get_UIElement().get_root()
-                return self.UIElement
-                
-            if self.identifier:
-                #run start func
-                if self.start_func:
-                    self._start()
-                #keep finding the element by identifier, until found or timeout
-                start_time = time.time()
-                while True:
-                    LOGGER().debug("Normal UIElement found: %s" % self.name)
-                    self.UIElement = self.verify()
-                            
-                    if not self.UIElement is None:
-                        break
-                        
-                    time.sleep(0.1)
-                    current_time = time.time()
-                    if current_time - start_time > self.timeout:
-                        #do a desktop screenshot here as required
-                        if self.screenshot_on_failure:
-                            #get root
-                            element = self
-                            parent = element.parent
-                            while not parent is None:
-                                element = parent
-                                parent = element.parent
-                            #screenshot
-                            element.screenshot()
-                            
-                        raise TimeOutError("time out encounter, during element:%s start" % self.name)
-            else:
-                #run start func
-                if self.start_func:
-                    self._start()
-      
-                LOGGER().debug("Fake UI element found: %s" % self.name)
-                #if identifier is not specified, use a fake UIElement to replace UIElement
-                self.UIElement = self.fake_UI_element
-                
-        return self.UIElement
+            #run start func
+            if self.start_func:
+                self._start()
+            self.wait_start()
             
     def _stop(self):
         if not self.stop_func is None:
@@ -191,25 +194,7 @@ class Element(object):
             #only stop and check element which has stop_func attribute
             if self.stop_func:
                 self._stop()
-                
-                #keep verify the element, until not found or timeout
-                start_time = time.time()
-                while True:
-                    if self.identifier:
-                        LOGGER().debug("Normal UIElement stop: %s" % self.name)
-                        self.UIElement = self.verify()
-                    else:
-                        LOGGER().debug("Fake UI element stop: %s" % self.name)
-                        #if identifier is not specified, use a fake UIElement to replace UIElement
-                        self.UIElement = None
-                    
-                    if self.UIElement is None:
-                        break 
-
-                    time.sleep(0.1)
-                    current_time = time.time()
-                    if current_time - start_time > self.timeout:
-                        raise TimeOutError("time out encounter, during element:%s stop" % self.name)
+            self.wait_stop()
 
     def findall(self, identifier):
         '''find all elements match identifier

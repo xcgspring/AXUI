@@ -35,7 +35,7 @@ t_DQUOTA = r"\""
 t_SQUOTA = r"'"
 
 def t_OBJECT(t):
-    r'[\w_.\\/:]+'
+    r'[\w_.\\/:,@]+'
     return t
 
 def t_error(t):
