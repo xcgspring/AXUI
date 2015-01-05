@@ -115,7 +115,7 @@ class Element(object):
         while True:
             self.UIElement = self.verify()
             if not self.UIElement is None:
-                break
+                return True
                         
             time.sleep(0.1)
             current_time = time.time()
@@ -130,8 +130,7 @@ class Element(object):
                         parent = element.parent
                     #screenshot
                     element.screenshot()
-                            
-                raise TimeOutError("time out encounter, during element:%s start" % self.name)
+                return False
         
     def wait_stop(self):
         '''wait until UIElement is not valid or timeout
@@ -142,12 +141,14 @@ class Element(object):
             while True:
                 self.UIElement = self.verify()
                 if self.UIElement is None:
-                    break
+                    return True
 
                 time.sleep(0.1)
                 current_time = time.time()
                 if current_time - start_time > self.timeout:
-                    raise TimeOutError("time out encounter, during element:%s stop" % self.name)
+                    return False
+        else:
+            return True
 
     def find(self, identifier):
         '''find element by identifier
@@ -175,7 +176,8 @@ class Element(object):
             #run start func
             if self.start_func:
                 self._start()
-            self.wait_start()
+            if not self.wait_start():
+                raise TimeOutError("time out encounter, during element:%s start" % self.name)
             
     def _stop(self):
         if not self.stop_func is None:
@@ -194,7 +196,8 @@ class Element(object):
             #only stop and check element which has stop_func attribute
             if self.stop_func:
                 self._stop()
-            self.wait_stop()
+            if not self.wait_stop():
+                raise TimeOutError("time out encounter, during element:%s stop" % self.name)
 
     def findall(self, identifier):
         '''find all elements match identifier
