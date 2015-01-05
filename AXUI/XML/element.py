@@ -157,7 +157,7 @@ class Element(object):
         self.start()
         if self.UIElement is None:
             return None
-        elif result is self.fake_UI_element:
+        elif self.UIElement is self.fake_UI_element:
             return self.parent.find(identifier)
         else:
             if self.parent is None:
@@ -196,8 +196,8 @@ class Element(object):
             #only stop and check element which has stop_func attribute
             if self.stop_func:
                 self._stop()
-            if not self.wait_stop():
-                raise TimeOutError("time out encounter, during element:%s stop" % self.name)
+                if not self.wait_stop():
+                    raise TimeOutError("time out encounter, during element:%s stop" % self.name)
 
     def findall(self, identifier):
         '''find all elements match identifier
