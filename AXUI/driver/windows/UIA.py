@@ -1026,12 +1026,14 @@ def get_property_by_id(UIAElement, property_identifier):
         property_value = UIAElement.GetCurrentPropertyValue(UIA_automation_element_property_identifers_mapping[property_identifier])
         if property_value is None:
             LOGGER().debug("This property:%s is not supported by this UIAElment" % property_identifier)
+            return ""
         return property_value
         
     elif property_identifier in UIA_control_pattern_availability_property_identifiers_mapping:
         property_value = UIAElement.GetCurrentPropertyValue(UIA_control_pattern_availability_property_identifiers_mapping[property_identifier])
         if property_value is None:
             LOGGER().debug("This property:%s is not supported by this UIAElment" % property_identifier)
+            return ""
         return property_value
     else:
         LOGGER().debug("This property identifier is not support: %s, cannot get it from UIA typelib" % property_identifier)
