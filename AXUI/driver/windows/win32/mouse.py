@@ -262,6 +262,8 @@ Attributes:
         docstring += self.LeftClick.__doc__+"\n"
         docstring += self.LeftDoubleClick.__doc__+"\n"
         docstring += self.RightClick.__doc__+"\n"
+        docstring += self.Move.__doc__+"\n"
+        docstring += self.DragDrop.__doc__+"\n"
         
         return docstring
         
@@ -310,5 +312,42 @@ Attributes:
         self.UIElement.SetFocus()
         SendMouseInput(coords, button="right")
         
-
-
+    def Move(self, abs_source_coords, abs_dest_coords):
+        '''Move: move mouse from source_coords to dest_coords
+        mouse move is not related with UI element
+        so need use abs coords
+        '''
+        import time
+        import random
+        x_range = abs(abs_source_coords[0] - abs_dest_coords[0])
+        y_range = abs(abs_source_coords[1] - abs_dest_coords[1])
+        x_sample_size = x_range/10
+        y_sample_size = y_range/10
+        #choose the bigger one
+        sample_size = x_sample_size > y_sample_size and x_sample_size or y_sample_size
+        #build population
+        x_population = range(sorted(abs_source_coords[0], abs_dest_coords[0]))
+        while len(x_population)<sample_size:
+            x_population = x_population*2
+            
+        y_population = range(sorted(abs_source_coords[1], abs_dest_coords[1]))
+        while len(y_population)<sample_size:
+            y_population = y_population*2
+        #get coords
+        x_coords = sorted(random.sample(x_population, sample_size))
+        y_coords = sorted(random.sample(y_population, sample_size))
+        #move mouse
+        for i in range(sample_size):
+            SendMouseInput([x_coords[i], y_coords[i]], button_down=False, button_up=False)
+            time.sleep(0.1)
+        
+    def DragDrop(self, abs_source_coords, abs_dest_coords):
+        '''Move: move mouse from source_coords to dest_coords
+        mouse drag drop is not related with UI element
+        so need use abs coords
+        '''
+        SendMouseInput(abs_source_coords, button_down=True, button_up=False)
+        self.Move(abs_source_coords, abs_dest_coords)
+        SendMouseInput(abs_dest_coords, button_down=False, button_up=True)
+        
+        
