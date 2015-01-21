@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <stdlib.h>
 #include "wingetopt.h"
+#include "ShellScalingApi.h"
 
 int CaptureAnImage(HWND hWnd, RECT rcClient, char* filename)
 {
@@ -162,6 +163,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	BOOL flag_hWnd = FALSE, flag_filename = FALSE;
 	BOOL flag_left = FALSE, flag_right = FALSE, flag_top = FALSE, flag_bottom = FALSE;
 
+	//set DPI awareness for winblue
+	if (NTDDI_VERSION >= NTDDI_WINBLUE)
+	{
+		SetProcessDpiAwareness(PROCESS_PER_MONITOR_DPI_AWARE);
+	}
+
+	//get options
 	char* optstr = "l:r:t:b:f:";
 	int	opt;
 
@@ -210,6 +218,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	// Get the client area for size calculation
 	RECT rcClient;
 	GetClientRect(hWnd, &rcClient);
+
+	//printf("%d, %d, %d, %d", rcClient.left, rcClient.right, rcClient.top, rcClient.bottom);
 
 	// Get customer resize area
 	if (flag_left && rcClient.left<left)
