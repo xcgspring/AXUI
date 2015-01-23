@@ -618,6 +618,7 @@ def HiByte(val):
     "Return the high byte of the value"
     return (val & 0xff00) >> 8
 
+from AXUI.logger import LOGGER
 class Keyboard(object):
     '''class for win32 keyboard input
     
@@ -695,7 +696,7 @@ Function:
         self.UIElement.SetFocus()
         
         keys = parse_keys(string)
-
+        LOGGER().debug("Keyboard input string: %s, parsed keys: %s" % (string, repr(keys)))
         for k in keys:
             k.Run()
             time.sleep(pause)
