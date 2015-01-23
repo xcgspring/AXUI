@@ -63,7 +63,7 @@ class ID_Translater(object):
         else:
             raise TranslaterException("Get error parsed_id: %s" % repr(parsed_id))
             
-        LOGGER().debug("Get translated: %s" % repr(translated))
+        #LOGGER().debug("Get translated: %s" % repr(translated))
         return translated
         
     def translated_top_level_identifier(self, parsed_id):

@@ -237,7 +237,7 @@ class UIElement(object):
     def _find_by_UIA(self, translated_identifier, scope=UIA.UIA_wrapper.TreeScope_Descendants):
         target_UIAElement = self.UIAElement.FindFirst(scope, translated_identifier)
         if target_UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
-            LOGGER().warn("Find no element matching identifier")
+            LOGGER().info("Find no element matching identifier")
             return None
         
         return UIElement(target_UIAElement)
@@ -289,7 +289,7 @@ class UIElement(object):
     def root_find(self, parsed_identifier):
         '''root find should only find in the first level
         '''
-        LOGGER().debug("Root only search elements in the first level")
+        #LOGGER().debug("Root only search elements in the first level")
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
             return CordinateElement(translated_identifier[1], self)
