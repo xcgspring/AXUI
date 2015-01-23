@@ -361,8 +361,8 @@ class UIElement(object):
         try:
             self.UIAElement.SetFocus()
         except _ctypes.COMError:
-            LOGGER().warn("SetFocus fail on current element, SetFocus its parent instead")
-            self.parent.SetFocus()
+            LOGGER().warn("SetFocus fail on current element, maybe due to this element not support SetFocus")
+            #self.parent.SetFocus()
         
     def screenshot(self, filename):
         self.SetFocus()
