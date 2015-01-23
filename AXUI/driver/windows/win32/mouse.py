@@ -353,7 +353,7 @@ Attributes:
         else:
             y_coords = sorted(random.sample(y_population, sample_size), reverse=True)
         #move mouse
-        LOGGER().debug("Mouse move from: %s to %s" % (repr(abs_source_coords), repr(abs_dest_coords))
+        LOGGER().debug("Mouse move from: %s to %s" % (repr(abs_source_coords), repr(abs_dest_coords)))
         self.UIElement.SetFocus()
         for i in range(sample_size):
             SendMouseInput([x_coords[i], y_coords[i]], button_down=False, button_up=False)
@@ -364,7 +364,7 @@ Attributes:
         mouse drag drop is not related with UI element
         so need use abs coords
         '''
-        LOGGER().debug("Mouse drag drop from: %s to %s" % (repr(abs_source_coords), repr(abs_dest_coords))
+        LOGGER().debug("Mouse drag drop from: %s to %s" % (repr(abs_source_coords), repr(abs_dest_coords)))
         self.UIElement.SetFocus()
         SendMouseInput(abs_source_coords, button_down=True, button_up=False)
         self.Move(abs_source_coords, abs_dest_coords)
