@@ -33,6 +33,8 @@ class ID_Translater(object):
     def _translated_atomic_identifier(self, parsed_atomic_id):
         if parsed_atomic_id[0] in UIA.UIA_automation_element_property_identifers_mapping:
             return UIA.IUIAutomation_object.CreatePropertyCondition(UIA.UIA_automation_element_property_identifers_mapping[parsed_atomic_id[0]], parsed_atomic_id[1])
+        elif parsed_atomic_id[0] in UIA.UIA_control_pattern_property_identifiers_mapping:
+            return UIA.IUIAutomation_object.CreatePropertyCondition(UIA.UIA_control_pattern_property_identifiers_mapping[parsed_atomic_id[0]], parsed_atomic_id[1])
         else:
             #use no UIA identifier will be skipped
             LOGGER().warn("identifier: %s not in UIA property maps" % parsed_atomic_id[0])

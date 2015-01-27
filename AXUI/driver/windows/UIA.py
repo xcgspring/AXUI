@@ -196,7 +196,7 @@ UIA_enums = {
     },
 "StructureChangeType"       : {
     "StructureChangeType_ChildAdded"        : None,
-    "StructureChangeType_ChildRemoved"      : None,
+    "StructureChangeType_ChildRemoved"      desktop_appmap: None,
     "StructureChangeType_ChildrenInvalidated" : None,
     "StructureChangeType_ChildrenBulkAdded" : None,
     "StructureChangeType_ChildrenBulkRemoved" : None,
@@ -992,6 +992,15 @@ for identifier in UIA_automation_element_property_identifers:
         LOGGER().debug("Automation element property identifier: %s not exist in current UIA namespace" % identifier)
         continue
     UIA_automation_element_property_identifers_mapping[identifier] = value
+
+#build mapfor control pattern identifiers
+UIA_control_pattern_property_identifiers_mapping = {}
+for identifier in UIA_control_pattern_property_identifiers:
+    value = getattr(UIA_wrapper, "UIA_"+identifier+"PropertyId", None)
+    if value is None:
+        LOGGER().debug("Automation element control pattern property identifier: %s not exist in current UIA namespace" % identifier)
+        continue
+    UIA_control_pattern_property_identifiers_mapping[identifier] = value
 
 #build map for Control Pattern Availability Property Identifiers
 UIA_control_pattern_availability_property_identifiers_mapping = {}
