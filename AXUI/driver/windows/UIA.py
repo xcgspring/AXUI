@@ -196,7 +196,7 @@ UIA_enums = {
     },
 "StructureChangeType"       : {
     "StructureChangeType_ChildAdded"        : None,
-    "StructureChangeType_ChildRemoved"      desktop_appmap: None,
+    "StructureChangeType_ChildRemoved"      : None,
     "StructureChangeType_ChildrenInvalidated" : None,
     "StructureChangeType_ChildrenBulkAdded" : None,
     "StructureChangeType_ChildrenBulkRemoved" : None,

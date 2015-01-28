@@ -277,6 +277,7 @@ Attributes:
         if relative_coords is None:
             coords = self.UIElement.GetClickablePoint()
         else:
+            coords = [0, 0]
             coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
             coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
@@ -293,6 +294,7 @@ Attributes:
         if relative_coords is None:
             coords = self.UIElement.GetClickablePoint()
         else:
+            coords = [0, 0]
             coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
             coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
@@ -309,6 +311,7 @@ Attributes:
         if relative_coords is None:
             coords = self.UIElement.GetClickablePoint()
         else:
+            coords = [0, 0]
             coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
             coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
