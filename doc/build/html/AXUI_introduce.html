@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AXUI introduce &mdash; AXUI document 0.1.5 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="axui-introduce">
+<span id="id1"></span><h1>AXUI introduce<a class="headerlink" href="#axui-introduce" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Page Status:</th><td class="field-body">Development</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Last Reviewed:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="axui-philosophy">
+<h2>AXUI philosophy<a class="headerlink" href="#axui-philosophy" title="Permalink to this headline">¶</a></h2>
+<p>Due to varies of reasons, writing and maintaining UI automation is easy to turn into a time cost/unpleasant task,
+and becomes hard to reach the predefined automation goal, and eventually UI automation is give up and leave people a bad impression</p>
+<p>Let&#8217;s have a summary of these reasons:</p>
+<ol class="arabic">
+<li><p class="first">UI is hard for programming, UI is a good/direct interface for people, but not a good interface for programming. On the contrary, CLI is good for programming.
+controlling UI is basically a inter process communication, typical step is:</p>
+<ol class="arabic simple">
+<li>find the target UI with some UI special features</li>
+<li>control process/scripts send a request to UI</li>
+<li>check for response/state</li>
+</ol>
+<p>Potential problems in upper steps:</p>
+<ul class="simple">
+<li>UI features used to find UI is not user friendly, some feature is not visible or have no meaning</li>
+<li>UI control request is not user friendly, like a mouse/keyboard/touch event</li>
+<li>UI could have lots of responses under different condition (UI change/no change/long time response/hang/crash), need to handle all of them</li>
+</ul>
+</li>
+<li><p class="first">Tool support for UI automation is not good, especially for PC platform due to there is a lot of UI frameworks on PC
+mainly problems for varies UI automation tools:</p>
+<ul class="simple">
+<li>Different tool has different flavour of the programming language/style</li>
+<li>Some tool is not powerful enough, but has no way to extend the function</li>
+<li>There are a lot of tools, need good experience to select a proper tool to use</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There are a lot of good tools emerging, like selenium for web test automation, appnium for smartphone automation</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AXUI introduce</a><ul>
+<li><a class="reference internal" href="#axui-philosophy">AXUI philosophy</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/AXUI_introduce.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, xcgspring.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
+    </div>
+  </body>
+</html>
