@@ -52,13 +52,84 @@ AXUI is a collection of solutions for these problems::
 3. AXUI separate UI logic from test scripts, make test scripts more readable and easier to maintain
 4. AXUI provide mechanism to handle auto met UI automation issues, like UI response time 
 
-  
+To summarize, AXUI is to minimize the gap between testers and UI automation technologies.
+
+AXUI structure
+================
+
+AXUI basically includes four modules, 
+XML module to parse ``app map``, 
+driver module to manage different drivers, 
+interface module to provide testers an easy to use API, 
+core module provides basic functions used by other modules
+
+.. image:: static/AXUI_structure.PNG
+   :scale: 50 %
+
+AXUI technologies details
+================================
+
+This section gives a brief introduce about some main features of AXUI
+
+separate UI logic from test script
+--------------------------------------
+
+UI automation technologies often use a formatted string as identifier to find UI element, 
+test scripts could contain a lot of these strings, makes scripts harder to understand and maintain.
+AXUI separate these strings to a standalone XML file, we usually create a XML file for one app, and thus we normally call this XML file an ``app map``
+An ``app map`` is just like a header file containing definitions, so scripts can reuse the definitions in ``app map``, no need to  string in scripts.
+
+Here is a sample ``app map`` for windows media player::
+
+    <AXUI:app_map xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
+
+        <AXUI:includes>
+            <AXUI:include name="desktop" path="windows_desktop.xml" />
+        </AXUI:includes>
+
+        <AXUI:funcs>
+            <AXUI:func name="wmplayer_start" description="">
+                <AXUI:step type="CLI" cmd='"C:\Program Files\Windows Media Player\wmplayer.exe"'/>
+            </AXUI:func>
+            
+            <AXUI:func name="wmplayer_stop" description="">
+                <AXUI:step type="GUI" cmd='wmplayer_Window.WindowPattern.Close'/>
+            </AXUI:func>
+        </AXUI:funcs>
+        
+        <AXUI:UI_elements>
+            <AXUI:UI_element name="wmplayer_Window" parent="desktop.desktop" identifier="Name='Windows Media Player' OR Name='Now Playing' AND LocalizedControlType='window'" start_func="wmplayer_start" stop_func="wmplayer_stop">
+                <AXUI:UI_element name="MenuBar" identifier="Name='Application' AND LocalizedControlType='menu bar'" start_func="wmplayer_ctrl_m">
+                    <AXUI:UI_element name="File_MenuItem" identifier="Name='File' AND LocalizedControlType='menu item'" />
+                    <AXUI:UI_element name="View_MenuItem" identifier="Name='View' AND LocalizedControlType='menu item'" />
+                    <AXUI:UI_element name="Play_MenuItem" identifier="Name='Play' AND LocalizedControlType='menu item'" />
+                    <AXUI:UI_element name="Tools_MenuItem" identifier="Name='Tools' AND LocalizedControlType='menu item'" />
+                    <AXUI:UI_element name="Help_MenuItem" identifier="Name='Help' AND LocalizedControlType='menu item'" />
+                </AXUI:UI_element>
+            </AXUI:UI_element>
+        </AXUI:UI_elements>
+        
+    </AXUI:app_map>
 
 
+plug-in mechanism to extend support for different UI
+-----------------------------------------------------
+
+AXUI provide a plug-in mechanism to support extend other UI automation technologies to AXUI,
+See :ref:`extend AXUI` 
+
+other supports for UI automation
+-----------------------------------------------------
+
+AXUI provide other functions may used in UI automation, 
+
+ - a timeout mechanism to handle UI response time
+ - image compare for UI verification.
+
+AXUI interface
+===============
 
 
-
-
-
-
+a simple example
+==================
 

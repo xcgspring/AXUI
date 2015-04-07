@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>AXUI introduce &mdash; AXUI document 0.1.5 documentation</title>
+    <title>1. AXUI introduce &mdash; AXUI document 0.1.5 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -23,7 +23,9 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" /> 
+    <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" />
+    <link rel="next" title="&lt;no title&gt;" href="use_AXUI.html" />
+    <link rel="prev" title="Welcome to AXUI document’s documentation!" href="index.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -32,6 +34,12 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="use_AXUI.html" title="&lt;no title&gt;"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to AXUI document’s documentation!"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -42,7 +50,7 @@
           <div class="body" role="main">
             
   <div class="section" id="axui-introduce">
-<span id="id1"></span><h1>AXUI introduce<a class="headerlink" href="#axui-introduce" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>1. AXUI introduce<a class="headerlink" href="#axui-introduce" title="Permalink to this headline">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -54,7 +62,7 @@
 </tbody>
 </table>
 <div class="section" id="axui-philosophy">
-<h2>AXUI philosophy<a class="headerlink" href="#axui-philosophy" title="Permalink to this headline">¶</a></h2>
+<h2>1.1. AXUI philosophy<a class="headerlink" href="#axui-philosophy" title="Permalink to this headline">¶</a></h2>
 <p>Due to varies of reasons, writing and maintaining UI automation is easy to turn into a time cost/unpleasant task,
 and becomes hard to reach the predefined automation goal, and eventually UI automation is give up and leave people a bad impression</p>
 <p>Let&#8217;s have a summary of these reasons:</p>
@@ -73,7 +81,7 @@ controlling UI is basically a inter process communication, typical step is:</p>
 <li>UI could have lots of responses under different condition (UI change/no change/long time response/hang/crash), need to handle all of them</li>
 </ul>
 </li>
-<li><p class="first">Tool support for UI automation is not good, especially for PC platform due to there is a lot of UI frameworks on PC
+<li><p class="first">Tool support for UI automation is not easy to use, especially for PC platform due to there is a lot of UI frameworks on PC
 mainly problems for varies UI automation tools:</p>
 <ul class="simple">
 <li>Different tool has different flavour of the programming language/style</li>
@@ -82,10 +90,96 @@ mainly problems for varies UI automation tools:</p>
 </ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">There are a lot of good tools emerging, like selenium for web test automation, appnium for smartphone automation</p>
+<p class="last">There are a lot of good tools emerging, like <a class="reference external" href="https://github.com/SeleniumHQ/selenium">selenium</a> for web test automation, <a class="reference external" href="https://github.com/appium">appium</a> for smartphone automation</p>
 </div>
 </li>
+<li><p class="first">Testers are lack of programming skills to make test scripts robust and easy to maintain.
+Testers are responsible for test design and test execution.
+Thus, testers might not have enough coding skills to use complex libraries.
+Automation tools should be easy for testers to use, let testers focus their energy to improve test cases</p>
+</li>
 </ol>
+<p>AXUI is a collection of solutions for these problems:</p>
+<ol class="arabic simple">
+<li>AXUI provide a plug-in mechanism for automation guy to extend support for different UI</li>
+<li>AXUI provide an unified, easy to use python interface for use in test scripts</li>
+<li>AXUI separate UI logic from test scripts, make test scripts more readable and easier to maintain</li>
+<li>AXUI provide mechanism to handle auto met UI automation issues, like UI response time</li>
+</ol>
+<p>To summarize, AXUI is to minimize the gap between testers and UI automation technologies.</p>
+</div>
+<div class="section" id="axui-structure">
+<h2>1.2. AXUI structure<a class="headerlink" href="#axui-structure" title="Permalink to this headline">¶</a></h2>
+<p>AXUI basically includes four modules,
+XML module to parse <code class="docutils literal"><span class="pre">app</span> <span class="pre">map</span></code>,
+driver module to manage different drivers,
+interface module to provide testers an easy to use API,
+core module provides basic functions used by other modules</p>
+<a class="reference internal image-reference" href="_images/AXUI_structure.PNG"><img alt="_images/AXUI_structure.PNG" src="_images/AXUI_structure.PNG" style="width: 245.0px; height: 265.0px;" /></a>
+</div>
+<div class="section" id="axui-technologies-details">
+<h2>1.3. AXUI technologies details<a class="headerlink" href="#axui-technologies-details" title="Permalink to this headline">¶</a></h2>
+<p>This section gives a brief introduce about some main features of AXUI</p>
+<div class="section" id="separate-ui-logic-from-test-script">
+<h3>1.3.1. separate UI logic from test script<a class="headerlink" href="#separate-ui-logic-from-test-script" title="Permalink to this headline">¶</a></h3>
+<p>UI automation technologies often use a formatted string as identifier to find UI element,
+test scripts could contain a lot of these strings, makes scripts harder to understand and maintain.
+AXUI separate these strings to a standalone XML file, we usually create a XML file for one app, and thus we normally call this XML file an <code class="docutils literal"><span class="pre">app</span> <span class="pre">map</span></code>
+An <code class="docutils literal"><span class="pre">app</span> <span class="pre">map</span></code> is just like a header file containing definitions, so scripts can reuse the definitions in <code class="docutils literal"><span class="pre">app</span> <span class="pre">map</span></code>, no need to  string in scripts.</p>
+<p>Here is a sample <code class="docutils literal"><span class="pre">app</span> <span class="pre">map</span></code> for windows media player:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:app_map xmlns:AXUI=&quot;AXUI&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;AXUI AXUI_app_map.xsd&quot;&gt;
+
+    &lt;AXUI:includes&gt;
+        &lt;AXUI:include name=&quot;desktop&quot; path=&quot;windows_desktop.xml&quot; /&gt;
+    &lt;/AXUI:includes&gt;
+
+    &lt;AXUI:funcs&gt;
+        &lt;AXUI:func name=&quot;wmplayer_start&quot; description=&quot;&quot;&gt;
+            &lt;AXUI:step type=&quot;CLI&quot; cmd=&#39;&quot;C:\Program Files\Windows Media Player\wmplayer.exe&quot;&#39;/&gt;
+        &lt;/AXUI:func&gt;
+
+        &lt;AXUI:func name=&quot;wmplayer_stop&quot; description=&quot;&quot;&gt;
+            &lt;AXUI:step type=&quot;GUI&quot; cmd=&#39;wmplayer_Window.WindowPattern.Close&#39;/&gt;
+        &lt;/AXUI:func&gt;
+    &lt;/AXUI:funcs&gt;
+
+    &lt;AXUI:UI_elements&gt;
+        &lt;AXUI:UI_element name=&quot;wmplayer_Window&quot; parent=&quot;desktop.desktop&quot; identifier=&quot;Name=&#39;Windows Media Player&#39; OR Name=&#39;Now Playing&#39; AND LocalizedControlType=&#39;window&#39;&quot; start_func=&quot;wmplayer_start&quot; stop_func=&quot;wmplayer_stop&quot;&gt;
+            &lt;AXUI:UI_element name=&quot;MenuBar&quot; identifier=&quot;Name=&#39;Application&#39; AND LocalizedControlType=&#39;menu bar&#39;&quot; start_func=&quot;wmplayer_ctrl_m&quot;&gt;
+                &lt;AXUI:UI_element name=&quot;File_MenuItem&quot; identifier=&quot;Name=&#39;File&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
+                &lt;AXUI:UI_element name=&quot;View_MenuItem&quot; identifier=&quot;Name=&#39;View&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
+                &lt;AXUI:UI_element name=&quot;Play_MenuItem&quot; identifier=&quot;Name=&#39;Play&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
+                &lt;AXUI:UI_element name=&quot;Tools_MenuItem&quot; identifier=&quot;Name=&#39;Tools&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
+                &lt;AXUI:UI_element name=&quot;Help_MenuItem&quot; identifier=&quot;Name=&#39;Help&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
+            &lt;/AXUI:UI_element&gt;
+        &lt;/AXUI:UI_element&gt;
+    &lt;/AXUI:UI_elements&gt;
+
+&lt;/AXUI:app_map&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="plug-in-mechanism-to-extend-support-for-different-ui">
+<h3>1.3.2. plug-in mechanism to extend support for different UI<a class="headerlink" href="#plug-in-mechanism-to-extend-support-for-different-ui" title="Permalink to this headline">¶</a></h3>
+<p>AXUI provide a plug-in mechanism to support extend other UI automation technologies to AXUI,
+See <a class="reference internal" href="extend_AXUI.html#extend-axui"><em>Extend AXUI</em></a></p>
+</div>
+<div class="section" id="other-supports-for-ui-automation">
+<h3>1.3.3. other supports for UI automation<a class="headerlink" href="#other-supports-for-ui-automation" title="Permalink to this headline">¶</a></h3>
+<p>AXUI provide other functions may used in UI automation,</p>
+<blockquote>
+<div><ul class="simple">
+<li>a timeout mechanism to handle UI response time</li>
+<li>image compare for UI verification.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="axui-interface">
+<h2>1.4. AXUI interface<a class="headerlink" href="#axui-interface" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="a-simple-example">
+<h2>1.5. a simple example<a class="headerlink" href="#a-simple-example" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -97,12 +191,27 @@ mainly problems for varies UI automation tools:</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">AXUI introduce</a><ul>
-<li><a class="reference internal" href="#axui-philosophy">AXUI philosophy</a></li>
+<li><a class="reference internal" href="#">1. AXUI introduce</a><ul>
+<li><a class="reference internal" href="#axui-philosophy">1.1. AXUI philosophy</a></li>
+<li><a class="reference internal" href="#axui-structure">1.2. AXUI structure</a></li>
+<li><a class="reference internal" href="#axui-technologies-details">1.3. AXUI technologies details</a><ul>
+<li><a class="reference internal" href="#separate-ui-logic-from-test-script">1.3.1. separate UI logic from test script</a></li>
+<li><a class="reference internal" href="#plug-in-mechanism-to-extend-support-for-different-ui">1.3.2. plug-in mechanism to extend support for different UI</a></li>
+<li><a class="reference internal" href="#other-supports-for-ui-automation">1.3.3. other supports for UI automation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#axui-interface">1.4. AXUI interface</a></li>
+<li><a class="reference internal" href="#a-simple-example">1.5. a simple example</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to AXUI document&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="use_AXUI.html"
+                        title="next chapter">&lt;no title&gt;</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -133,6 +242,12 @@ mainly problems for varies UI automation tools:</p>
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="use_AXUI.html" title="&lt;no title&gt;"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to AXUI document’s documentation!"
+             >previous</a> |</li>
         <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
       </ul>
     </div>
