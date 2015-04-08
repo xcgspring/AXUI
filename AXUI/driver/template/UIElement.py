@@ -1,17 +1,31 @@
 
+class Method(object):
+    '''
+    this class is a method wrapper for UIElement methods, if UI API has native python lib, this class might not needed
+    '''
+    pass
+
+class Pattern(object):
+    '''
+    this class is a method set for different kinds of UIElement
+    usually different kind of UIElements support different set of methods
+    we can assign different pattern for these UIElements
+    '''
+    pass
 
 class UIElement(object):
     '''
     this is a template driver module need to implement
     '''
-    @classmethod
-    def get_root():
-        raise NotImplementedError("Not implement")
-    property_keys = []
-    pattern_keys = []
-    def find(self, parsed_identifier):
+    def find_element(self, parsed_identifier):
         '''
-        find the UI element via identifier, return one UIAElement if success, return None if not find
+        find the first child UI element via identifier, return one UIAElement if success, return None if not find
+        '''
+        raise NotImplementedError("Not implement")
+        
+    def find_elements(self, parsed_identifier):
+        '''
+        find the child UI elements via identifier, return a list containing target UI elements
         '''
         raise NotImplementedError("Not implement")
 
@@ -29,25 +43,25 @@ class UIElement(object):
         
     def get_pattern(self, name):
         '''
-        get pattern supprted by UI element
+        pattern is a class support one kind of UI actions
         '''
         raise NotImplementedError("Not implement")
         
     def get_keyboard(self):
         '''
-        get keyboard
+        get keyboard class to use keyboard related methods
         '''
         raise NotImplementedError("Not implement")
     
     def get_mouse(self):
         '''
-        get mouse
+        get mouse class to use mouse related methods
         '''
         raise NotImplementedError("Not implement")
     
     def get_touch(self):
         '''
-        get touch
+        get touch class to use touch related methods
         '''
         raise NotImplementedError("Not implement")
         
@@ -67,5 +81,14 @@ class UIElement(object):
                 return attr   
             raise AttributeError("Attribute not exist: %s" % name)
             
-            
-        
+class Root(UIElement):
+    '''
+    root is the entry point to interact with UI
+    like desktop of windows UIA, web browser of web driver API
+    '''
+    def get(self, **kwargs):
+        '''
+        dynamic get root ready
+        like get root element in windows UIA, get browser to target website
+        '''
+        raise NotImplementedError("Not implement")
