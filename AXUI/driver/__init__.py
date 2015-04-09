@@ -1,9 +1,9 @@
 #for config use
 from config_driver import *
 
-def get_UIElement():
-    '''get driver UIElement
-    Return: return UIElement from driver selected in config
+def get_driver():
+    '''get driver
+    Return: return driver module selected in config
     '''
     import config_driver
     driver_used = config_driver.DriverUsed
@@ -15,4 +15,4 @@ def get_UIElement():
     except ImportError:
         raise NotImplementedError("driver not implement: %s, check your driver folder" % driver_used)
         
-    return driver.UIElement
+    return driver

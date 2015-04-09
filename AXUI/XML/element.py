@@ -17,11 +17,90 @@ class FakeUIElement(object):
     def verify(self):
         return self
 
+class RootElement(object):
+    '''wrapper for root element
+    provide interface for enter point of UI automation API
+    like desktop of windows UIA API, or browser for web driver API
+    
+    Interfaces exposed for use:
+        verify:             function to verify if self still exist
+        start:              function to init and start this element
+        stop:               function to stop this element
+        screenshot:         function to take a screenshot
+        
+        other driver special interfaces
+    '''
+    def __init__(self):
+        #Need init by app map module
+        self.name = ""
+        self.children = {}
+        
+        #get driver module
+        driver_module = driver.get_driver()
+        #represent for root interface of driver module
+        self.root = driver_module.Root()
+        
+    def __repr__(self):
+        docstring = "root element instance"
+        return docstring
+        
+    @property
+    def details(self):
+        '''return details of this element
+        '''
+        docstring = "Root element details for: %s\n" % self.name
+        
+        docstring += "#"*24
+        docstring += "\n"
+        docstring += "  Children:\n"
+        for key in self.children:
+            docstring += "    %s\n" % repr(self.children[key])
+        
+        docstring += "#"*24
+        docstring += "\n"
+        docstring += "  details:\n"
+        docstring += self.root.__repr__()
+
+        return docstring
+        
+    def start(self, **kwargs):
+        '''
+        start method will do some initiation for root element
+        for windows UIA, just bind UIA root element to driver root interface, no arguments required
+        for webdriver API, could pass in some arguments, like browser type, URL, timeout, and start the browser
+        '''
+        self.root.start(kwargs)
+        
+    def stop(self):
+        '''
+        '''
+        self.root.stop()
+        
+    def find(self, identifier):
+        '''find element by identifier
+        identifier should already be parsed
+        '''
+        self.start()
+        return self.root.find_element(identifier)
+        
+    def findall(self, identifier):
+        '''find all elements match identifier
+        '''
+        self.start()
+        return self.root.find_elements(identifier)
+        
+    def __getattr__(self, name):
+        if self.children.has_key(name):
+            return self.children[name] 
+        else:
+            self.start()
+            return getattr(self.root, name)
+        
 class Element(object):
     '''wrapper for UIElement
     hold informations from app map, and provide UIElement interface for app map
     
-    Attributes:
+    Attributes used internal:
         name:               Element's name, from XML
         parent_string:      Element's parent string, from XML
         identifier_string:  Identifier string, from XML
@@ -33,11 +112,16 @@ class Element(object):
         identifier:         parsed identifier 
         
         UIElement:          driver interface for UIElement
+        find:               function to find first match child element
+        findall:            function to find all matched children elements
         
+    Interfaces exposed for use:
         verify:             function to verify if self still exist
-        find:               function to find children element
         start:              function to start this element
         stop:               function to stop this element
+        screenshot:         function to take a screenshot
+        
+        other driver special interfaces
 
     '''
     #fake UI element is for elements without identifier 
@@ -95,11 +179,8 @@ class Element(object):
         '''verify UIElement is valid or not
         return None if not valid
         '''
-        #root element
-        if self.parent is None:
-            self.UIElement = driver.get_UIElement().get_root()
         #no identifier
-        elif self.identifier is None:
+        if self.identifier is None:
             self.UIElement = self.fake_UI_element
         #has identifier and not root
         else:
@@ -107,7 +188,7 @@ class Element(object):
 
         return self.UIElement
         
-    def wait_start(self):
+    def _wait_start(self):
         '''wait until UIElement is valid or timeout
         '''
         #keep finding the element by identifier, until found or timeout
@@ -132,7 +213,7 @@ class Element(object):
                     element.screenshot()
                 return False
         
-    def wait_stop(self):
+    def _wait_stop(self):
         '''wait until UIElement is not valid or timeout
         '''
         if not self.identifier is None:
@@ -160,10 +241,7 @@ class Element(object):
         elif self.UIElement is self.fake_UI_element:
             return self.parent.find(identifier)
         else:
-            if self.parent is None:
-                return self.UIElement.root_find(identifier)
-            else:
-                return self.UIElement.find(identifier)
+            return self.UIElement.find_element(identifier)
         
     def _start(self):
         if not self.start_func is None:
@@ -176,7 +254,7 @@ class Element(object):
             #run start func
             if self.start_func:
                 self._start()
-            if not self.wait_start():
+            if not self._wait_start():
                 raise TimeOutError("time out encounter, during element:%s start" % self.name)
             
     def _stop(self):
@@ -196,20 +274,15 @@ class Element(object):
             #only stop and check element which has stop_func attribute
             if self.stop_func:
                 self._stop()
-                if not self.wait_stop():
+                if not self._wait_stop():
                     raise TimeOutError("time out encounter, during element:%s stop" % self.name)
 
     def findall(self, identifier):
         '''find all elements match identifier
         '''
         self.start()
-        if self.parent is None:
-            children_UIElements = self.UIElement._root_find_all_by_UIA(identifier)
-        else:
-            children_UIElements = self.UIElement._find_all_by_UIA(identifier)
-            
-        return children_UIElements
-        
+        return self.UIElement.find_elements(identifier)
+
     def screenshot(self):
         '''take a screen shot for this element
         '''

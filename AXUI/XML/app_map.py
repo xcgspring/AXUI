@@ -123,6 +123,13 @@ class AppMap(object):
                 UI_element.identifier = identifier_parser.parse(UI_element.identifier_string, lexer=identifier_lexer)
              
             return UI_element
+            
+        elif xml_element.tag == "{AXUI}Root_element":
+            UI_element = element_module.RootElement()
+            
+            UI_element.name = xml_element.attrib["name"]
+            
+            return UI_element
              
         elif xml_element.tag == "{AXUI}UI_element_group":
             UI_element_group = element_module.ElementGroup()
@@ -153,14 +160,15 @@ class AppMap(object):
     def _build_top_level_UI_element(self, xml_element):
         UI_element = self._init_UI_element(xml_element)
 
+        #do nothing for root element
+        if UI_element.is_root():
+            return UI_element
+            
         #top level element must have parent
-        #except root element
-        if UI_element.parent_string == self.root_parent_string:
-            UI_element.parent = None
-        elif UI_element.parent_string:
+        if UI_element.parent_string:
             UI_element.parent = self.get_UI_element_by_name(UI_element.parent_string)
         else:
-            raise ValueError("Top level element except root must have parent, miss parent in element: %s" % UI_element.name)
+            raise ValueError("Top level element must have parent attribute, miss parent in element: %s" % UI_element.name)
         
         return UI_element
 

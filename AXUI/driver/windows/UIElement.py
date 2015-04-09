@@ -17,7 +17,6 @@ def _unpack(flag, name, *args):
 
 class Method(object):
     '''Wrapper class for UIA pattern method
-    
     '''
     def __init__(self, function_object, name, args_expected=[]):
         self.function_object = function_object
@@ -174,26 +173,23 @@ class Pattern(object):
             raise AttributeError("Attribute not exist: %s" % name)
     
 class UIElement(object):
-    '''This class defines interfaces of UI element, basic unit of UI automation 
+    '''This class defines interfaces for common UI element
     
-    Every driver (Windows, Android, Selenium) should implement these interfaces,
+    Every driver (Windows, Appium, Selenium) should implement this interfaces,
     provides independent interfaces for uplevel modules, so we transplant AXUI cross different platform
     
     Attributes:
-        get_root:   class method, get the root element
-        root_find:  special find method for root element
-        find:       find the first descendant element which matches parsed_identifier
+        find_element:           find the first descendant element which matches parsed_identifier
+        find_elements:          find all elements which match parsed_identifier
+        verify:                 verify current element is valid
 
-        other attributes:      get other attributes or interfaces supported by this UI element,
-                               such like keyboard, mouse, touch, etc.
-    '''
-    @classmethod
-    def get_root(cls):
-        '''get root element
+        get_keyboard:           class for keyboard related methods
+        get_mouse:              class for mouse related methods
+        get_touch:              class for touch related methods
         
-        '''
-        return UIElement(UIA.IUIAutomation_object.GetRootElement())
-    
+        get_property:           get property value for current element
+        get_pattern:            get pattern interface for current element
+    '''
     def __init__(self, UIAElement):
         #UIAElement is a pointer to IUIAutomation
         self.UIAElement = UIAElement
@@ -242,64 +238,8 @@ class UIElement(object):
         
         return UIElement(target_UIAElement)
         
-    def _find_all_by_UIA(self, parsed_identifier):
-        '''for debug use
-        '''
-        if parsed_identifier is None:
-            translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
-        else:
-            translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
-            
-            if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
-                LOGGER().warn("Only support UIA identifier, skip other identifier")
-                translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
-            else:
-                translated_identifier = translated_identifier[1]
-            
-        scope = UIA.UIA_wrapper.TreeScope_Descendants
-        UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
-        UIElements = []
-        for i in range(UIAElementArray.Length):
-            UIElements.append(UIElement(UIAElementArray.GetElement(i)))
-            
-        return UIElements
-        
-    def _root_find_all_by_UIA(self, parsed_identifier):
-        '''for debug use
-        '''
-        if parsed_identifier is None:
-            translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
-        else:
-            translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
-            
-            if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
-                LOGGER().warn("Only support UIA identifier, skip other identifier")
-                translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
-            else:
-                translated_identifier = translated_identifier[1]
-            
-        scope = UIA.UIA_wrapper.TreeScope_Children
-        UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
-        UIElements = []
-        for i in range(UIAElementArray.Length):
-            UIElements.append(UIElement(UIAElementArray.GetElement(i)))
-            
-        return UIElements
-        
-    def root_find(self, parsed_identifier):
-        '''root find should only find in the first level
-        '''
-        #LOGGER().debug("Root only search elements in the first level")
-        translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
-        if translated_identifier[0] == "Coordinate":
-            return CordinateElement(translated_identifier[1], self)
-        elif translated_identifier[0] == "Index":
-            return self._find_by_index(translated_identifier[1], scope=UIA.UIA_wrapper.TreeScope_Children)
-        elif translated_identifier[0] == "UIA":
-            return self._find_by_UIA(translated_identifier[1], scope=UIA.UIA_wrapper.TreeScope_Children)
-
-    def find(self, parsed_identifier):
-        '''find the UI element via identifier
+    def find_element(self, parsed_identifier):
+        '''find the UI element
         '''
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
@@ -308,6 +248,28 @@ class UIElement(object):
             return self._find_by_index(translated_identifier[1])
         elif translated_identifier[0] == "UIA":
             return self._find_by_UIA(translated_identifier[1])
+ 
+    def find_elements(self, parsed_identifier):
+        '''find all UI elements
+        '''
+        if parsed_identifier is None:
+            translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        else:
+            translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
+            
+            if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
+                LOGGER().warn("find_elements method not support find by Coordinate or find by Index")
+                return []
+            else:
+                translated_identifier = translated_identifier[1]
+        
+        scope = UIA.UIA_wrapper.TreeScope_Descendants
+        UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
+        UIElements = []
+        for i in range(UIAElementArray.Length):
+            UIElements.append(UIElement(UIAElementArray.GetElement(i)))
+            
+        return UIElements
  
     def verify(self):
         '''verify UI element is still exist
@@ -331,16 +293,48 @@ class UIElement(object):
             
         return UIElement(UIAElement)
         
-    def _get_property(self, name):
+    def get_keyboard(self):
+        return win32.Keyboard(self)
+    
+    def get_mouse(self):
+        return win32.Mouse(self)
+    
+    def get_touch(self):
+        return win32.Touch(self)
+        
+    def get_property(self, name):
         return UIA.get_property_by_id(self.UIAElement, name)
         
-    def _get_pattern(self, name):
+    def get_pattern(self, name):
         try:
             pattern = Pattern(self.UIAElement, name)
         except UIElementException:
             pattern = None
             
         return pattern
+    
+    def __getattr__(self, name):
+        '''
+        we also support direct use name to get object
+        '''
+        if name == "keyboard":
+            return self.get_keyboard()
+        elif name == "mouse":
+            return self.get_mouse()
+        elif name == "touch":
+            return self.get_touch()
+        else:
+            attr = self.get_property(name)
+            if attr is not None:
+                return attr
+            attr = self.get_pattern(name)
+            if attr is not None:
+                return attr   
+            raise AttributeError("Attribute not exist: %s" % name)
+            
+    ####################################################
+    #below methods are for keyboard and mouse operation
+    #####################################################
     
     @property
     def coordinate(self):
@@ -350,7 +344,7 @@ class UIElement(object):
         value = self.UIAElement.CurrentBoundingRectangle
         return value.left, value.top, value.right, value.bottom
     
-    def SetFocus(self):
+    def set_focus(self):
         '''set foucs this element
         
         Will bring this element to the front, used by Keyboard, Mouse, Touch
@@ -364,11 +358,7 @@ class UIElement(object):
             LOGGER().warn("SetFocus fail on current element, maybe due to this element not support SetFocus")
             #self.parent.SetFocus()
         
-    def screenshot(self, filename):
-        self.SetFocus()
-        return screenshot.screenshot(filename, self.coordinate)
-        
-    def GetClickablePoint(self):
+    def get_clickable_point(self):
         '''Retrieves a point on the element that can be clicked.
         
         Arguments:
@@ -384,29 +374,87 @@ class UIElement(object):
             x = (self.coordinate[0]+self.coordinate[2])/2
             y = (self.coordinate[1]+self.coordinate[3])/2
             return x, y
+
+class Root(UIElement):
+    '''
+    root is the entry point to interact with UI
+    like desktop of windows UIA, web browser of web driver API
     
-    @property
-    def keyboard(self):
-        return win32.Keyboard(self)
+    This class defines interfaces for root element
     
-    @property
-    def mouse(self):
-        return win32.Mouse(self)
+    Every driver (Windows, Appium, Selenium) should implement this interfaces,
+    provides independent interfaces for uplevel modules, so we transplant AXUI cross different platform
     
-    @property
-    def touch(self):
-        return win32.Touch(self)
+    Attributes:
+        start:                  start root element
+        stop:                   stop root element
+        screenshot:             take a screen shot for root element
+    
+        find_element:           find the first descendant element which matches parsed_identifier
+        find_elements:          find all elements which match parsed_identifier
+        verify:                 verify current element is valid
+
+        get_keyboard:           class for keyboard related methods
+        get_mouse:              class for mouse related methods
+        get_touch:              class for touch related methods
         
-    def __getattr__(self, name):
-        attr = self._get_property(name)
-        if attr is not None:
-            return attr
-        attr = self._get_pattern(name)
-        if attr is not None:
-            return attr   
-        raise AttributeError("Attribute not exist: %s" % name)
+        get_property:           get property value for current element
+        get_pattern:            get pattern interface for current element
+    '''
+    def __init__(self):
+        self.UIAElement = None
+    
+    def start(self, **kwargs):
+        self.UIAElement = UIA.IUIAutomation_object.GetRootElement()
+        
+    def stop(self, **kwargs):
+        self.UIAElement = None
+        
+    def screenshot(self, filename):
+        return screenshot.screenshot(filename)
+        
+    def find_element(self, parsed_identifier):
+        '''find the UI element
+        root find should only find in the first level to avoid search in all UI
+        '''
+        translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
+        if translated_identifier[0] == "Coordinate":
+            return CordinateElement(translated_identifier[1], self)
+        elif translated_identifier[0] == "Index":
+            return self._find_by_index(translated_identifier[1], scope=UIA.UIA_wrapper.TreeScope_Children)
+        elif translated_identifier[0] == "UIA":
+            return self._find_by_UIA(translated_identifier[1], scope=UIA.UIA_wrapper.TreeScope_Children)
+            
+    def find_elements(self, parsed_identifier):
+        '''find all matched element
+        root find should only find in the first level to avoid search in all UI
+        '''
+        if parsed_identifier is None:
+            translated_identifier = UIA.IUIAutomation_object.CreateTrueCondition()
+        else:
+            translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
+            if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
+                LOGGER().warn("find_elements method not support find by Coordinate or find by Index")
+                return []
+            else:
+                translated_identifier = translated_identifier[1]
+            
+        scope = UIA.UIA_wrapper.TreeScope_Children
+        UIAElementArray = self.UIAElement.FindAll(scope, translated_identifier)
+        UIElements = []
+        for i in range(UIAElementArray.Length):
+            UIElements.append(UIElement(UIAElementArray.GetElement(i)))
+        return UIElements
 
-
+    def verify(self):
+        '''verify UI element is still exist
+        for root element just check if UIAElement is initialized
+        '''
+        if self.UIAElement is None:
+            return None
+        else:
+            return self
+        
 class CoordinateElement(UIElement):
     '''
     coordinate element is for coordinate identifier
@@ -429,7 +477,11 @@ class CoordinateElement(UIElement):
     def __repr__(self):
         docstring = "Coordinate element for coordinate: %s" % repr(self.coordinate)
     
-    def find(self, parsed_identifier):
+    def find_element(self, parsed_identifier):
+        #TODO maybe we should let coordinate element have children
+        raise UIElementException("coordinate element should not have children")
+        
+    def find_elements(self, parsed_identifier):
         #TODO maybe we should let coordinate element have children
         raise UIElementException("coordinate element should not have children")
     
@@ -447,10 +499,6 @@ class CoordinateElement(UIElement):
         #usually, a coordinate element will be set focus if its parent is set focus
         return self.parent_element.SetFocus()
         
-    def screenshot(self, filename):
-        self.SetFocus()
-        return screenshot.screenshot(filename, self.coordinate)
-        
     def GetClickablePoint(self):
         '''Retrieves a point on the element that can be clicked.
         
@@ -463,12 +511,11 @@ class CoordinateElement(UIElement):
         y = (self.coordinate[1]+self.coordinate[3])/2
         return x, y
     
-    def _get_property(self, name):
+    def get_property(self, name):
         raise UIElementException("coordinate element don't support property")
         
-    def _get_pattern(self, name):
+    def get_pattern(self, name):
         raise UIElementException("coordinate element don't support pattern")
                 
     def __getattr__(self, name):
         raise AttributeError("Attribute not exist for coordinate element: %s" % name)
-
