@@ -9,14 +9,15 @@ Welcome to AXUI document's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :numbered:
    
    AXUI_introduce
-   use_AXUI
-   use_AXUI_advance
+   config_AXUI
+   AXUI_AppMap
    extend_AXUI
-    
+   best_practices
+   
    ToDo_list
 
 Indices and tables

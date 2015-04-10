@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. AXUI AppMap &mdash; AXUI document 0.1.5 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" />
+    <link rel="next" title="4. Extend AXUI" href="extend_AXUI.html" />
+    <link rel="prev" title="2. AXUI configurations" href="config_AXUI.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="extend_AXUI.html" title="4. Extend AXUI"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="config_AXUI.html" title="2. AXUI configurations"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="axui-appmap">
+<span id="id1"></span><h1>3. AXUI AppMap<a class="headerlink" href="#axui-appmap" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Page Status:</th><td class="field-body">Development</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Last Reviewed:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="appmap-overview">
+<h2>3.1. AppMap overview<a class="headerlink" href="#appmap-overview" title="Permalink to this headline">¶</a></h2>
+<p>AppMap is a key feature of AXUI, use AppMap smart can make your automation task much easier.
+Basically, AppMap is to store all changeable UI element features, and provide a consistent AppMap element for use.
+Thus, AppMap could reduce the scripts mutability, and make script easier for maintenance.
+This feature also provide a direct solution for internationalization.</p>
+<p>We will provide a detail introduce for each part of AppMap below, before that, here provide a sample AppMap containing all parts of AppMap:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:app_map xmlns:AXUI=&quot;AXUI&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;AXUI AXUI_app_map.xsd&quot;&gt;
+
+&lt;AXUI:variables&gt;
+    &lt;AXUI:variable name=&quot;&quot; value=&quot;&quot; /&gt;
+&lt;/AXUI:variables&gt;
+
+&lt;AXUI:includes&gt;
+    &lt;AXUI:include name=&quot;&quot; path=&quot;&quot; /&gt;
+&lt;/AXUI:includes&gt;
+
+&lt;AXUI:funcs&gt;
+    &lt;AXUI:func name=&quot;&quot; description=&quot;&quot;&gt;
+        &lt;AXUI:step type=&quot;&quot; cmd=&#39;&#39;/&gt;
+    &lt;/AXUI:func&gt;
+&lt;/AXUI:funcs&gt;
+
+&lt;AXUI:UI_elements&gt;
+    &lt;AXUI:Root_element name=&quot;&quot;/&gt;
+
+    &lt;AXUI:UI_element name=&quot;&quot; parent=&quot;&quot; identifier=&quot;&quot; start_func=&quot;&quot; stop_func=&quot;&quot;&gt;
+        &lt;AXUI:UI_element name=&quot;&quot; identifier=&quot;&quot; start_func=&quot;&quot;&gt;
+            &lt;AXUI:UI_element name=&quot;&quot; identifier=&quot;&quot; /&gt;
+        &lt;/AXUI:UI_element&gt;
+    &lt;/AXUI:UI_element&gt;
+&lt;/AXUI:UI_elements&gt;
+</pre></div>
+</div>
+<p>&lt;/AXUI:app_map&gt;</p>
+</div>
+<div class="section" id="appmap-elements">
+<h2>3.2. AppMap elements<a class="headerlink" href="#appmap-elements" title="Permalink to this headline">¶</a></h2>
+<p>Here we have an introduce for each element in AppMap, AppMap will be checked with a pre-defined schema <code class="docutils literal"><span class="pre">AXUI/XML/schemas/AXUI_app_map.xsd</span></code></p>
+<div class="section" id="root-element-axui-app-map">
+<h3>3.2.1. root element &#8211; AXUI:app_map<a class="headerlink" href="#root-element-axui-app-map" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">AXUI:app_map</span></code> is the root element of AppMap, it should always be:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:app_map xmlns:AXUI=&quot;AXUI&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;AXUI AXUI_app_map.xsd&quot;&gt;
+    ......
+&lt;/AXUI:app_map&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="axui-variables">
+<h3>3.2.2. AXUI:variables<a class="headerlink" href="#axui-variables" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">AXUI:variables</span></code> can include multiple <code class="docutils literal"><span class="pre">AXUI:variable</span></code> elements, <code class="docutils literal"><span class="pre">AXUI:variables</span></code> has no attributes.</p>
+<div class="section" id="axui-variable">
+<h4>3.2.2.1. AXUI:variable<a class="headerlink" href="#axui-variable" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">AXUI:variable</span></code> element provide a dynamic way to change AppMap contents, currently only support change command line in <code class="docutils literal"><span class="pre">AXUI:func</span></code> element</p>
+<p>typical usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:variables&gt;
+    &lt;AXUI:variable name=&quot;AppPath&quot; value=&#39;&quot;some_app_path&quot;&#39;/&gt;
+&lt;/AXUI:variables&gt;
+
+&lt;AXUI:funcs&gt;
+    &lt;AXUI:func name=&quot;start_some_element&quot; description=&quot;&quot;&gt;
+        &lt;AXUI:step type=&quot;CLI&quot; cmd=&#39;{AppPath}&#39;/&gt;
+    &lt;/AXUI:func&gt;
+&lt;/AXUI:funcs&gt;
+</pre></div>
+</div>
+<p>OR:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:funcs&gt;
+    &lt;AXUI:func name=&quot;start_some_element&quot; description=&quot;&quot;&gt;
+        &lt;AXUI:step type=&quot;CLI&quot; cmd=&#39;{AppPath}&#39;/&gt;
+    &lt;/AXUI:func&gt;
+&lt;/AXUI:funcs&gt;
+
+#in script
+appmap.variables[&quot;AppPath&quot;] = &quot;some_app_path&quot;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="axui-includes">
+<h3>3.2.3. AXUI:includes<a class="headerlink" href="#axui-includes" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">AXUI:includes</span></code> can include multiple <code class="docutils literal"><span class="pre">AXUI:include</span></code> elements, <code class="docutils literal"><span class="pre">AXUI:includes</span></code> has no attributes.</p>
+<div class="section" id="axui-include">
+<h4>3.2.3.1. AXUI:include<a class="headerlink" href="#axui-include" title="Permalink to this headline">¶</a></h4>
+<p>AXUI support include other AppMap to use other AppMap definitions by using <code class="docutils literal"><span class="pre">AXUI:include</span></code>, this is used when some app is used by other apps, or you want to extend original app UI elements.</p>
+<p>typical usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:includes&gt;
+    &lt;AXUI:include name=&quot;namespace_name&quot; path=&quot;included_appmap_name&quot; /&gt;
+    ...
+&lt;/AXUI:includes&gt;
+
+#in script
+appmap.namespace_name.element_name...
+</pre></div>
+</div>
+<p>OR using it as element parent:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:includes&gt;
+    &lt;AXUI:include name=&quot;namespace_name&quot; path=&quot;included_appmap_name&quot; /&gt;
+    ...
+&lt;/AXUI:includes&gt;
+
+&lt;AXUI:UI_elements&gt;
+    &lt;AXUI:UI_element name=&quot;&quot; parent=&quot;namespace_name.element_name&quot; /&gt;
+&lt;/AXUI:UI_elements&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="axui-funcs">
+<h3>3.2.4. AXUI:funcs<a class="headerlink" href="#axui-funcs" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">AXUI:funcs</span></code> can include multiple <code class="docutils literal"><span class="pre">AXUI:func</span></code> element, <code class="docutils literal"><span class="pre">AXUI:funcs</span></code> has no attributes.</p>
+<div class="section" id="axui-func">
+<h4>3.2.4.1. AXUI:func<a class="headerlink" href="#axui-func" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">AXUI:func</span></code> can include multiple <code class="docutils literal"><span class="pre">AXUI:step</span></code> element, <code class="docutils literal"><span class="pre">AXUI:func</span></code> has two attributes &#8220;name&#8221; and &#8220;description&#8221;.
+&#8220;name&#8221; attribute is to provide an identifier to use this function, this attribute is must have,
+&#8220;description&#8221; provide a description for this function, it&#8217;s optional.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>it&#8217;s recommend to use <code class="docutils literal"><span class="pre">AXUI:func</span></code> element for UI element start/stop function</p>
+<p class="last">not recommend to use <code class="docutils literal"><span class="pre">AXUI:func</span></code> to replace python functions</p>
+</div>
+<div class="section" id="axui-step">
+<h5>3.2.4.1.1. AXUI:step<a class="headerlink" href="#axui-step" title="Permalink to this headline">¶</a></h5>
+<p><code class="docutils literal"><span class="pre">AXUI:step</span></code> has three attributes: &#8220;type&#8221;, &#8220;cmd&#8221;, &#8220;app_map&#8221;.
+&#8220;type&#8221; specifies step type, could be &#8220;CLI&#8221; for command or &#8220;GUI&#8221; for UI operation
+&#8220;cmd&#8221; specifies the detail executing step, for &#8220;CLI&#8221; type, it&#8217;s a string of command line; for &#8220;GUI&#8221; type, it&#8217;s a string of GUI command just like AXUI command in appmap
+&#8220;app_map&#8221; is optional, indicate which AppMap to execute the step</p>
+<p>typical usage:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:funcs&gt;
+    &lt;AXUI:func name=&quot;wmplayer_start_open_dialog&quot; description=&quot;&quot;&gt;
+        &lt;AXUI:step type=&quot;CLI&quot; cmd=&#39;&quot;C:\Program Files\Windows Media Player\wmplayer.exe&quot;&#39;/&gt;
+        &lt;AXUI:step type=&quot;GUI&quot; cmd=&quot;wmplayer_Window.keyboard.Input &#39;^o&#39;&quot;/&gt;
+        ...
+    &lt;/AXUI:func&gt;
+    ...
+&lt;/AXUI:funcs&gt;
+
+&lt;AXUI:UI_elements&gt;
+    &lt;AXUI:UI_element name=&quot;OpenDialog&quot; parent=&quot;&quot; start_func=&quot;wmplayer_start_open_dialog&quot;/&gt;
+&lt;/AXUI:UI_elements&gt;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="axui-ui-elements">
+<h3>3.2.5. AXUI:UI_elements<a class="headerlink" href="#axui-ui-elements" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="axui-root-element">
+<h4>3.2.5.1. AXUI:Root_element<a class="headerlink" href="#axui-root-element" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="axui-ui-element">
+<h4>3.2.5.2. AXUI:UI_element<a class="headerlink" href="#axui-ui-element" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="axui-ui-element-group">
+<h4>3.2.5.3. AXUI:UI_element_group<a class="headerlink" href="#axui-ui-element-group" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. AXUI AppMap</a><ul>
+<li><a class="reference internal" href="#appmap-overview">3.1. AppMap overview</a></li>
+<li><a class="reference internal" href="#appmap-elements">3.2. AppMap elements</a><ul>
+<li><a class="reference internal" href="#root-element-axui-app-map">3.2.1. root element &#8211; AXUI:app_map</a></li>
+<li><a class="reference internal" href="#axui-variables">3.2.2. AXUI:variables</a><ul>
+<li><a class="reference internal" href="#axui-variable">3.2.2.1. AXUI:variable</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#axui-includes">3.2.3. AXUI:includes</a><ul>
+<li><a class="reference internal" href="#axui-include">3.2.3.1. AXUI:include</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#axui-funcs">3.2.4. AXUI:funcs</a><ul>
+<li><a class="reference internal" href="#axui-func">3.2.4.1. AXUI:func</a><ul>
+<li><a class="reference internal" href="#axui-step">3.2.4.1.1. AXUI:step</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#axui-ui-elements">3.2.5. AXUI:UI_elements</a><ul>
+<li><a class="reference internal" href="#axui-root-element">3.2.5.1. AXUI:Root_element</a></li>
+<li><a class="reference internal" href="#axui-ui-element">3.2.5.2. AXUI:UI_element</a></li>
+<li><a class="reference internal" href="#axui-ui-element-group">3.2.5.3. AXUI:UI_element_group</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="config_AXUI.html"
+                        title="previous chapter">2. AXUI configurations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="extend_AXUI.html"
+                        title="next chapter">4. Extend AXUI</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/AXUI_AppMap.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="extend_AXUI.html" title="4. Extend AXUI"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="config_AXUI.html" title="2. AXUI configurations"
+             >previous</a> |</li>
+        <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, xcgspring.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
+    </div>
+  </body>
+</html>

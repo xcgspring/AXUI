@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" />
-    <link rel="next" title="&lt;no title&gt;" href="use_AXUI.html" />
+    <link rel="next" title="2. AXUI configurations" href="config_AXUI.html" />
     <link rel="prev" title="Welcome to AXUI document’s documentation!" href="index.html" /> 
   </head>
   <body role="document">
@@ -35,7 +35,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="use_AXUI.html" title="&lt;no title&gt;"
+          <a href="config_AXUI.html" title="2. AXUI configurations"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to AXUI document’s documentation!"
@@ -129,10 +129,6 @@ An <code class="docutils literal"><span class="pre">app</span> <span class="pre"
 <p>Here is a sample <code class="docutils literal"><span class="pre">app</span> <span class="pre">map</span></code> for windows media player:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;AXUI:app_map xmlns:AXUI=&quot;AXUI&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xsi:schemaLocation=&quot;AXUI AXUI_app_map.xsd&quot;&gt;
 
-    &lt;AXUI:includes&gt;
-        &lt;AXUI:include name=&quot;desktop&quot; path=&quot;windows_desktop.xml&quot; /&gt;
-    &lt;/AXUI:includes&gt;
-
     &lt;AXUI:funcs&gt;
         &lt;AXUI:func name=&quot;wmplayer_start&quot; description=&quot;&quot;&gt;
             &lt;AXUI:step type=&quot;CLI&quot; cmd=&#39;&quot;C:\Program Files\Windows Media Player\wmplayer.exe&quot;&#39;/&gt;
@@ -141,16 +137,25 @@ An <code class="docutils literal"><span class="pre">app</span> <span class="pre"
         &lt;AXUI:func name=&quot;wmplayer_stop&quot; description=&quot;&quot;&gt;
             &lt;AXUI:step type=&quot;GUI&quot; cmd=&#39;wmplayer_Window.WindowPattern.Close&#39;/&gt;
         &lt;/AXUI:func&gt;
+
+        &lt;AXUI:func name=&quot;wmplayer_ctrl_o&quot; description=&quot;&quot;&gt;
+            &lt;AXUI:step type=&quot;GUI&quot; cmd=&quot;wmplayer_Window.keyboard.Input &#39;^o&#39;&quot; /&gt;
+        &lt;/AXUI:func&gt;
+
+        &lt;AXUI:func name=&quot;open_dialog_stop&quot; description=&quot;&quot;&gt;
+            &lt;AXUI:step type=&quot;GUI&quot; cmd=&quot;wmplayer_Window.Open_Dialog.WindowPattern.Close&quot;/&gt;
+        &lt;/AXUI:func&gt;
     &lt;/AXUI:funcs&gt;
 
     &lt;AXUI:UI_elements&gt;
-        &lt;AXUI:UI_element name=&quot;wmplayer_Window&quot; parent=&quot;desktop.desktop&quot; identifier=&quot;Name=&#39;Windows Media Player&#39; OR Name=&#39;Now Playing&#39; AND LocalizedControlType=&#39;window&#39;&quot; start_func=&quot;wmplayer_start&quot; stop_func=&quot;wmplayer_stop&quot;&gt;
-            &lt;AXUI:UI_element name=&quot;MenuBar&quot; identifier=&quot;Name=&#39;Application&#39; AND LocalizedControlType=&#39;menu bar&#39;&quot; start_func=&quot;wmplayer_ctrl_m&quot;&gt;
-                &lt;AXUI:UI_element name=&quot;File_MenuItem&quot; identifier=&quot;Name=&#39;File&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
-                &lt;AXUI:UI_element name=&quot;View_MenuItem&quot; identifier=&quot;Name=&#39;View&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
-                &lt;AXUI:UI_element name=&quot;Play_MenuItem&quot; identifier=&quot;Name=&#39;Play&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
-                &lt;AXUI:UI_element name=&quot;Tools_MenuItem&quot; identifier=&quot;Name=&#39;Tools&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
-                &lt;AXUI:UI_element name=&quot;Help_MenuItem&quot; identifier=&quot;Name=&#39;Help&#39; AND LocalizedControlType=&#39;menu item&#39;&quot; /&gt;
+        &lt;AXUI:Root_element name=&quot;desktop&quot;/&gt;
+
+        &lt;AXUI:UI_element name=&quot;wmplayer_Window&quot; parent=&quot;desktop&quot; identifier=&quot;Name=&#39;Windows Media Player&#39; OR Name=&#39;Now Playing&#39; AND LocalizedControlType=&#39;window&#39;&quot; start_func=&quot;wmplayer_start&quot; stop_func=&quot;wmplayer_stop&quot;&gt;
+            &lt;AXUI:UI_element name=&quot;Open_Dialog&quot; identifier=&quot;Name=&#39;Open&#39; AND LocalizedControlType=&#39;dialog&#39;&quot; start_func=&quot;wmplayer_ctrl_o&quot; stop_func=&quot;open_dialog_stop&quot;&gt;
+                &lt;AXUI:UI_element name=&quot;FileName_ComboBox&quot; identifier=&quot;Name=&#39;File name:&#39; AND LocalizedControlType=&#39;combo box&#39;&quot;&gt;
+                    &lt;AXUI:UI_element name=&quot;FileName_Edit&quot; identifier=&quot;Name=&#39;File name:&#39; AND LocalizedControlType=&#39;edit&#39;&quot;/&gt;
+                &lt;/AXUI:UI_element&gt;
+                &lt;AXUI:UI_element name=&quot;Open_Button&quot; identifier=&quot;Name=&#39;Open&#39; AND LocalizedControlType=&#39;button&#39; AND Index=2&quot;/&gt;
             &lt;/AXUI:UI_element&gt;
         &lt;/AXUI:UI_element&gt;
     &lt;/AXUI:UI_elements&gt;
@@ -167,19 +172,81 @@ See <a class="reference internal" href="extend_AXUI.html#extend-axui"><em>Extend
 <div class="section" id="other-supports-for-ui-automation">
 <h3>1.3.3. other supports for UI automation<a class="headerlink" href="#other-supports-for-ui-automation" title="Permalink to this headline">¶</a></h3>
 <p>AXUI provide other functions may used in UI automation,</p>
-<blockquote>
-<div><ul class="simple">
-<li>a timeout mechanism to handle UI response time</li>
-<li>image compare for UI verification.</li>
+<ul class="simple">
+<li>timeout mechanism to handle UI response time</li>
+<li>image compare for UI verification</li>
+<li>screenshot for every UI operation</li>
+<li>multiple language support for internationalization (TODO, which means I will never do it :) )</li>
 </ul>
-</div></blockquote>
 </div>
 </div>
 <div class="section" id="axui-interface">
 <h2>1.4. AXUI interface<a class="headerlink" href="#axui-interface" title="Permalink to this headline">¶</a></h2>
+<p>AXUI restructure the original UI API into two parts, common operations like UI search is taken into AXUI internal, user should use <code class="docutils literal"><span class="pre">app</span> <span class="pre">map</span></code> to search UI element,
+UI element specified operations like button invoke, set editor value is ported out directly, user can use original API to operate the UI element after UI element is found,
+so AXUI can make code disciplined while not reducing the power of original API.</p>
+<p>AXUI native API:</p>
+<ul class="simple">
+<li>for configuration, <code class="docutils literal"><span class="pre">AXUI.Config(config_file)</span></code>, also see <a class="reference internal" href="config_AXUI.html#config-axui"><em>AXUI configurations</em></a></li>
+<li>for UIElement checking, <code class="docutils literal"><span class="pre">AXUI.assertIsValid(element,</span> <span class="pre">msg)</span></code>, also see <em class="xref std std-ref">valid AXUI element</em></li>
+<li>for AppMap control, <code class="docutils literal"><span class="pre">AXUI.AppMap</span></code>, also see <a class="reference internal" href="AXUI_AppMap.html#axui-appmap"><em>AXUI AppMap</em></a></li>
+</ul>
+<p>Driver special API, mostly AXUI keep original API, for detail usage, you could refer original API documents:</p>
+<ul class="simple">
+<li>for windows, check <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee684021(v=vs.85).aspx">windows native UIAutomation Client API</a></li>
+<li>for selenium, check <a class="reference external" href="https://github.com/SeleniumHQ/selenium">selenium project</a></li>
+<li>for appnium, check <a class="reference external" href="https://github.com/appium/appium">appium project</a></li>
+</ul>
 </div>
 <div class="section" id="a-simple-example">
 <h2>1.5. a simple example<a class="headerlink" href="#a-simple-example" title="Permalink to this headline">¶</a></h2>
+<p>Let&#8217;s have a simple demo about how to control wmplayer to playback some media file on one 32bit windows machine:</p>
+<ol class="arabic simple">
+<li>Environment prepare</li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li>First to use AXUI, you need install python environment, prefer python 2.7 (TODO, support python 3 :) )</li>
+<li>Install AXUI</li>
+<li>Install <code class="docutils literal"><span class="pre">comtypes</span></code> as windows driver needs this library</li>
+</ul>
+</div></blockquote>
+<ol class="arabic" start="2">
+<li><p class="first">Write a appmap, like upper example, also see <a class="reference internal" href="AXUI_AppMap.html#axui-appmap"><em>AXUI AppMap</em></a></p>
+</li>
+<li><p class="first">Write a config file, usually you can modify the default config file, also see <a class="reference internal" href="config_AXUI.html#config-axui"><em>AXUI configurations</em></a></p>
+</li>
+<li><p class="first">Write a script like below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">###########################################################</span>
+<span class="c">#prepare part</span>
+<span class="c">###########################################################</span>
+<span class="kn">import</span> <span class="nn">AXUI</span>
+
+<span class="n">config_file</span> <span class="o">=</span> <span class="s">&quot;windows.cfg&quot;</span>             <span class="c">#config file name, abs path needed</span>
+<span class="n">app_map</span> <span class="o">=</span> <span class="s">&quot;windows_media_player.xml&quot;</span>    <span class="c">#app map name, just need a file name, path not needed</span>
+
+<span class="n">AXUI</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">config_file</span><span class="p">)</span>                <span class="c">#load the config file</span>
+<span class="n">appmap</span> <span class="o">=</span> <span class="n">AXUI</span><span class="o">.</span><span class="n">AppMap</span><span class="p">(</span><span class="n">app_map</span><span class="p">)</span>           <span class="c">#load the appmap</span>
+
+<span class="c">############################################################</span>
+<span class="c">#action part, now you can do the UI actions, here we open a media file</span>
+<span class="c">############################################################</span>
+<span class="n">media_file</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>                         <span class="c">#your media file need to open</span>
+
+<span class="c">#set the media file path to wmplayer open dialog file name edit</span>
+<span class="n">appmap</span><span class="o">.</span><span class="n">wmplayer_Window</span><span class="o">.</span><span class="n">Open_Dialog</span><span class="o">.</span><span class="n">FileName_ComboBox</span><span class="o">.</span><span class="n">FileName_Edit</span><span class="o">.</span><span class="n">ValuePattern</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">media_file</span><span class="p">)</span>
+
+<span class="c">#press the open button</span>
+<span class="n">appmap</span><span class="o">.</span><span class="n">wmplayer_Window</span><span class="o">.</span><span class="n">Open_Dialog</span><span class="o">.</span><span class="n">Open_Button</span><span class="o">.</span><span class="n">InvokePattern</span><span class="o">.</span><span class="n">Invoke</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Run this script as below, and listen the music:</p>
+<div class="highlight-python"><div class="highlight"><pre>python script_name.py
+</pre></div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 
@@ -210,8 +277,8 @@ See <a class="reference internal" href="extend_AXUI.html#extend-axui"><em>Extend
   <p class="topless"><a href="index.html"
                         title="previous chapter">Welcome to AXUI document&#8217;s documentation!</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="use_AXUI.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="config_AXUI.html"
+                        title="next chapter">2. AXUI configurations</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -243,7 +310,7 @@ See <a class="reference internal" href="extend_AXUI.html#extend-axui"><em>Extend
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="use_AXUI.html" title="&lt;no title&gt;"
+          <a href="config_AXUI.html" title="2. AXUI configurations"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="Welcome to AXUI document’s documentation!"

@@ -151,9 +151,9 @@ Some pre implementations for common platform
 
 AXUI has implement some drivers for common used platforms
 
- - windows desktop, based on `windows native UIAutomation Client API <https://msdn.microsoft.com/en-us/library/windows/desktop/ee684021(v=vs.85).aspx>`_
- - web, based on `selenium project <https://github.com/SeleniumHQ/selenium>`_
- - mobile android/ios, based on `appium project <https://github.com/appium/appium>`_
+- windows desktop, based on `windows native UIAutomation Client API <https://msdn.microsoft.com/en-us/library/windows/desktop/ee684021(v=vs.85).aspx>`_
+- web, based on `selenium project <https://github.com/SeleniumHQ/selenium>`_
+- mobile android/ios, based on `appium project <https://github.com/appium/appium>`_
 
 driver for windows UIAutomation API
 -------------------------------------
@@ -176,7 +176,7 @@ AXUI expose these patterns to end users, anyway end users should need to have a 
 driver for `WebDriver <https://w3c.github.io/webdriver/webdriver-spec.html>`_ compatible projects
 ---------------------------------------------------------------------------------------------------
 
-``selenium`` and ``appium`` all use a C/S structure to support multiple languages, the client side and server side use `WebDriver <https://w3c.github.io/webdriver/webdriver-spec.html>`_ protocol to communicate with each other
+``selenium`` and ``appium`` all use a C/S structure to support multiple languages, the client side and server side use `WebDriver <https://w3c.github.io/webdriver/webdriver-spec.html>`_ protocol to communicate with each other.
 since ``selenium`` and ``appium`` already have python clients, we don't reinvent the wheel, but use these python clients to implement our drivers for AXUI
 
 selenium
@@ -195,3 +195,17 @@ appium
 .. note::
 
  since I don't have an apple/android environment, the appium driver is not tested
+ 
+ I will be very glad someone can have a test for it :)
+
+Implement you own driver
+=========================
+
+Most of platforms already supported by AXUI built-in driver, anyway AXUI still open for new drivers.
+You can refer to upper built-in drivers to write your driver.
+
+.. note::
+
+ Before you start to implement your own driver for your UI, always be sure you really need to do this
+ 
+ For Custom UI, if your developers have provided you a command line back door to control the UI, you do not need to write your own UI driver.

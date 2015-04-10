@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>2. Extend AXUI &mdash; AXUI document 0.1.5 documentation</title>
+    <title>4. Extend AXUI &mdash; AXUI document 0.1.5 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" />
-    <link rel="next" title="&lt;no title&gt;" href="ToDo_list.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="use_AXUI_advance.html" /> 
+    <link rel="next" title="5. Best practices for UI Automation" href="best_practices.html" />
+    <link rel="prev" title="3. AXUI AppMap" href="AXUI_AppMap.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -35,10 +35,10 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="ToDo_list.html" title="&lt;no title&gt;"
+          <a href="best_practices.html" title="5. Best practices for UI Automation"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="use_AXUI_advance.html" title="&lt;no title&gt;"
+          <a href="AXUI_AppMap.html" title="3. AXUI AppMap"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
       </ul>
@@ -50,7 +50,7 @@
           <div class="body" role="main">
             
   <div class="section" id="extend-axui">
-<span id="id1"></span><h1>2. Extend AXUI<a class="headerlink" href="#extend-axui" title="Permalink to this headline">¶</a></h1>
+<span id="id1"></span><h1>4. Extend AXUI<a class="headerlink" href="#extend-axui" title="Permalink to this headline">¶</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -62,21 +62,195 @@
 </tbody>
 </table>
 <div class="section" id="axui-driver-interface">
-<h2>2.1. AXUI driver interface<a class="headerlink" href="#axui-driver-interface" title="Permalink to this headline">¶</a></h2>
+<h2>4.1. AXUI driver interface<a class="headerlink" href="#axui-driver-interface" title="Permalink to this headline">¶</a></h2>
+<p>AXUI is first developed for easy use of windows UIAutomation API, then restructure to add support for <a class="reference external" href="http://www.w3.org/TR/webdriver/">WebDriver</a> API used by <code class="docutils literal"><span class="pre">selenium</span></code> and <code class="docutils literal"><span class="pre">appium</span></code>.
+So if your UI automation is similar to windows UIAutomation API or <a class="reference external" href="http://www.w3.org/TR/webdriver/">WebDriver</a> API, it will be easy to add support for it in AXUI.</p>
+<p>AXUI driver interface exposes some basic interface for used in other AXUI modules,</p>
+<p>details interfaces definition is in <code class="docutils literal"><span class="pre">driver/template/UIElement.py</span></code></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">UIElement</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;This class defines interfaces for common UI element</span>
+
+<span class="sd">    Every driver (Windows, Appium, Selenium) should implement this interfaces,</span>
+<span class="sd">    provides independent interfaces for uplevel modules, so we transplant AXUI cross different platform</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        find_element:           find the first descendant element which matches parsed_identifier</span>
+<span class="sd">        find_elements:          find all elements which match parsed_identifier</span>
+<span class="sd">        verify:                 verify current element is valid</span>
+
+<span class="sd">        get_keyboard:           class for keyboard related methods</span>
+<span class="sd">        get_mouse:              class for mouse related methods</span>
+<span class="sd">        get_touch:              class for touch related methods</span>
+
+<span class="sd">        get_property:           get property value for current element</span>
+<span class="sd">        get_pattern:            get pattern interface for current element</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">find_element</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parsed_identifier</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        find the first child UI element via identifier, return one UIAElement if success, return None if not find</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">find_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parsed_identifier</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        find the child UI elements via identifier, return a list containing target UI elements</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">verify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        verify UI element is still exist</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_property</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        get property value</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        pattern is a class support one kind of UI actions</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_keyboard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        get keyboard class to use keyboard related methods</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_mouse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        get mouse class to use mouse related methods</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_touch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        get touch class to use touch related methods</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&quot;keyboard&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_keyboard</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&quot;mouse&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mouse</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s">&quot;touch&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_touch</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_property</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">attr</span>
+            <span class="n">attr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_pattern</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">attr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">attr</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s">&quot;Attribute not exist: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Root</span><span class="p">(</span><span class="n">UIElement</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    root is the entry point to interact with UI</span>
+<span class="sd">    like desktop of windows UIA, web browser of web driver API</span>
+
+<span class="sd">    This class defines interfaces for root element</span>
+
+<span class="sd">    Every driver (Windows, Appium, Selenium) should implement this interfaces,</span>
+<span class="sd">    provides independent interfaces for uplevel modules, so we transplant AXUI cross different platform</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        start:                  start root element</span>
+<span class="sd">        stop:                   stop root element</span>
+<span class="sd">        screenshot:             take a screen shot for root element</span>
+
+<span class="sd">        find_element:           find the first descendant element which matches parsed_identifier</span>
+<span class="sd">        find_elements:          find all elements which match parsed_identifier</span>
+<span class="sd">        verify:                 verify current element is valid</span>
+
+<span class="sd">        get_keyboard:           class for keyboard related methods</span>
+<span class="sd">        get_mouse:              class for mouse related methods</span>
+<span class="sd">        get_touch:              class for touch related methods</span>
+
+<span class="sd">        get_property:           get property value for current element</span>
+<span class="sd">        get_pattern:            get pattern interface for current element</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        get root ready</span>
+<span class="sd">        like get root element in windows UIA, get browser to target website</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        stop root</span>
+<span class="sd">        like close browser for web driver API</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">absfile_path</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        take a screen shot for root</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s">&quot;Not implement&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="some-implementations-for-common-platform">
-<h2>2.2. Some implementations for common platform<a class="headerlink" href="#some-implementations-for-common-platform" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="some-pre-implementations-for-common-platform">
+<h2>4.2. Some pre implementations for common platform<a class="headerlink" href="#some-pre-implementations-for-common-platform" title="Permalink to this headline">¶</a></h2>
+<p>AXUI has implement some drivers for common used platforms</p>
+<ul class="simple">
+<li>windows desktop, based on <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee684021(v=vs.85).aspx">windows native UIAutomation Client API</a></li>
+<li>web, based on <a class="reference external" href="https://github.com/SeleniumHQ/selenium">selenium project</a></li>
+<li>mobile android/ios, based on <a class="reference external" href="https://github.com/appium/appium">appium project</a></li>
+</ul>
 <div class="section" id="driver-for-windows-uiautomation-api">
-<h3>2.2.1. driver for windows UIAutomation API<a class="headerlink" href="#driver-for-windows-uiautomation-api" title="Permalink to this headline">¶</a></h3>
+<h3>4.2.1. driver for windows UIAutomation API<a class="headerlink" href="#driver-for-windows-uiautomation-api" title="Permalink to this headline">¶</a></h3>
+<p>driver for windows UIAutomation API is in <code class="docutils literal"><span class="pre">driver/windows</span></code>, we use <a class="reference external" href="https://github.com/enthought/comtypes">comtypes</a> to access this windows COM API,
+thus to use AXUI to automate windows UI, you need install <a class="reference external" href="https://github.com/enthought/comtypes">comtypes</a> first.</p>
+<p>Windows UIAutomation API separates operations for different kinds of UI into a set of <a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ee684023(v=vs.85).aspx">control patterns</a>,
+it&#8217;s recommended to use these patterns to operate target UI,
+AXUI expose these patterns to end users, anyway end users should need to have a check of these patterns.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>I have tested windows driver on win8.1 and win10,</p>
+<ul class="last simple">
+<li>it&#8217;s works well with windows UI framework like win32, winform, WPF, windows store app</li>
+<li>not works well with Qt framework, UIA recognize all kinds of Qt controls as frames</li>
+<li>not support for directX, custom UI controls</li>
+</ul>
 </div>
-<div class="section" id="driver-for-webdriver-compatible-tools">
-<h3>2.2.2. driver for <code class="docutils literal"><span class="pre">webdriver</span></code> compatible tools<a class="headerlink" href="#driver-for-webdriver-compatible-tools" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="driver-for-webdriver-compatible-projects">
+<h3>4.2.2. driver for <a class="reference external" href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver</a> compatible projects<a class="headerlink" href="#driver-for-webdriver-compatible-projects" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">selenium</span></code> and <code class="docutils literal"><span class="pre">appium</span></code> all use a C/S structure to support multiple languages, the client side and server side use <a class="reference external" href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver</a> protocol to communicate with each other.
+since <code class="docutils literal"><span class="pre">selenium</span></code> and <code class="docutils literal"><span class="pre">appium</span></code> already have python clients, we don&#8217;t reinvent the wheel, but use these python clients to implement our drivers for AXUI</p>
 <div class="section" id="selenium">
-<h4>2.2.2.1. selenium<a class="headerlink" href="#selenium" title="Permalink to this headline">¶</a></h4>
+<h4>4.2.2.1. selenium<a class="headerlink" href="#selenium" title="Permalink to this headline">¶</a></h4>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Only have some tests with IE with selenium driver</p>
 </div>
-<div class="section" id="appnium">
-<h4>2.2.2.2. appnium<a class="headerlink" href="#appnium" title="Permalink to this headline">¶</a></h4>
 </div>
+<div class="section" id="appium">
+<h4>4.2.2.2. appium<a class="headerlink" href="#appium" title="Permalink to this headline">¶</a></h4>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>since I don&#8217;t have an apple/android environment, the appium driver is not tested</p>
+<p class="last">I will be very glad someone can have a test for it :)</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="implement-you-own-driver">
+<h2>4.3. Implement you own driver<a class="headerlink" href="#implement-you-own-driver" title="Permalink to this headline">¶</a></h2>
+<p>Most of platforms already supported by AXUI built-in driver, anyway AXUI still open for new drivers.
+You can refer to upper built-in drivers to write your driver.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Before you start to implement your own driver for your UI, always be sure you really need to do this</p>
+<p class="last">For Custom UI, if your developers have provided you a command line back door to control the UI, you do not need to write your own UI driver.</p>
 </div>
 </div>
 </div>
@@ -89,27 +263,28 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">2. Extend AXUI</a><ul>
-<li><a class="reference internal" href="#axui-driver-interface">2.1. AXUI driver interface</a></li>
-<li><a class="reference internal" href="#some-implementations-for-common-platform">2.2. Some implementations for common platform</a><ul>
-<li><a class="reference internal" href="#driver-for-windows-uiautomation-api">2.2.1. driver for windows UIAutomation API</a></li>
-<li><a class="reference internal" href="#driver-for-webdriver-compatible-tools">2.2.2. driver for <code class="docutils literal"><span class="pre">webdriver</span></code> compatible tools</a><ul>
-<li><a class="reference internal" href="#selenium">2.2.2.1. selenium</a></li>
-<li><a class="reference internal" href="#appnium">2.2.2.2. appnium</a></li>
+<li><a class="reference internal" href="#">4. Extend AXUI</a><ul>
+<li><a class="reference internal" href="#axui-driver-interface">4.1. AXUI driver interface</a></li>
+<li><a class="reference internal" href="#some-pre-implementations-for-common-platform">4.2. Some pre implementations for common platform</a><ul>
+<li><a class="reference internal" href="#driver-for-windows-uiautomation-api">4.2.1. driver for windows UIAutomation API</a></li>
+<li><a class="reference internal" href="#driver-for-webdriver-compatible-projects">4.2.2. driver for WebDriver compatible projects</a><ul>
+<li><a class="reference internal" href="#selenium">4.2.2.1. selenium</a></li>
+<li><a class="reference internal" href="#appium">4.2.2.2. appium</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li><a class="reference internal" href="#implement-you-own-driver">4.3. Implement you own driver</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="use_AXUI_advance.html"
-                        title="previous chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="AXUI_AppMap.html"
+                        title="previous chapter">3. AXUI AppMap</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="ToDo_list.html"
-                        title="next chapter">&lt;no title&gt;</a></p>
+  <p class="topless"><a href="best_practices.html"
+                        title="next chapter">5. Best practices for UI Automation</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -141,10 +316,10 @@
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="ToDo_list.html" title="&lt;no title&gt;"
+          <a href="best_practices.html" title="5. Best practices for UI Automation"
              >next</a> |</li>
         <li class="right" >
-          <a href="use_AXUI_advance.html" title="&lt;no title&gt;"
+          <a href="AXUI_AppMap.html" title="3. AXUI AppMap"
              >previous</a> |</li>
         <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
       </ul>

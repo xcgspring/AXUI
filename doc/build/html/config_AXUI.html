@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>2. AXUI configurations &mdash; AXUI document 0.1.5 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" />
+    <link rel="next" title="3. AXUI AppMap" href="AXUI_AppMap.html" />
+    <link rel="prev" title="1. AXUI introduce" href="AXUI_introduce.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="AXUI_AppMap.html" title="3. AXUI AppMap"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="AXUI_introduce.html" title="1. AXUI introduce"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="axui-configurations">
+<span id="config-axui"></span><h1>2. AXUI configurations<a class="headerlink" href="#axui-configurations" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Page Status:</th><td class="field-body">Development</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Last Reviewed:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="axui-configurations-overview">
+<h2>2.1. AXUI configurations overview<a class="headerlink" href="#axui-configurations-overview" title="Permalink to this headline">¶</a></h2>
+<p>AXUI support some custom configurations, to make AXUI suite your test environment.
+AXUI use a config file to specify these configurations, config format is compatible with <a class="reference external" href="http://tools.ietf.org/html/rfc822.html">RFC 822</a>,
+so that we can parse it with python built-in <a class="reference external" href="https://docs.python.org/2/library/configparser.html">ConfigParser</a> module</p>
+<p>Below is the default configuration file in <code class="docutils literal"><span class="pre">AXUI/global.cfg</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>[logging]
+#logger name
+logger_name = AXUI
+
+#logging level
+#valid levels are DEBUG,INFO,WARNING,ERROR,CRITICAL
+logging_level_file = DEBUG
+logging_level_stream = ERROR
+
+#logging file name
+logging_file = AXUI.log
+
+#logging file mode
+#&quot;w&quot; for overwrite, will create a new file
+#&quot;a&quot; for append, will append the log if there is an existing file
+file_logging_mode = a
+
+#logging format
+#please check https://docs.python.org/2/library/logging.html#logrecord-attributes
+#for more available formats
+formatter = %(message)s
+
+#if enable colorful logging, &quot;True&quot; or &quot;False&quot;
+color_enable = True
+
+[XML]
+#location where you store your app maps, should be an absolute path
+#set this location wrong could cause your app map loading fail
+app_map_location = abspath
+
+#location where you store your schema, should be an absolute path
+#usually you do not need to change the default schema
+#so do not set this unless you know what your are doing
+#schema_location = abspath
+
+#global timeout for UI response
+time_out = 5
+
+#screenshot file location
+#need abspath
+screenshot_location = abspath
+
+#enable screenshot when fail happens
+#can only set to True or False, other value will be ignore
+screenshot_on_failure = False
+
+[image]
+#if generate diff image
+#can only set to True or False, other value will be ignore
+gen_diff_image = True
+
+#diff image location
+#need abspath
+diff_image_location = abspath
+
+[driver]
+#driver used in your UI automation
+driver_used = windows
+</pre></div>
+</div>
+</div>
+<div class="section" id="axui-configuration-sections">
+<h2>2.2. AXUI configuration sections<a class="headerlink" href="#axui-configuration-sections" title="Permalink to this headline">¶</a></h2>
+<p>Just introduce some common used configure settings</p>
+<div class="section" id="logging">
+<h3>2.2.1. logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>logger_name: you can change logger_name to keep consistent with your app</li>
+<li>logging_file: AXUI log file, you can specify a abs path or relative path</li>
+</ul>
+</div>
+<div class="section" id="xml">
+<h3>2.2.2. XML<a class="headerlink" href="#xml" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>app_map_location: you need to set your app map location, make sure AXUI can find an app map file has same name as your specified</li>
+<li>schema_location: default is <code class="docutils literal"><span class="pre">AXUI/XML/schema</span></code>, you usually do not need to change it</li>
+<li>time_out: global timeout for UI response, you can set it bigger for slow machine/website</li>
+<li>screenshot_on_failure: set this true will turn on screen shot when UI operation fails</li>
+</ul>
+</div>
+<div class="section" id="image">
+<h3>2.2.3. image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>gen_diff_image: set this to true will generate diff image for image compare</li>
+</ul>
+</div>
+<div class="section" id="driver">
+<h3>2.2.4. driver<a class="headerlink" href="#driver" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>driver_used: your driver module name used currently, like &#8220;windows&#8221; for windows driver</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">2. AXUI configurations</a><ul>
+<li><a class="reference internal" href="#axui-configurations-overview">2.1. AXUI configurations overview</a></li>
+<li><a class="reference internal" href="#axui-configuration-sections">2.2. AXUI configuration sections</a><ul>
+<li><a class="reference internal" href="#logging">2.2.1. logging</a></li>
+<li><a class="reference internal" href="#xml">2.2.2. XML</a></li>
+<li><a class="reference internal" href="#image">2.2.3. image</a></li>
+<li><a class="reference internal" href="#driver">2.2.4. driver</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="AXUI_introduce.html"
+                        title="previous chapter">1. AXUI introduce</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="AXUI_AppMap.html"
+                        title="next chapter">3. AXUI AppMap</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/config_AXUI.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="AXUI_AppMap.html" title="3. AXUI AppMap"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="AXUI_introduce.html" title="1. AXUI introduce"
+             >previous</a> |</li>
+        <li><a href="index.html">AXUI document 0.1.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2015, xcgspring.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b2.
+    </div>
+  </body>
+</html>
