@@ -693,7 +693,7 @@ Function:
             pause n second      :       {PAUSE n}
         '''
         #set focus before input keys
-        self.UIElement.SetFocus()
+        self.UIElement.set_focus()
         
         keys = parse_keys(string)
         LOGGER().debug("Keyboard input string: %s, parsed keys: %s" % (string, repr(keys)))

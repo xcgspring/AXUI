@@ -34,7 +34,6 @@ class AppMap(object):
     app map includes UI elements, functions and other app maps
     app maps should not recursive include each other
     '''
-    root_parent_string = XML_config.query_root_parent()
     
     def __init__(self, xml, uplevel_app_map_xmls):
         self.app_map_xml = xml
@@ -161,7 +160,7 @@ class AppMap(object):
         UI_element = self._init_UI_element(xml_element)
 
         #do nothing for root element
-        if UI_element.is_root():
+        if isinstance(UI_element, element_module.RootElement):
             return UI_element
             
         #top level element must have parent

@@ -69,10 +69,8 @@
     
     <xs:element name="UI_elements">
         <xs:complexType>
-            <xs:choice minOccurs="0" maxOccurs="1">
-                <xs:element ref="AXUI:Root_element" />
-            </xs:choice>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="AXUI:Root_element" />
                 <xs:element ref="AXUI:UI_element" />
                 <xs:element ref="AXUI:UI_element_group" />
             </xs:choice>

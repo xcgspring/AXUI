@@ -173,10 +173,10 @@ AXUI expose these patterns to end users, anyway end users should need to have a 
  - not works well with Qt framework, UIA recognize all kinds of Qt controls as frames  
  - not support for directX, custom UI controls
 
-driver for `WebDriver <http://www.w3.org/TR/webdriver/>`_ compatible projects
-----------------------------------------------------------------------------------
+driver for `WebDriver <https://w3c.github.io/webdriver/webdriver-spec.html>`_ compatible projects
+---------------------------------------------------------------------------------------------------
 
-``selenium`` and ``appium`` all use a C/S structure to support multiple languages, the client side and server side use `WebDriver <http://www.w3.org/TR/webdriver/>`_ protocol to communicate with each other
+``selenium`` and ``appium`` all use a C/S structure to support multiple languages, the client side and server side use `WebDriver <https://w3c.github.io/webdriver/webdriver-spec.html>`_ protocol to communicate with each other
 since ``selenium`` and ``appium`` already have python clients, we don't reinvent the wheel, but use these python clients to implement our drivers for AXUI
 
 selenium

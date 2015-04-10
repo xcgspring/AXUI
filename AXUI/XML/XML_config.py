@@ -4,7 +4,6 @@ import os
 config_section="XML"
 default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "example"),
                   "schema_location": os.path.join(os.path.dirname(os.path.abspath(__file__)), "schemas"),
-                  "root_parent": "None",
                   "timeout": 5,
                   "screenshot_location": os.path.dirname(os.path.abspath(__file__)),
                   "screenshot_on_failure": "False",
@@ -12,7 +11,6 @@ default_configs={ "app_map_location": os.path.join(os.path.dirname(os.path.abspa
 
 AppMapLocation=default_configs["app_map_location"]
 SchemaLocation=default_configs["schema_location"]
-RootParent=default_configs["root_parent"]
 TimeOut=default_configs["timeout"]
 ScreenshotLocation=default_configs["screenshot_location"]
 ScreenshotOnFailure=default_configs["screenshot_on_failure"]
@@ -23,13 +21,11 @@ def config(configs=default_configs):
     '''
     global AppMapLocation
     global SchemaLocation
-    global RootParent
     global TimeOut
     global ScreenshotLocation
     global ScreenshotOnFailure
     AppMapLocation=configs["app_map_location"]
     SchemaLocation=configs["schema_location"]
-    RootParent=configs["root_parent"]
     TimeOut=configs["timeout"]
     ScreenshotLocation=configs["screenshot_location"]
     ScreenshotOnFailure=configs["screenshot_on_failure"]
@@ -70,12 +66,6 @@ def query_schema_file(schema_file):
                 if file_ == basename:
                     return os.path.join(root, basename)
         raise ValueError("%s not found in %s" % (schema_file, SchemaLocation))
-
-def query_root_parent():
-    '''query root id for root element
-    Return: root identifier set in config
-    '''
-    return RootParent
     
 def query_timeout():
     '''query timeout from config

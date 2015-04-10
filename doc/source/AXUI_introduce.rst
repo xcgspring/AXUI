@@ -132,7 +132,7 @@ AXUI interface
 ===============
 
 AXUI restructure the original UI API into two parts, common operations like UI search is taken into AXUI internal, user should use ``app map`` to search UI element,
-UI element specified operations like button invoke, editor value set is ported out directly, user can use original API to operate the UI element after UI element is found,
+UI element specified operations like button invoke, set editor value is ported out directly, user can use original API to operate the UI element after UI element is found,
 so AXUI can make code disciplined while not reducing the power of original API.
 
 

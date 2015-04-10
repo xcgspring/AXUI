@@ -1,6 +1,9 @@
 #for config use
 from config_driver import *
 
+class DriverException(Exception):
+    pass
+
 def get_driver():
     '''get driver
     Return: return driver module selected in config

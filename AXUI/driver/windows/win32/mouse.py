@@ -275,14 +275,14 @@ Attributes:
         Returns:
         '''
         if relative_coords is None:
-            coords = self.UIElement.GetClickablePoint()
+            coords = self.UIElement.get_clickable_point()
         else:
             coords = [0, 0]
             coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
             coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
         LOGGER().debug("Mouse left click at: %s" % repr(coords))
-        self.UIElement.SetFocus()
+        self.UIElement.set_focus()
         SendMouseInput(coords)
         
     def LeftDoubleClick(self, relative_coords = None):
@@ -292,14 +292,14 @@ Attributes:
         Returns:
         '''
         if relative_coords is None:
-            coords = self.UIElement.GetClickablePoint()
+            coords = self.UIElement.get_clickable_point()
         else:
             coords = [0, 0]
             coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
             coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
         LOGGER().debug("Mouse left double click at: %s" % repr(coords))
-        self.UIElement.SetFocus()
+        self.UIElement.set_focus()
         SendMouseInput(coords, double=True)
     
     def RightClick(self, relative_coords = None):
@@ -309,14 +309,14 @@ Attributes:
         Returns:
         '''
         if relative_coords is None:
-            coords = self.UIElement.GetClickablePoint()
+            coords = self.UIElement.get_clickable_point()
         else:
             coords = [0, 0]
             coords[0] = relative_coords[0]+self.UIElement.coordinate[0]
             coords[1] = relative_coords[1]+self.UIElement.coordinate[1]
         
         LOGGER().debug("Mouse right click at: %s" % repr(coords))
-        self.UIElement.SetFocus()
+        self.UIElement.set_focus()
         SendMouseInput(coords, button="right")
         
     def Move(self, abs_source_coords, abs_dest_coords):
@@ -357,7 +357,7 @@ Attributes:
             y_coords = sorted(random.sample(y_population, sample_size), reverse=True)
         #move mouse
         LOGGER().debug("Mouse move from: %s to %s" % (repr(abs_source_coords), repr(abs_dest_coords)))
-        self.UIElement.SetFocus()
+        self.UIElement.set_focus()
         for i in range(sample_size):
             SendMouseInput([x_coords[i], y_coords[i]], button_down=False, button_up=False)
             time.sleep(0.1)
@@ -368,7 +368,7 @@ Attributes:
         so need use abs coords
         '''
         LOGGER().debug("Mouse drag drop from: %s to %s" % (repr(abs_source_coords), repr(abs_dest_coords)))
-        self.UIElement.SetFocus()
+        self.UIElement.set_focus()
         SendMouseInput(abs_source_coords, button_down=True, button_up=False)
         self.Move(abs_source_coords, abs_dest_coords)
         SendMouseInput(abs_dest_coords, button_down=False, button_up=True)

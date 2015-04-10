@@ -25,10 +25,16 @@ def Config(config_file=""):
     config.config(driver)
     config.config(image)
 
+def assertIsValid(element, msg="element not valid"):
+    '''check if element valid
+    '''
+    if element.verify() is None:
+        raise AssertionError(msg)
+    
 #port AppMap here
 AppMap=XML.AppMap
 
 #port image_compare here
 from image import image_compare
 
-__all__=["Config", "AppMap", "image_compare"]
+__all__=["Config", "assertIsValid", "AppMap", "image_compare"]

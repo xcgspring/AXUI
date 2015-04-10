@@ -1,4 +1,6 @@
 
+from AXUI.driver import DriverException
+
 class Method(object):
     '''
     optional interface,
@@ -42,12 +44,6 @@ class UIElement(object):
     def find_elements(self, parsed_identifier):
         '''
         find the child UI elements via identifier, return a list containing target UI elements
-        '''
-        raise NotImplementedError("Not implement")
-
-    def verify(self):
-        '''
-        verify UI element is still exist
         '''
         raise NotImplementedError("Not implement")
         
