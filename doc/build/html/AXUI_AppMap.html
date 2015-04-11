@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="AXUI document 0.1.5 documentation" href="index.html" />
-    <link rel="next" title="4. Extend AXUI" href="extend_AXUI.html" />
+    <link rel="next" title="4. AXUI built-in drivers" href="AXUI_built-in_drivers.html" />
     <link rel="prev" title="2. AXUI configurations" href="config_AXUI.html" /> 
   </head>
   <body role="document">
@@ -35,7 +35,7 @@
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="extend_AXUI.html" title="4. Extend AXUI"
+          <a href="AXUI_built-in_drivers.html" title="4. AXUI built-in drivers"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="config_AXUI.html" title="2. AXUI configurations"
@@ -208,14 +208,40 @@ appmap.namespace_name.element_name...
 </div>
 <div class="section" id="axui-ui-elements">
 <h3>3.2.5. AXUI:UI_elements<a class="headerlink" href="#axui-ui-elements" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal"><span class="pre">AXUI:UI_elements</span></code> can include multiple <code class="docutils literal"><span class="pre">AXUI:UI_element</span></code> \ <code class="docutils literal"><span class="pre">AXUI:Root_element</span></code> \ <code class="docutils literal"><span class="pre">AXUI:UI_element_group</span></code> elements, <code class="docutils literal"><span class="pre">AXUI:UI_elements</span></code> has no attributes.</p>
 <div class="section" id="axui-root-element">
 <h4>3.2.5.1. AXUI:Root_element<a class="headerlink" href="#axui-root-element" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">AXUI:Root_element</span></code> element represents the enter point of UI automation API, like desktop of windows UIA, web browser of <code class="docutils literal"><span class="pre">WebDriver</span></code>.</p>
+<p><code class="docutils literal"><span class="pre">AXUI:Root_element</span></code> element can include multiple <code class="docutils literal"><span class="pre">AXUI:UI_element</span></code> \ <code class="docutils literal"><span class="pre">AXUI:UI_element_group</span></code> elements, element included are treated as children of <code class="docutils literal"><span class="pre">AXUI:Root_element</span></code> element.</p>
+<p><code class="docutils literal"><span class="pre">AXUI:Root_element</span></code> element has a <code class="docutils literal"><span class="pre">name</span></code> attribute as identifier.</p>
 </div>
 <div class="section" id="axui-ui-element">
 <h4>3.2.5.2. AXUI:UI_element<a class="headerlink" href="#axui-ui-element" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">AXUI:UI_element</span></code> element represents the normal UI elements,</p>
+<p><code class="docutils literal"><span class="pre">AXUI:UI_element</span></code> element can contain multiple <code class="docutils literal"><span class="pre">AXUI:UI_element</span></code> \ <code class="docutils literal"><span class="pre">AXUI:UI_element_group</span></code> elements, element included are treated as children of <code class="docutils literal"><span class="pre">AXUI:UI_element</span></code> element.</p>
+<p><code class="docutils literal"><span class="pre">AXUI:UI_element</span></code> element has six attributes:</p>
+<div class="highlight-python"><div class="highlight"><pre>- ``name`` attribute, must have, identifier of this element
+- ``parent`` attribute, must have for elements of the direct children of ``AXUI:UI_elements``
+- ``identifier`` attribute, optional, a string for UI API to find the element, check :ref:`AXUI built-in drivers` for detail identifier format
+- ``start_func`` attribute, optional, how to start the element
+- ``stop_func`` attribute, optional, how to stop the element
+- ``timeout`` attribute, optional, element unique timeout time, will replace global timeout in config file
+</pre></div>
+</div>
 </div>
 <div class="section" id="axui-ui-element-group">
 <h4>3.2.5.3. AXUI:UI_element_group<a class="headerlink" href="#axui-ui-element-group" title="Permalink to this headline">¶</a></h4>
+<p><code class="docutils literal"><span class="pre">AXUI:UI_element_group</span></code> element represents the UI element list,</p>
+<p><code class="docutils literal"><span class="pre">AXUI:UI_element_group</span></code> element cannot contain any element,</p>
+<p><code class="docutils literal"><span class="pre">AXUI:UI_element_group</span></code> element also has six attributes:</p>
+<div class="highlight-python"><div class="highlight"><pre>- ``name`` attribute, must have, identifier of this element
+- ``parent`` attribute, must have for elements of the direct children of ``AXUI:UI_elements``
+- ``identifier`` attribute, optional, a string for UI API to find the element, check :ref:`AXUI built-in drivers` for detail identifier format
+- ``start_func`` attribute, optional, how to start the element
+- ``stop_func`` attribute, optional, how to stop the element
+- ``timedelay`` attribute, optional, will find the element group after time specified
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -264,8 +290,8 @@ appmap.namespace_name.element_name...
   <p class="topless"><a href="config_AXUI.html"
                         title="previous chapter">2. AXUI configurations</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="extend_AXUI.html"
-                        title="next chapter">4. Extend AXUI</a></p>
+  <p class="topless"><a href="AXUI_built-in_drivers.html"
+                        title="next chapter">4. AXUI built-in drivers</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -297,7 +323,7 @@ appmap.namespace_name.element_name...
           <a href="genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="extend_AXUI.html" title="4. Extend AXUI"
+          <a href="AXUI_built-in_drivers.html" title="4. AXUI built-in drivers"
              >next</a> |</li>
         <li class="right" >
           <a href="config_AXUI.html" title="2. AXUI configurations"

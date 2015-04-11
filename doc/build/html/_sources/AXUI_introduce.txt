@@ -131,7 +131,7 @@ AXUI provide other functions may used in UI automation,
 - timeout mechanism to handle UI response time
 - image compare for UI verification
 - screenshot for every UI operation
-- multiple language support for internationalization (TODO, which means I will never do it :) )
+- multiple languages support for internationalization (TODO, which means I will never do it :) )
 
 AXUI interface
 ===============

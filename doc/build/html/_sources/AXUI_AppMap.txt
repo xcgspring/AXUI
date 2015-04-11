@@ -168,11 +168,45 @@ typical usage::
 AXUI:UI_elements
 -----------------
 
+``AXUI:UI_elements`` can include multiple ``AXUI:UI_element`` \\ ``AXUI:Root_element`` \\ ``AXUI:UI_element_group`` elements, ``AXUI:UI_elements`` has no attributes.
+
 AXUI:Root_element
 ##################
+
+``AXUI:Root_element`` element represents the enter point of UI automation API, like desktop of windows UIA, web browser of ``WebDriver``.
+
+``AXUI:Root_element`` element can include multiple ``AXUI:UI_element`` \\ ``AXUI:UI_element_group`` elements, element included are treated as children of ``AXUI:Root_element`` element.
+
+``AXUI:Root_element`` element has a ``name`` attribute as identifier.
 
 AXUI:UI_element
 ##################
 
+``AXUI:UI_element`` element represents the normal UI elements,
+
+``AXUI:UI_element`` element can contain multiple ``AXUI:UI_element`` \\ ``AXUI:UI_element_group`` elements, element included are treated as children of ``AXUI:UI_element`` element.
+
+``AXUI:UI_element`` element has six attributes::
+
+- ``name`` attribute, must have, identifier of this element
+- ``parent`` attribute, must have for elements of the direct children of ``AXUI:UI_elements``
+- ``identifier`` attribute, optional, a string for UI API to find the element, check :ref:`AXUI built-in drivers` for detail identifier format
+- ``start_func`` attribute, optional, how to start the element
+- ``stop_func`` attribute, optional, how to stop the element
+- ``timeout`` attribute, optional, element unique timeout time, will replace global timeout in config file
+
 AXUI:UI_element_group
 ########################
+
+``AXUI:UI_element_group`` element represents the UI element list,
+
+``AXUI:UI_element_group`` element cannot contain any element,
+
+``AXUI:UI_element_group`` element also has six attributes::
+
+- ``name`` attribute, must have, identifier of this element
+- ``parent`` attribute, must have for elements of the direct children of ``AXUI:UI_elements``
+- ``identifier`` attribute, optional, a string for UI API to find the element, check :ref:`AXUI built-in drivers` for detail identifier format
+- ``start_func`` attribute, optional, how to start the element
+- ``stop_func`` attribute, optional, how to stop the element
+- ``timedelay`` attribute, optional, will find the element group after time specified
