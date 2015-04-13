@@ -3,6 +3,7 @@ translate AXUI identifier to Windows UIA searchCondition
 '''
 import re
 from AXUI.logger import LOGGER
+from AXUI.driver import DriverException
 import UIA
 
 #Custom identifiers is defined for UI elements not properly recongnized by UIA
@@ -20,9 +21,6 @@ custom_identifiers=[
 #to identify what technology used to identify the UI
 supprted_identifiers=["UIA"].extend(custom_identifiers)
 
-class TranslaterException(Exception):
-    pass
-    
 class ID_Translater(object):
     '''
     translate parsed identifier to acoordingly search condition
@@ -46,7 +44,7 @@ class ID_Translater(object):
         elif relation == "OR":
             return UIA.IUIAutomation_object.CreateOrCondition(translated_id_1, translated_id_2)
         else:
-            raise TranslaterException("Get error relation id: %s" % repr(relation))
+            raise DriverException("Get error relation id: %s" % repr(relation))
         
     def _translated_identifier(self, parsed_id):
         if len(parsed_id) == 3:
@@ -63,7 +61,7 @@ class ID_Translater(object):
         elif len(parsed_id) == 2:
             translated = self._translated_atomic_identifier(parsed_id)
         else:
-            raise TranslaterException("Get error parsed_id: %s" % repr(parsed_id))
+            raise DriverException("Get error parsed_id: %s" % repr(parsed_id))
             
         #LOGGER().debug("Get translated: %s" % repr(translated))
         return translated
