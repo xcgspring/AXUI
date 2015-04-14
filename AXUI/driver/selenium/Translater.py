@@ -12,7 +12,7 @@ class ID_Translater(object):
     '''
     def __init__(self, parsed_identifier):
         self.parsed_identifier = parsed_identifier
-        
+
     def get_translated(self):
         '''
         get translated result from parsed identifier
@@ -27,7 +27,7 @@ class ID_Translater(object):
         else:
             LOGGER().error("Get error parsed_id: %s" % repr(self.parsed_identifier))
             raise DriverException("Get error parsed_id: %s" % repr(self.parsed_identifier))
-        
-        
 
-        
+
+
+
