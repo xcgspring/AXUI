@@ -315,11 +315,11 @@ class UIElement(object):
         '''
         we also support direct use name to get object
         '''
-        if name == "keyboard":
+        if name == "Keyboard":
             return self.get_keyboard()
-        elif name == "mouse":
+        elif name == "Mouse":
             return self.get_mouse()
-        elif name == "touch":
+        elif name == "Touch":
             return self.get_touch()
         else:
             attr = self.get_property(name)

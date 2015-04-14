@@ -268,7 +268,7 @@ Attributes:
         
         return docstring
         
-    def LeftClick(self, relative_coords = None):
+    def left_click(self, relative_coords = None):
         '''LeftClick: left click the UI element, or taget coords
         Arguments:
             coords: coordinate indicate where mouse click, default use UI element click point
@@ -285,7 +285,7 @@ Attributes:
         self.UIElement.set_focus()
         SendMouseInput(coords)
         
-    def LeftDoubleClick(self, relative_coords = None):
+    def left_double_click(self, relative_coords = None):
         '''LeftDoubleClick: left double click the UI element, or taget coords
         Arguments:
             coords: coordinate indicate where mouse click, default use UI element click point
@@ -302,7 +302,7 @@ Attributes:
         self.UIElement.set_focus()
         SendMouseInput(coords, double=True)
     
-    def RightClick(self, relative_coords = None):
+    def right_click(self, relative_coords = None):
         '''RightClick: right click the UI element, or taget coords
         Arguments:
             coords: coordinate indicate where mouse click, default use UI element click point
@@ -319,7 +319,7 @@ Attributes:
         self.UIElement.set_focus()
         SendMouseInput(coords, button="right")
         
-    def Move(self, abs_source_coords, abs_dest_coords):
+    def move(self, abs_source_coords, abs_dest_coords):
         '''Move: move mouse from source_coords to dest_coords
         mouse move is not related with UI element
         so need use abs coords
@@ -362,7 +362,7 @@ Attributes:
             SendMouseInput([x_coords[i], y_coords[i]], button_down=False, button_up=False)
             time.sleep(0.1)
         
-    def DragDrop(self, abs_source_coords, abs_dest_coords):
+    def drag_drop(self, abs_source_coords, abs_dest_coords):
         '''Move: move mouse from source_coords to dest_coords
         mouse drag drop is not related with UI element
         so need use abs coords

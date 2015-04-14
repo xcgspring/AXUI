@@ -11,6 +11,7 @@ The tips and tricks at http://www.pinvoke.net/default.aspx/user32.sendinput
 is useful!
 
 """
+import re
 import time
 import ctypes
 
@@ -626,6 +627,15 @@ class Keyboard(object):
         Input:  Input key to target UI element
     
     '''
+    
+    #for key combinations
+    key_combinations = {
+        "CTRL" : "^",
+        "SHIFT" : "+",
+        "MENU" : "%",
+        "LWIN" : "~"
+    }
+    
     def __init__(self, UIElement):
         self.UIElement = UIElement
     
@@ -638,7 +648,7 @@ Function:
         docstring +=self.Input.__doc__
         return docstring
     
-    def Input(self, string, pause=0.05):
+    def input(self, *values, pause=0.05):
         '''take a string, translate to win32 event, and input to system
         Arguments:
             string: a string represent the keys input
@@ -676,24 +686,42 @@ Function:
             tab             :       {TAB}
             up              :       {UP}
         (3) For key combinations
-            ctrl            :       ^
-            shift           :       +
-            menu key        :       %
-            windows key     :       ~
-            Samples like
-                ctrl+X          :       ^X
-                shift+X         :       +X
-                menu+X          :       %X
-                windows key+X   :       ~X
-                ctrl+shift+X    :       ^+X, +^X
-                ctrl+(XYZ)      :       ^(XYZ)
-        (4) repeat key input
-            repeat X for n time :       {X n}
-        (5) self defined pause time
-            pause n second      :       {PAUSE n}
+            ctrl+X          :       {CTRL+X}
+            shift+X         :       {SHIFT+X}
+            menu+X          :       {MENU+X}
+            windows key+X   :       {LWIN+X}
+            ctrl+shift+X    :       {CTRL+SHIFT+X}
+            ctrl+(XYZ)      :       {CTRL+XYZ}
         '''
         #set focus before input keys
         self.UIElement.set_focus()
+        
+        #translate arguments to a string
+        LOGGER().debug("Before translate, value: %s" % repr(values))
+        string = ""
+        for value in values:
+            #value should only allow to be string or int
+            if isinstance(value, int):
+                translated_value = str(value)
+                string += translated_value
+            elif isinstance(value, str):
+                if re.match("^{\+*}$", value) != None:
+                    #for key combinations, we need to do some translation
+                    #like "{CTRL+A}" to "^A", "{CTRL+SHIFT+B}" to "^+B"
+                    keys = value.lstrip("{").rstrip("}").split("+")
+                    for key in keys:
+                        if key.upper() in self.key_combinations:
+                            translated_value += self.key_combinations[key.upper()]
+                        else:
+                            translated_value += "("+key+")"
+                else:
+                    translated_value = value
+                
+                string += translated_value
+            else:
+                LOGGER().warning("keyboard input method arguments can only be string or int value, other value will be skipped")
+                
+        LOGGER().debug("Translated string: %s" % string)        
         
         keys = parse_keys(string)
         LOGGER().debug("Keyboard input string: %s, parsed keys: %s" % (string, repr(keys)))
