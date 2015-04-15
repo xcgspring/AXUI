@@ -16,7 +16,7 @@
         </AXUI:func>
         
         <AXUI:func name="wmplayer_ctrl_o" description="">
-            <AXUI:step type="GUI" cmd="wmplayer_Window.keyboard.Input '^o'" />
+            <AXUI:step type="GUI" cmd="wmplayer_Window.Keyboard.input '^o'" />
         </AXUI:func>
         
         <AXUI:func name="open_dialog_stop" description="">
@@ -24,7 +24,7 @@
         </AXUI:func>
         
         <AXUI:func name="wmplayer_ctrl_m" description="">
-            <AXUI:step type="GUI" cmd="wmplayer_Window.keyboard.Input '^m'" />
+            <AXUI:step type="GUI" cmd="wmplayer_Window.Keyboard.input '^m'" />
         </AXUI:func>
 
         <AXUI:func name="wmplayer_maximize" description="">

@@ -29,3 +29,5 @@ AXUI features
 5. AXUI provide mechanism to handle auto met UI automation issues, like UI response time 
 
 More details, please check `AXUI documents <http://axui.readthedocs.org/en/latest/index.html>`_
+
+To have quick experience about AXUI, please check `AXUI samples <http://axui.readthedocs.org/en/latest/Appendices.html#samples>`_

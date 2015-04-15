@@ -82,7 +82,7 @@ def wmplayer_seek(seek_value):
     y = (bottom+top)/2
     
     appmap.wmplayer_Window.Seek_Slider.SetFocus()
-    appmap.wmplayer_Window.Seek_Slider.mouse.LeftClick((x,y))
+    appmap.wmplayer_Window.Seek_Slider.Mouse.left_click((x,y))
     
 def wmplayer_wait_playback_end():
     import time
