@@ -11,6 +11,7 @@ except ImportError, e:
     LOGGER().error("To use AXUI selenium driver, you must install selenium python project first, check https://pypi.python.org/pypi/selenium")
     raise e
 
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
 import Translater
@@ -80,7 +81,7 @@ class NormalPattern(object):
 
     def __getattr__(self, name):
         if name in self.interfaces:
-            return getattr(self.pattern, name)
+            return getattr(self.selenium_element, name)
         else:
             LOGGER().info("This method not exist in NormalPattern: %s", name)
 
@@ -123,7 +124,7 @@ class BrowserPattern(object):
 
     def __getattr__(self, name):
         if name in self.interfaces:
-            return getattr(self.pattern, name)
+            return getattr(self.selenium_element, name)
         else:
             LOGGER().info("This method not exist in BrowserPattern: %s", name)
 
@@ -154,7 +155,13 @@ class UIElement(object):
         find the first child UI element via identifier, return one UIAElement if success, return None if not find
         '''
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
-        return UIElement(self.selenium_element.find_element(by=translated_identifier[0], value=translated_identifier[1]))
+        try:
+            selenium_element = self.selenium_element.find_element(by=translated_identifier[0], value=translated_identifier[1])
+        except NoSuchElementException:
+            LOGGER().debug("Cannot find target element")
+            return None
+        else:
+            return UIElement(selenium_element)
 
     def find_elements(self, parsed_identifier):
         '''
@@ -191,7 +198,10 @@ class UIElement(object):
         '''
         pattern is a class support one kind of UI actions
         '''
-        return NormalPattern(self.selenium_element)
+        if name == "WebUIElementPattern":
+            return NormalPattern(self.selenium_element)
+        else:
+            return None
 
     def get_keyboard(self):
         '''
@@ -319,12 +329,29 @@ class Root(UIElement):
         take a screen shot for root
         '''
         self.webdriver.get_screenshot_as_file(absfile_path)
+        
+    def verify(self):
+        '''
+        verify if session exist
+        '''
+        if self.webdriver is None:
+            return None
+            
+        try:
+            getattr(self.webdriver, "title")
+        except AttributeError:
+            return None
+        else:
+            return self.webdriver
 
     def get_pattern(self, name):
         '''
         pattern is a class support one kind of UI actions
         '''
-        return BrowserPattern(self.selenium_element)
+        if name == "BrowserPattern":
+            return BrowserPattern(self.selenium_element)
+        else:
+            return None
 
     def get_keyboard(self):
         '''

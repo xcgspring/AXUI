@@ -14,7 +14,7 @@ def get_driver():
     try:
         import sys, os
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-        driver = __import__(driver_used)
+        driver = __import__(driver_used+"_driver")
     except ImportError:
         raise NotImplementedError("driver not implement: %s, check your driver folder" % driver_used)
         

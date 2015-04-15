@@ -1,0 +1,239 @@
+Created by PLY version 3.4 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> objects
+Rule 1     objects -> variable
+Rule 2     objects -> objects variable
+Rule 3     variable -> LBRACE objects RBRACE
+Rule 4     objects -> SQUOTA objects SQUOTA
+Rule 5     objects -> DQUOTA objects DQUOTA
+Rule 6     objects -> objects OBJECT
+Rule 7     objects -> OBJECT
+
+Terminals, with rules where they appear
+
+DQUOTA               : 5 5
+LBRACE               : 3
+OBJECT               : 6 7
+RBRACE               : 3
+SQUOTA               : 4 4
+error                : 
+
+Nonterminals, with rules where they appear
+
+objects              : 2 3 4 5 6 0
+variable             : 1 2
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . objects
+    (1) objects -> . variable
+    (2) objects -> . objects variable
+    (4) objects -> . SQUOTA objects SQUOTA
+    (5) objects -> . DQUOTA objects DQUOTA
+    (6) objects -> . objects OBJECT
+    (7) objects -> . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    SQUOTA          shift and go to state 1
+    DQUOTA          shift and go to state 2
+    OBJECT          shift and go to state 3
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 6
+    objects                        shift and go to state 4
+
+state 1
+
+    (4) objects -> SQUOTA . objects SQUOTA
+    (1) objects -> . variable
+    (2) objects -> . objects variable
+    (4) objects -> . SQUOTA objects SQUOTA
+    (5) objects -> . DQUOTA objects DQUOTA
+    (6) objects -> . objects OBJECT
+    (7) objects -> . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    SQUOTA          shift and go to state 1
+    DQUOTA          shift and go to state 2
+    OBJECT          shift and go to state 3
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 6
+    objects                        shift and go to state 7
+
+state 2
+
+    (5) objects -> DQUOTA . objects DQUOTA
+    (1) objects -> . variable
+    (2) objects -> . objects variable
+    (4) objects -> . SQUOTA objects SQUOTA
+    (5) objects -> . DQUOTA objects DQUOTA
+    (6) objects -> . objects OBJECT
+    (7) objects -> . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    SQUOTA          shift and go to state 1
+    DQUOTA          shift and go to state 2
+    OBJECT          shift and go to state 3
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 6
+    objects                        shift and go to state 8
+
+state 3
+
+    (7) objects -> OBJECT .
+
+    DQUOTA          reduce using rule 7 (objects -> OBJECT .)
+    OBJECT          reduce using rule 7 (objects -> OBJECT .)
+    LBRACE          reduce using rule 7 (objects -> OBJECT .)
+    $end            reduce using rule 7 (objects -> OBJECT .)
+    RBRACE          reduce using rule 7 (objects -> OBJECT .)
+    SQUOTA          reduce using rule 7 (objects -> OBJECT .)
+
+
+state 4
+
+    (0) S' -> objects .
+    (2) objects -> objects . variable
+    (6) objects -> objects . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    OBJECT          shift and go to state 10
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 9
+
+state 5
+
+    (3) variable -> LBRACE . objects RBRACE
+    (1) objects -> . variable
+    (2) objects -> . objects variable
+    (4) objects -> . SQUOTA objects SQUOTA
+    (5) objects -> . DQUOTA objects DQUOTA
+    (6) objects -> . objects OBJECT
+    (7) objects -> . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    SQUOTA          shift and go to state 1
+    DQUOTA          shift and go to state 2
+    OBJECT          shift and go to state 3
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 6
+    objects                        shift and go to state 11
+
+state 6
+
+    (1) objects -> variable .
+
+    DQUOTA          reduce using rule 1 (objects -> variable .)
+    OBJECT          reduce using rule 1 (objects -> variable .)
+    LBRACE          reduce using rule 1 (objects -> variable .)
+    $end            reduce using rule 1 (objects -> variable .)
+    RBRACE          reduce using rule 1 (objects -> variable .)
+    SQUOTA          reduce using rule 1 (objects -> variable .)
+
+
+state 7
+
+    (4) objects -> SQUOTA objects . SQUOTA
+    (2) objects -> objects . variable
+    (6) objects -> objects . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    SQUOTA          shift and go to state 12
+    OBJECT          shift and go to state 10
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 9
+
+state 8
+
+    (5) objects -> DQUOTA objects . DQUOTA
+    (2) objects -> objects . variable
+    (6) objects -> objects . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    DQUOTA          shift and go to state 13
+    OBJECT          shift and go to state 10
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 9
+
+state 9
+
+    (2) objects -> objects variable .
+
+    DQUOTA          reduce using rule 2 (objects -> objects variable .)
+    OBJECT          reduce using rule 2 (objects -> objects variable .)
+    LBRACE          reduce using rule 2 (objects -> objects variable .)
+    $end            reduce using rule 2 (objects -> objects variable .)
+    RBRACE          reduce using rule 2 (objects -> objects variable .)
+    SQUOTA          reduce using rule 2 (objects -> objects variable .)
+
+
+state 10
+
+    (6) objects -> objects OBJECT .
+
+    DQUOTA          reduce using rule 6 (objects -> objects OBJECT .)
+    OBJECT          reduce using rule 6 (objects -> objects OBJECT .)
+    LBRACE          reduce using rule 6 (objects -> objects OBJECT .)
+    $end            reduce using rule 6 (objects -> objects OBJECT .)
+    RBRACE          reduce using rule 6 (objects -> objects OBJECT .)
+    SQUOTA          reduce using rule 6 (objects -> objects OBJECT .)
+
+
+state 11
+
+    (3) variable -> LBRACE objects . RBRACE
+    (2) objects -> objects . variable
+    (6) objects -> objects . OBJECT
+    (3) variable -> . LBRACE objects RBRACE
+
+    RBRACE          shift and go to state 14
+    OBJECT          shift and go to state 10
+    LBRACE          shift and go to state 5
+
+    variable                       shift and go to state 9
+
+state 12
+
+    (4) objects -> SQUOTA objects SQUOTA .
+
+    DQUOTA          reduce using rule 4 (objects -> SQUOTA objects SQUOTA .)
+    OBJECT          reduce using rule 4 (objects -> SQUOTA objects SQUOTA .)
+    LBRACE          reduce using rule 4 (objects -> SQUOTA objects SQUOTA .)
+    $end            reduce using rule 4 (objects -> SQUOTA objects SQUOTA .)
+    RBRACE          reduce using rule 4 (objects -> SQUOTA objects SQUOTA .)
+    SQUOTA          reduce using rule 4 (objects -> SQUOTA objects SQUOTA .)
+
+
+state 13
+
+    (5) objects -> DQUOTA objects DQUOTA .
+
+    DQUOTA          reduce using rule 5 (objects -> DQUOTA objects DQUOTA .)
+    OBJECT          reduce using rule 5 (objects -> DQUOTA objects DQUOTA .)
+    LBRACE          reduce using rule 5 (objects -> DQUOTA objects DQUOTA .)
+    $end            reduce using rule 5 (objects -> DQUOTA objects DQUOTA .)
+    RBRACE          reduce using rule 5 (objects -> DQUOTA objects DQUOTA .)
+    SQUOTA          reduce using rule 5 (objects -> DQUOTA objects DQUOTA .)
+
+
+state 14
+
+    (3) variable -> LBRACE objects RBRACE .
+
+    SQUOTA          reduce using rule 3 (variable -> LBRACE objects RBRACE .)
+    OBJECT          reduce using rule 3 (variable -> LBRACE objects RBRACE .)
+    LBRACE          reduce using rule 3 (variable -> LBRACE objects RBRACE .)
+    DQUOTA          reduce using rule 3 (variable -> LBRACE objects RBRACE .)
+    $end            reduce using rule 3 (variable -> LBRACE objects RBRACE .)
+    RBRACE          reduce using rule 3 (variable -> LBRACE objects RBRACE .)
+

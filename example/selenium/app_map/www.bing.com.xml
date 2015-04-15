@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<AXUI:app_map xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
+
+    <AXUI:funcs>
+        <AXUI:func name="go_to_bing" description="">
+            <AXUI:step type="GUI" cmd='browser.BrowserPattern.get "http://www.bing.com"'/>
+        </AXUI:func>
+    </AXUI:funcs>
+
+    <AXUI:UI_elements>
+        <AXUI:Root_element name="browser" >
+            <AXUI:UI_element name="searchEdit" identifier="id='sb_form_q'" start_func="go_to_bing"/>
+            <AXUI:UI_element name="goButton" identifier="id='sb_form_go'" start_func="go_to_bing"/>
+        </AXUI:Root_element>
+    </AXUI:UI_elements>
+</AXUI:app_map>

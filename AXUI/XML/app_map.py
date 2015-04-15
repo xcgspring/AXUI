@@ -211,6 +211,8 @@ class AppMap(object):
         if not isinstance(object_, AppMap):
             raise ValueError("Expect app map, get %s, please check your name and app map" % type(object_))
 
+        return object_
+        
     def get_UI_element_by_name(self, name_list):
         '''get element by name
         name_list should be like "app_map1.app_map2...element1.element2...elementX"
@@ -218,6 +220,7 @@ class AppMap(object):
         object_ = self._get_object_by_name_list(name_list.split("."))
         if not isinstance(object_, element_module.Element):
             raise ValueError("Expect UI element, get %s, please check your name and app map" % type(object_))
+        return object_
         
     def get_func_by_name(self, name_list):
         '''get func by name
@@ -226,7 +229,9 @@ class AppMap(object):
         object_ = self._get_object_by_name_list(name_list.split("."))
         if not isinstance(object_, func.Func):
             raise ValueError("Expect func, get %s, please check your name and app map" % type(object_))
-
+        
+        return object_
+        
     def gui_execute(self, command):
         '''execute gui command
         command like "app_map1.app_map2...element1.element2...operation [parameter1 parameter2 ...]"
