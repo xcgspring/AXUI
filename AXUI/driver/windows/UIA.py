@@ -976,7 +976,7 @@ for enum in UIA_enums.items():
     if enum_name_type is not ctypes.c_int:
         #enum type should be c_int in UIA wrapper namespace
         #skip this enum if enum type is not c_int
-        LOGGER().debug("Enum: %s not exist in current UIA namespace" % enum_name)
+        LOGGER().debug("Enum: %s not exist in current UIA namespace" , enum_name)
         continue
     
     for enum_content_name in enum_contents:
@@ -989,7 +989,7 @@ UIA_automation_element_property_identifers_mapping = {}
 for identifier in UIA_automation_element_property_identifers:
     value = getattr(UIA_wrapper, "UIA_"+identifier+"PropertyId", None)
     if value is None:
-        LOGGER().debug("Automation element property identifier: %s not exist in current UIA namespace" % identifier)
+        LOGGER().debug("Automation element property identifier: %s not exist in current UIA namespace" , identifier)
         continue
     UIA_automation_element_property_identifers_mapping[identifier] = value
 
@@ -998,7 +998,7 @@ UIA_control_pattern_property_identifiers_mapping = {}
 for identifier in UIA_control_pattern_property_identifiers:
     value = getattr(UIA_wrapper, "UIA_"+identifier+"PropertyId", None)
     if value is None:
-        LOGGER().debug("Automation element control pattern property identifier: %s not exist in current UIA namespace" % identifier)
+        LOGGER().debug("Automation element control pattern property identifier: %s not exist in current UIA namespace" , identifier)
         continue
     UIA_control_pattern_property_identifiers_mapping[identifier] = value
 
@@ -1007,7 +1007,7 @@ UIA_control_pattern_availability_property_identifiers_mapping = {}
 for identifier in UIA_control_pattern_availability_property_identifiers:
     value = getattr(UIA_wrapper, "UIA_"+identifier+"PropertyId", None)
     if value is None:
-        LOGGER().debug("Control pattern property identifier: %s not exist in current UIA namespace" % identifier)
+        LOGGER().debug("Control pattern property identifier: %s not exist in current UIA namespace" , identifier)
         continue
     UIA_control_pattern_availability_property_identifiers_mapping[identifier] = value
     
@@ -1017,7 +1017,7 @@ for identifier in UIA_control_pattern_identifers:
     identifier_value = getattr(UIA_wrapper, "UIA_"+identifier+"Id", None)
     interface_value = getattr(UIA_wrapper, "IUIAutomation"+identifier, None)
     if identifier_value is None:
-        LOGGER().debug("Control pattern identifier: %s not exist in current UIA namespace" % identifier)
+        LOGGER().debug("Control pattern identifier: %s not exist in current UIA namespace" , identifier)
         continue
     UIA_control_pattern_identifers_mapping[identifier] = (identifier_value, interface_value)
 
@@ -1034,14 +1034,14 @@ def get_property_by_id(UIAElement, property_identifier):
     if property_identifier in UIA_automation_element_property_identifers_mapping:
         property_value = UIAElement.GetCurrentPropertyValue(UIA_automation_element_property_identifers_mapping[property_identifier])
         if property_value is None:
-            LOGGER().debug("This property:%s is not supported by this UIAElment" % property_identifier)
+            LOGGER().debug("This property:%s is not supported by this UIAElment" , property_identifier)
             return ""
         return property_value
         
     elif property_identifier in UIA_control_pattern_availability_property_identifiers_mapping:
         property_value = UIAElement.GetCurrentPropertyValue(UIA_control_pattern_availability_property_identifiers_mapping[property_identifier])
         if property_value is None:
-            LOGGER().debug("This property:%s is not supported by this UIAElment" % property_identifier)
+            LOGGER().debug("This property:%s is not supported by this UIAElment" , property_identifier)
             return ""
         return property_value
     else:
@@ -1064,7 +1064,7 @@ def get_pattern_by_id(UIAElement, pattern_identifier):
         
         pattern = UIAElement.GetCurrentPatternAs(UIA_pattern_identifier, UIA_pattern_interface._iid_)
         if pattern is None:
-            LOGGER().debug("This pattern:%s is not supported by this UIAElment" % pattern_identifier)
+            LOGGER().debug("This pattern:%s is not supported by this UIAElment" , pattern_identifier)
             return None
         return ctypes.POINTER(UIA_pattern_interface)(pattern)
         '''
@@ -1073,5 +1073,5 @@ def get_pattern_by_id(UIAElement, pattern_identifier):
         return pattern
         '''
     else:
-        LOGGER().debug("This pattern identifier is not support: %s, cannot get it from UIA typelib" % pattern_identifier)
+        LOGGER().debug("This pattern identifier is not support: %s, cannot get it from UIA typelib" , pattern_identifier)
         return None

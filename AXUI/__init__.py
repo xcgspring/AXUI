@@ -13,8 +13,8 @@ def Config(config_file=""):
     '''
     try:
         if not os.path.isfile(config_file):
-            raise Exception()
-    except:
+            raise ValueError()
+    except ValueError:
         print("config_file not valid, use default config file")
         current_dir = os.path.dirname(os.path.abspath(__file__))
         config_file = os.path.join(current_dir, "global.cfg")

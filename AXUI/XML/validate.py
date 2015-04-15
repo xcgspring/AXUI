@@ -1,8 +1,6 @@
 
 import os
-import re
 import sys
-import platform
 import pyxb
 
 from AXUI.logger import LOGGER
@@ -103,13 +101,13 @@ def check_app_map(XSD_file, app_map_file):
 
     with open(app_map_file) as app_map:
         try:
-            app_map_instance = XSD_module.CreateFromDocument(app_map.read())
+            XSD_module.CreateFromDocument(app_map.read())
             LOGGER().info("Check successful")
         except pyxb.UnrecognizedContentError as e:
             LOGGER().warn(e.details())
         except pyxb.IncompleteElementContentError as e:
-        	LOGGER().warn(e.details())
+            LOGGER().warn(e.details())
         except pyxb.ValidationError as e:
-            LOGGER().warn(e.details())	
+            LOGGER().warn(e.details())  
         
 

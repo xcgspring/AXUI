@@ -58,8 +58,8 @@ class AppMap(object):
         for appmap in self.app_maps:
             docstring += "    %s\n" % appmap
         docstring += "  Include Functions:\n"
-        for func in self.funcs:
-            docstring += "    %s\n" % func
+        for func_ in self.funcs:
+            docstring += "    %s\n" % func_
         docstring += "  Include UI elements:\n"
         for element in self.UI_elements:
             docstring += "    %s\n" % element
@@ -109,15 +109,15 @@ class AppMap(object):
             UI_element = element_module.Element()
             
             UI_element.name = xml_element.attrib["name"]
-            if xml_element.attrib.has_key("timeout"):
+            if "timeout" in xml_element.attrib:
                 UI_element.timeout = float(xml_element.attrib["timeout"])
-            if xml_element.attrib.has_key("parent"):
+            if "parent" in xml_element.attrib:
                 UI_element.parent_string = xml_element.attrib["parent"]
-            if xml_element.attrib.has_key("start_func"):
+            if "start_func" in xml_element.attrib:
                 UI_element.start_func = self.get_func_by_name(xml_element.attrib["start_func"])
-            if xml_element.attrib.has_key("stop_func"):
+            if "stop_func" in xml_element.attrib:
                 UI_element.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
-            if xml_element.attrib.has_key("identifier"):
+            if "identifier" in xml_element.attrib:
                 UI_element.identifier_string = xml_element.attrib["identifier"]
                 UI_element.identifier = identifier_parser.parse(UI_element.identifier_string, lexer=identifier_lexer)
              
@@ -134,15 +134,15 @@ class AppMap(object):
             UI_element_group = element_module.ElementGroup()
 
             UI_element_group.name = xml_element.attrib["name"]
-            if xml_element.attrib.has_key("timedelay"):
+            if "timedelay" in xml_element.attrib:
                 UI_element_group.timedelay = float(xml_element.attrib["timedelay"])
-            if xml_element.attrib.has_key("parent"):
+            if "parent" in xml_element.attrib:
                 UI_element_group.parent_string = xml_element.attrib["parent"]
-            if xml_element.attrib.has_key("start_func"):
+            if "start_func" in xml_element.attrib:
                 UI_element_group.start_func = self.get_func_by_name(xml_element.attrib["start_func"])
-            if xml_element.attrib.has_key("stop_func"):
+            if "stop_func" in xml_element.attrib:
                 UI_element_group.stop_func = self.get_func_by_name(xml_element.attrib["stop_func"])
-            if xml_element.attrib.has_key("identifier"):
+            if "identifier" in xml_element.attrib:
                 UI_element_group.identifier_string = xml_element.attrib["identifier"]
                 UI_element_group.identifier = identifier_parser.parse(UI_element_group.identifier_string, lexer=identifier_lexer)
                 
@@ -215,7 +215,7 @@ class AppMap(object):
         '''get element by name
         name_list should be like "app_map1.app_map2...element1.element2...elementX"
         '''
-        return self._get_object_by_name_list(name_list.split("."))
+        object_ = self._get_object_by_name_list(name_list.split("."))
         if not isinstance(object_, element_module.Element):
             raise ValueError("Expect UI element, get %s, please check your name and app map" % type(object_))
         
@@ -223,7 +223,7 @@ class AppMap(object):
         '''get func by name
         name_list should be like "app_map1.app_map2...app_mapX...func_name"
         '''
-        return self._get_object_by_name_list(name_list.split("."))
+        object_ = self._get_object_by_name_list(name_list.split("."))
         if not isinstance(object_, func.Func):
             raise ValueError("Expect func, get %s, please check your name and app map" % type(object_))
 
@@ -233,7 +233,7 @@ class AppMap(object):
         '''
         (object_name_list, parameter_list) = gui_command_parser.parse(command, lexer=gui_command_lexer)
         object_= self._get_object_by_name_list(object_name_list)
-        LOGGER().debug("GUI execute %s %s" %(object_name_list, parameter_list))
+        LOGGER().debug("GUI execute %s %s" , object_name_list, parameter_list)
         object_(*parameter_list)
         
     def cli_execute(self, command):
@@ -252,7 +252,7 @@ class AppMap(object):
         if app_path:
             os.chdir(app_path)
                 
-        LOGGER().debug("CLI execute: %s" % repr(args))
+        LOGGER().debug("CLI execute: %s" , repr(args))
         p = subprocess.Popen(args, shell=True)
         #some app is blocking, do not wait here
         #p.communicate()

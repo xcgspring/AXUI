@@ -41,7 +41,7 @@ class Keyboard(object):
                     try:
                         key_value = getattr(Keys, key)
                     except AttributeError, e:
-                        LOGGER().warning("Input special key not support: %s, skip this input" % key)
+                        LOGGER().warning("Input special key not support: %s, skip this input" , key)
                     else:
                         translated_values.append(key_value)
                 else:
@@ -176,13 +176,13 @@ class UIElement(object):
         try:
             obj = getattr(self.selenium_element, name)
         except AttributeError:
-            LOGGER().debug("Cannot find this attribute: %s" % name)
+            LOGGER().debug("Cannot find this attribute: %s" , name)
             if hasattr(self.selenium_element, "get_attribute"):
                 LOGGER().debug("Try get_attribute method")
                 return self.selenium_element.get_attribute(name)
         else:
             if inspect.ismethod(obj):
-                LOGGER().info("This is a method, not a property: %s" % name)
+                LOGGER().info("This is a method, not a property: %s" , name)
                 return None
             else:
                 return obj
@@ -287,7 +287,7 @@ class Root(UIElement):
 
         browser_name = kwargs["browser_name"]
         if not browser_name.upper() in self.support_browsers:
-            LOGGER().error("Unsupported browser name: %s" % browser_name)
+            LOGGER().error("Unsupported browser name: %s" , browser_name)
             raise DriverException("Unsupported browser name: %s" % browser_name)
 
         #remove browser_name key from kwargs

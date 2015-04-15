@@ -52,7 +52,7 @@ def t_STRING(t):
     return t
 
 def t_error(t):
-    LOGGER().debug("Illegal character %s in Ln: %d" % (repr(t.value[0]), t.lexer.lineno))
+    LOGGER().debug("Illegal character %s in Ln: %d" , repr(t.value[0]), t.lexer.lineno)
     t.lexer.skip(1)
 
 gui_command_lexer = lex.lex()
@@ -125,7 +125,7 @@ def p_number(p):
     p[0] = int(p[1])
               
 def p_error(p):
-    LOGGER().debug("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))
+    LOGGER().debug("Syntax error in input: %s, Ln: %d" , repr(p.value), p.lineno)
 
 gui_command_parser = yacc.yacc(write_tables=0)
 

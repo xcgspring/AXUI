@@ -20,7 +20,7 @@ def screenshot(filename, coordinate=None):
         cmd = '"%s" -f %s -l %s -t %s -r %s -b %s' %\
                (screenshot_app, filename, coordinate[0], coordinate[1], coordinate[2], coordinate[3])
         
-    LOGGER().debug("screenshot command: %s" % cmd)
+    LOGGER().debug("screenshot command: %s" , cmd)
     process = subprocess.Popen(cmd)
     
     return process.wait()

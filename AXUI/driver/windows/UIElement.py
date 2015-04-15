@@ -84,7 +84,7 @@ class Method(object):
                     args[index] = UIA.UIA_enums[expected_arg_type][args[index]]
 
                 if args[index] not in UIA.UIA_enums[expected_arg_type].values():
-                    LOGGER().warn("Input argument not in expected value: %s" % args[index])
+                    LOGGER().warn("Input argument not in expected value: %s" , args[index])
                     return None
 
         return self.function_object(*args)
@@ -108,7 +108,7 @@ class Pattern(object):
             try:
                 getattr(self.pattern_object, name)
             except AttributeError:
-                LOGGER().warn("%s not exist in Pattern:%s"%(name, pattern_identifier))
+                LOGGER().warn("%s not exist in Pattern:%s", name, pattern_identifier)
                 continue
 
             if flag == "method":
@@ -219,12 +219,12 @@ class UIElement(object):
             identifier = UIA.IUIAutomation_object.CreateTrueCondition()
             index = translated_identifier
         else:
-            LOGGER().warn("Index identifier is wrong, get %s" % repr(translated_identifier))
+            LOGGER().warn("Index identifier is wrong, get %s" , repr(translated_identifier))
             return None
 
         target_UIAElements = self.UIAElement.FindAll(scope, identifier)
         if index+1 > target_UIAElements.Length:
-            LOGGER().warn("Find %d matched elements, index:%d out of range" % (target_UIAElements.Length, index))
+            LOGGER().warn("Find %d matched elements, index:%d out of range", target_UIAElements.Length, index)
             return None
         return UIElement(target_UIAElements.GetElement(index))
 
@@ -241,7 +241,7 @@ class UIElement(object):
         '''
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
-            return CordinateElement(translated_identifier[1], self)
+            return CoordinateElement(translated_identifier[1], self)
         elif translated_identifier[0] == "Index":
             return self._find_by_index(translated_identifier[1])
         elif translated_identifier[0] == "UIA":
@@ -417,7 +417,7 @@ class Root(UIElement):
         '''
         translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
         if translated_identifier[0] == "Coordinate":
-            return CordinateElement(translated_identifier[1], self)
+            return CoordinateElement(translated_identifier[1], self)
         elif translated_identifier[0] == "Index":
             return self._find_by_index(translated_identifier[1], scope=UIA.UIA_wrapper.TreeScope_Children)
         elif translated_identifier[0] == "UIA":

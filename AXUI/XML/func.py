@@ -1,8 +1,4 @@
 
-import xml.etree.ElementTree as ET
-
-import app_map
-import XML_config
 from AXUI.logger import LOGGER
 
 class _Step(object):
@@ -24,13 +20,13 @@ class _Step(object):
         
     def run(self):
         if self.type == "GUI":
-            LOGGER().debug("run gui command: %s" % self.command)
+            LOGGER().debug("run gui command: %s" , self.command)
             self.app_map.gui_execute(self.command)
         elif self.type == "CLI":
-            LOGGER().debug("run cli command: %s" % self.command)
+            LOGGER().debug("run cli command: %s" , self.command)
             self.app_map.cli_execute(self.command)
         else:
-            raise AppMapException("step type must be GUI or CLI, get: %s" % self.type)
+            raise ValueError("step type must be GUI or CLI, get: %s" % self.type)
 
 class Func(object):
     '''represent a function element in the XML

@@ -16,7 +16,7 @@ def image_compare(image1, image2, diff_image_name="diff.bmp"):
     i1 = Image.open(image1)
     i2 = Image.open(image2)
     assert i1.mode == i2.mode, "Different kinds of images: %s VS %s" % (i1.mode, i2.mode)
-    assert i1.size == i2.size, "Different sizes: %s" % (i1.size, i2.size)
+    assert i1.size == i2.size, "Different sizes: %s, %s" % (i1.size, i2.size)
     
     #generate diff bitmap
     if gen_diff_image:

@@ -39,7 +39,7 @@ def t_OBJECT(t):
     return t
 
 def t_error(t):
-    LOGGER().debug("Illegal character %s in Ln: %d" % (repr(t.value[0]), t.lexer.lineno))
+    LOGGER().debug("Illegal character %s in Ln: %d" , repr(t.value[0]), t.lexer.lineno)
     t.lexer.skip(1)
 
 cli_command_lexer = lex.lex()
@@ -79,7 +79,7 @@ def p_objects_6(p):
     p[0] = [p[1]]
               
 def p_error(p):
-    LOGGER().debug("Syntax error in input: %s, Ln: %d" % (repr(p.value), p.lineno))
+    LOGGER().debug("Syntax error in input: %s, Ln: %d" , repr(p.value), p.lineno)
 
 cli_command_parser = yacc.yacc(write_tables=0)
 

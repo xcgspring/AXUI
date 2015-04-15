@@ -35,7 +35,7 @@ class ID_Translater(object):
             return UIA.IUIAutomation_object.CreatePropertyCondition(UIA.UIA_control_pattern_property_identifiers_mapping[parsed_atomic_id[0]], parsed_atomic_id[1])
         else:
             #use no UIA identifier will be skipped
-            LOGGER().warn("identifier: %s not in UIA property maps" % parsed_atomic_id[0])
+            LOGGER().warn("identifier: %s not in UIA property maps" , parsed_atomic_id[0])
             return None
     
     def _translated_relational_identifier(self, relation, translated_id_1, translated_id_2):

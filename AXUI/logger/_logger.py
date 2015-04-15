@@ -109,7 +109,6 @@ def config(configs=default_configs):
 __all__=["config_section", "default_configs", "config"]
 
 def LOGGER():
-    global LOGNAME
     if LOGNAME == None:
         config()
     return logging.getLogger(LOGNAME)

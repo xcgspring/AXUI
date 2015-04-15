@@ -21,11 +21,11 @@ class ID_Translater(object):
             name = self.parsed_identifier[0]
             value = self.parsed_identifier[1]
             if not By.is_valid(name.upper()):
-                LOGGER().error("identifier not support: %s" % name)
+                LOGGER().error("identifier not support: %s" , name)
                 raise DriverException("identifier not support: %s" % name)
             return getattr(By, name), value
         else:
-            LOGGER().error("Get error parsed_id: %s" % repr(self.parsed_identifier))
+            LOGGER().error("Get error parsed_id: %s" , repr(self.parsed_identifier))
             raise DriverException("Get error parsed_id: %s" % repr(self.parsed_identifier))
 
 

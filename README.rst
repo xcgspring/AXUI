@@ -7,7 +7,10 @@ AXUI
     :target: https://readthedocs.org/projects/axui/?badge=latest
     :alt: Documentation Status
 
-
+.. image:: https://landscape.io/github/xcgspring/AXUI/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/xcgspring/AXUI/master
+   :alt: Code Health
+    
 AXUI is short for "Auto eXecute UI", is an UI automation framework, target to minimize the gap between tools and testers.
 AXUI provides testers a powerful, unified, easy to use interface for common met platforms, like windows desktop, web, Android, IOS...
 
