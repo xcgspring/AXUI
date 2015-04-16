@@ -28,6 +28,13 @@ AXUI features
 4. AXUI separate UI logic from test scripts, make test scripts more readable and easier to maintain
 5. AXUI provide mechanism to handle auto met UI automation issues, like UI response time 
 
+An overview of AXUI structure
+=============================
+
+.. image:: http://axui.readthedocs.org/en/latest/_images/AXUI_structure.PNG
+    :target: http://axui.readthedocs.org/en/latest/_images/AXUI_structure.PNG
+    :alt: AXUI structure
+
 More details, please check `AXUI documents <http://axui.readthedocs.org/en/latest/index.html>`_
 
 To have quick experience about AXUI, please check `AXUI samples <http://axui.readthedocs.org/en/latest/Appendices.html#samples>`_
