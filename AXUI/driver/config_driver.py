@@ -6,10 +6,13 @@ default_configs={ #"driver_used": "fake_driver",
 
 DriverUsed = default_configs["driver_used"]
 
-def config(configs=default_configs):
+def config(configs=None):
     '''callback function used by config module
     
     '''
+    if configs is None:
+        configs = default_configs
+    
     global DriverUsed
     DriverUsed=configs["driver_used"]
 

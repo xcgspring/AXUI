@@ -9,10 +9,13 @@ default_configs={ "gen_diff_image" : "True",
 GenDiffImage=default_configs["gen_diff_image"]
 DiffImageLocation=default_configs["diff_image_location"]
 
-def config(configs=default_configs):
+def config(configs=None):
     '''call back function used by config module
     set the global variables according to configuration
     '''
+    if configs is None:
+        configs = default_configs
+    
     global GenDiffImage
     global DiffImageLocation
 

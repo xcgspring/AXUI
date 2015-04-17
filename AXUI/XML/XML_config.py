@@ -15,10 +15,13 @@ TimeOut=default_configs["timeout"]
 ScreenshotLocation=default_configs["screenshot_location"]
 ScreenshotOnFailure=default_configs["screenshot_on_failure"]
 
-def config(configs=default_configs):
+def config(configs=None):
     '''call back function used by config module
     set the global variables according to configuration
     '''
+    if configs is None:
+        configs = default_configs
+    
     global AppMapLocation
     global SchemaLocation
     global TimeOut

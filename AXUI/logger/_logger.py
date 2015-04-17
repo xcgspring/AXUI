@@ -35,9 +35,12 @@ file_logging_modes = {"A":"a",
 logging_color_configs = {"TRUE":True, 
                  "FALSE":False }
                  
-def config(configs=default_configs):
+def config(configs=None):
     '''config logger with settings in configure file
     '''
+    if configs is None:
+        configs = default_configs
+    
     logger_name=configs["logger_name"]
     
     if configs["logging_level_file"].upper() in logging_levels:

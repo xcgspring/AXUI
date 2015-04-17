@@ -16,7 +16,10 @@ def _unpack(flag, name, *args):
 class Method(object):
     '''Wrapper class for UIA pattern method
     '''
-    def __init__(self, function_object, name, args_expected=[]):
+    def __init__(self, function_object, name, args_expected=None):
+        if args_expected is None:
+            args_expected = []
+    
         self.function_object = function_object
         self.name = name
         self.args = []
