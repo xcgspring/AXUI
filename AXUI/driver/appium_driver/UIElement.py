@@ -60,6 +60,30 @@ class Mouse(object):
 class Touch(object):
     def __init__(self, selenium_element):
         self.selenium_element = selenium_element
+		
+	############################
+	#porting appium touch methods
+	############################
+	def scroll(self, origin_el, destination_el):
+		self.selenium_element.scroll(origin_el.selenium_element, destination_el.selenium_element)
+		
+	def drag_and_drop(self, origin_el, destination_el):
+		self.selenium_element.drag_and_drop(origin_el.selenium_element, destination_el.selenium_element)
+		
+	def tap(self, positions, duration=None):
+		self.selenium_element.tap(positions, duration)
+		
+	def swipe(self, start_x, start_y, end_x, end_y, duration=None):
+		self.selenium_element.swipe(start_x, start_y, end_x, end_y, duration)
+		
+	def flick(self, start_x, start_y, end_x, end_y):
+		self.selenium_element.flick(start_x, start_y, end_x, end_y)
+		
+	def pinch(self, element=None, percent=200, steps=50):
+		self.selenium_element.pinch(element.selenium_element, percent, steps)
+		
+	def zoom(self, element=None, percent=200, steps=50):
+		self.selenium_element.zoom(element.selenium_element, percent, steps)
 
 class NormalPattern(object):
     '''
@@ -127,20 +151,8 @@ class BrowserPattern(object):
             return getattr(self.selenium_element, name)
         else:
             LOGGER().info("This method not exist in BrowserPattern: %s", name)
-
-class MobileElementPattern(object):
-    '''
-    pattern interface for normal mobile element
-    '''
-    #interfaces may change due to appium interface maybe change
-    interfaces = [
-        ""
-    
-    
-    ]
-    
             
-class MobileRootPattern(object):
+class MobilePattern(object):
     '''
     pattern interface for mobile root element
     '''
@@ -367,17 +379,9 @@ class Root(UIElement):
         
     def verify(self):
         '''
-        verify if session exist
+        verify if session exist, not check for appium
         '''
-        if self.webdriver is None:
-            return None
-            
-        try:
-            getattr(self.webdriver, "title")
-        except AttributeError:
-            return None
-        else:
-            return self.webdriver
+        return self.webdriver
 
     def get_pattern(self, name):
         '''
@@ -385,6 +389,8 @@ class Root(UIElement):
         '''
         if name == "BrowserPattern":
             return BrowserPattern(self.selenium_element)
+        elif name == "MobilePattern":
+            return MobilePattern(self.selenium_element)
         else:
             return None
 

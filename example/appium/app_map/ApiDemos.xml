@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+
+<AXUI:app_map xmlns:AXUI="AXUI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="AXUI AXUI_app_map.xsd">
+
+    <AXUI:funcs>
+        <AXUI:func name="click_graphics" description="">
+            <AXUI:step type="GUI" cmd='driver.Graphic.Mouse.left_click'/>
+        </AXUI:func>
+        <AXUI:func name="click_arcs" description="">
+            <AXUI:step type="GUI" cmd='driver.Graphic.Mouse.left_click'/>
+        </AXUI:func>
+		
+        <AXUI:func name="click_app" description="">
+            <AXUI:step type="GUI" cmd='driver.App.Mouse.left_click'/>
+        </AXUI:func>
+    </AXUI:funcs>
+
+    <AXUI:UI_elements>
+        <AXUI:Root_element name="driver" >
+            <AXUI:UI_element name="Graphic" identifier="ACCESSIBILITY_ID='Graphics'"/>
+            <AXUI:UI_element name="Arcs" identifier="ACCESSIBILITY_ID='Arcs'" start_func="click_graphics"/>
+			<AXUI:UI_element name="Arcs_title" identifier="ANDROID_UIAUTOMATOR='new UiSelector().text(&quot;Graphics/Arcs&quot;)'" start_func="click_arcs"/>
+			
+			<AXUI:UI_element name="App" identifier="ACCESSIBILITY_ID='App'"/>
+			<AXUI:UI_element name="Title" identifier="ANDROID_UIAUTOMATOR='text(&quot;API Demos&quot;)'" start_func="click_app"/>
+			<AXUI:UI_element_group name="clickable_items" identifier="ANDROID_UIAUTOMATOR='new UiSelector().clickable(true)'" start_func="click_app"/>
+        </AXUI:Root_element>
+    </AXUI:UI_elements>
+</AXUI:app_map>
