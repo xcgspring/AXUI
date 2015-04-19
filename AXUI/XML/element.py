@@ -366,7 +366,7 @@ class ElementGroup(object):
             else:
                 element.identifier = ("AND", self.identifier, ("Index", i))
             element.UIElement = UIElement
-			#Name property is not available for appium driver 
+            #Name property is not available for appium driver 
             #element.name = UIElement.Name
 
             self.Elements.append(element)

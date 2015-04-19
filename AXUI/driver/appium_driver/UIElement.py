@@ -60,30 +60,30 @@ class Mouse(object):
 class Touch(object):
     def __init__(self, selenium_element):
         self.selenium_element = selenium_element
-		
-	############################
-	#porting appium touch methods
-	############################
-	def scroll(self, origin_el, destination_el):
-		self.selenium_element.scroll(origin_el.selenium_element, destination_el.selenium_element)
-		
-	def drag_and_drop(self, origin_el, destination_el):
-		self.selenium_element.drag_and_drop(origin_el.selenium_element, destination_el.selenium_element)
-		
-	def tap(self, positions, duration=None):
-		self.selenium_element.tap(positions, duration)
-		
-	def swipe(self, start_x, start_y, end_x, end_y, duration=None):
-		self.selenium_element.swipe(start_x, start_y, end_x, end_y, duration)
-		
-	def flick(self, start_x, start_y, end_x, end_y):
-		self.selenium_element.flick(start_x, start_y, end_x, end_y)
-		
-	def pinch(self, element=None, percent=200, steps=50):
-		self.selenium_element.pinch(element.selenium_element, percent, steps)
-		
-	def zoom(self, element=None, percent=200, steps=50):
-		self.selenium_element.zoom(element.selenium_element, percent, steps)
+        
+    ############################
+    #porting appium touch methods
+    ############################
+    def scroll(self, origin_el, destination_el):
+        self.selenium_element.scroll(origin_el.selenium_element, destination_el.selenium_element)
+        
+    def drag_and_drop(self, origin_el, destination_el):
+        self.selenium_element.drag_and_drop(origin_el.selenium_element, destination_el.selenium_element)
+        
+    def tap(self, positions, duration=None):
+        self.selenium_element.tap(positions, duration)
+        
+    def swipe(self, start_x, start_y, end_x, end_y, duration=None):
+        self.selenium_element.swipe(start_x, start_y, end_x, end_y, duration)
+        
+    def flick(self, start_x, start_y, end_x, end_y):
+        self.selenium_element.flick(start_x, start_y, end_x, end_y)
+        
+    def pinch(self, element=None, percent=200, steps=50):
+        self.selenium_element.pinch(element.selenium_element, percent, steps)
+        
+    def zoom(self, element=None, percent=200, steps=50):
+        self.selenium_element.zoom(element.selenium_element, percent, steps)
 
 class NormalPattern(object):
     '''
