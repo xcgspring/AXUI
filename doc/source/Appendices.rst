@@ -87,4 +87,4 @@ ToDo list
 
 - Multiple languages support, to support internationalization test
 - Define an unified interfaces for different driver UI actions
-- Add AXUI dependences in setup.py
+- Support for python 3

@@ -2,18 +2,16 @@
 from setuptools import setup, find_packages
 
 setup(
-
     name = "AXUI",
     packages = find_packages(),
     package_data = {"AXUI":["global.cfg"], "AXUI.XML":["schemas/AXUI_app_map.xsd"], "AXUI.driver.windows":["screenshot/screenshot.exe"]},
-    version = "0.1.5",
-    description = "UI auto framework",
+    version = "0.2.1",
+    description = "A cross platform UI auto framework",
     author = "xcgspring",
     author_email = "xcgspring@163.com",
     license = "Apache Licence Version 2.0",
     url = "https://github.com/xcgspring/AXUI",
-    download_url = "",
-    keywords = ["UI", "auto"],
+    keywords = ["UI", "automation"],
     classifiers = [
         "Programming Language :: Python",
         "Programming Language :: Python :: 2",
@@ -26,6 +24,9 @@ setup(
         "Topic :: Software Development :: Quality Assurance",
         "Topic :: Software Development :: Testing",
         ],
-    long_description = ''' '''
-    
+    install_requires = [
+    'ply>=3.4',
+    'pyxb>=1.2.4',
+    'pillow>=2.8.1',
+    ]
 )
