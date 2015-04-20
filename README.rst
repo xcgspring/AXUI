@@ -47,7 +47,7 @@ Image that an app contains a lot of UI Elements, and the search identifiers spli
 
     import selenium.webdriver as webdriver
 
-    browser = webdriver.Chrome(executable_path = r"C:\Users\cxuanx\Downloads\chromedriver.exe")
+    browser = webdriver.Chrome(executable_path = r"chromedriver.exe")
     browser.get(r"http://www.bing.com")
 
     searchEdit = browser.find_element_by_id("sb_form_q")
@@ -83,7 +83,7 @@ Image that an app contains a lot of UI Elements, and the search identifiers spli
     AXUI.Config(config_file)
     appmap = AXUI.AppMap(app_map)
 
-    appmap.browser.start(browser_name="CHROME", executable_path = r"C:\Users\cxuanx\Downloads\chromedriver.exe")
+    appmap.browser.start(browser_name="CHROME", executable_path = r"chromedriver.exe")
 
     appmap.browser.searchEdit.Keyboard.input("AXUI")
     appmap.browser.goButton.Mouse.left_click()
