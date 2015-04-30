@@ -11,11 +11,11 @@ AXUI
    :target: https://landscape.io/github/xcgspring/AXUI/master
    :alt: Code Health
     
-.. image:: https://pypip.in/v/AXUI/badge.png
+.. image:: https://img.shields.io/pypi/v/AXUI.svg
     :target: https://pypi.python.org/pypi/AXUI/
     :alt: Latest AXUI version
 
-.. image:: https://pypip.in/d/AXUI/badge.png
+.. image:: https://img.shields.io/pypi/dm/AXUI.svg
     :target: https://pypi.python.org/pypi/AXUI/
     :alt: Number of PyPI downloads
     
