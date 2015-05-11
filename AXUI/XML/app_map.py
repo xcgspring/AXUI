@@ -218,7 +218,7 @@ class AppMap(object):
         name_list should be like "app_map1.app_map2...element1.element2...elementX"
         '''
         object_ = self._get_object_by_name_list(name_list.split("."))
-        if not isinstance(object_, element_module.Element):
+        if not (isinstance(object_, element_module.Element) or isinstance(object_, element_module.RootElement)):
             raise ValueError("Expect UI element, get %s, please check your name and app map" % type(object_))
         return object_
         
