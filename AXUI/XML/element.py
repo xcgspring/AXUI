@@ -350,6 +350,8 @@ class ElementGroup(object):
     def start(self):
         '''start and findall UIElements, build Elements automatically
         '''
+        #need to start parent element first
+        self.parent.start()
         #run start func
         if self.start_func:
             self.start_func.run()
