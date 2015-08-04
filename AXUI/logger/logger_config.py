@@ -1,3 +1,4 @@
+
 import logging
 
 def config_logger():
@@ -42,7 +43,7 @@ class Config(object):
                           "WARNING": logging.WARN,
                           "WARN": logging.WARN,
                           "INFO": logging.INFO,
-                          "DEBUG": logging.DEBUG
+                          "DEBUG": logging.DEBUG,
                           logging.CRITICAL: logging.CRITICAL,
                           logging.ERROR: logging.ERROR,
                           logging.WARN: logging.WARN,
