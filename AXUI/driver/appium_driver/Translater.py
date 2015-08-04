@@ -2,7 +2,7 @@
 translate AXUI identifier to webdriver search condition
 '''
 from AXUI.logger import LOGGER
-from AXUI.driver import DriverException
+from AXUI.exceptions import DriverException
 
 from appium.webdriver.common.mobileby import MobileBy
 

@@ -1,6 +1,6 @@
 
 from AXUI.logger import LOGGER
-from AXUI.driver import DriverException
+from AXUI.exceptions import DriverException
 
 import UIA
 import ctypes

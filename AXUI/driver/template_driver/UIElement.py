@@ -1,5 +1,5 @@
 
-from AXUI.driver import DriverException
+from AXUI.exceptions import DriverException
 
 class Method(object):
     '''

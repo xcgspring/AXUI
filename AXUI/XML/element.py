@@ -2,11 +2,9 @@
 import os
 import time
 from AXUI.logger import LOGGER
-from AXUI.driver import get_driver, DriverException
+from AXUI.driver import get_driver
+from AXUI.exceptions import DriverException, TimeOutError
 from XML_config import core_config
-
-class TimeOutError(Exception):
-    pass
 
 class FakeUIElement(object):
     '''used for Elements without identifier

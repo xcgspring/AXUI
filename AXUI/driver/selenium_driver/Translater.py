@@ -2,7 +2,7 @@
 translate AXUI identifier to Windows UIA searchCondition
 '''
 from AXUI.logger import LOGGER
-from AXUI.driver import DriverException
+from AXUI.exceptions import DriverException
 
 from selenium.webdriver.common.by import By
 

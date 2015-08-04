@@ -3,7 +3,7 @@ import re
 import inspect
 
 from AXUI.logger import LOGGER
-from AXUI.driver import DriverException
+from AXUI.exceptions import DriverException
 
 try:
     import selenium.webdriver as webdriver
