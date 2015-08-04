@@ -8,7 +8,7 @@ from AXUI.exceptions import DriverException
 try:
     import selenium.webdriver as webdriver
 except ImportError, e:
-    LOGGER().error("To use AXUI selenium driver, you must install selenium python project first, check https://pypi.python.org/pypi/selenium")
+    LOGGER.error("To use AXUI selenium driver, you must install selenium python project first, check https://pypi.python.org/pypi/selenium")
     raise e
 
 from selenium.common.exceptions import NoSuchElementException
@@ -42,7 +42,7 @@ class Keyboard(object):
                     try:
                         key_value = getattr(Keys, key)
                     except AttributeError, e:
-                        LOGGER().warning("Input special key not support: %s, skip this input" , key)
+                        LOGGER.warning("Input special key not support: %s, skip this input" , key)
                     else:
                         translated_values.append(key_value)
                 else:
@@ -83,7 +83,7 @@ class NormalPattern(object):
         if name in self.interfaces:
             return getattr(self.selenium_element, name)
         else:
-            LOGGER().info("This method not exist in NormalPattern: %s", name)
+            LOGGER.debug("This method not exist in NormalPattern: %s", name)
 
 class BrowserPattern(object):
     '''
@@ -126,7 +126,7 @@ class BrowserPattern(object):
         if name in self.interfaces:
             return getattr(self.selenium_element, name)
         else:
-            LOGGER().info("This method not exist in BrowserPattern: %s", name)
+            LOGGER.debug("This method not exist in BrowserPattern: %s", name)
 
 class UIElement(object):
     '''This class defines interfaces for common UI element
@@ -158,7 +158,7 @@ class UIElement(object):
         try:
             selenium_element = self.selenium_element.find_element(by=translated_identifier[0], value=translated_identifier[1])
         except NoSuchElementException:
-            LOGGER().debug("Cannot find target element")
+            LOGGER.debug("Cannot find target element")
             return None
         else:
             return UIElement(selenium_element)
@@ -183,13 +183,13 @@ class UIElement(object):
         try:
             obj = getattr(self.selenium_element, name)
         except AttributeError:
-            LOGGER().debug("Cannot find this attribute: %s" , name)
+            LOGGER.debug("Cannot find this attribute: %s" , name)
             if hasattr(self.selenium_element, "get_attribute"):
-                LOGGER().debug("Try get_attribute method")
+                LOGGER.debug("Try get_attribute method")
                 return self.selenium_element.get_attribute(name)
         else:
             if inspect.ismethod(obj):
-                LOGGER().info("This is a method, not a property: %s" , name)
+                LOGGER.debug("This is a method, not a property: %s" , name)
                 return None
             else:
                 return obj
@@ -292,12 +292,12 @@ class Root(UIElement):
         other kwargs are same as normal selenium webdrivers
         '''
         if not "browser_name" in kwargs:
-            LOGGER().error("Browser name not specified")
+            LOGGER.error("Browser name not specified")
             raise DriverException("Browser name not specified")
 
         browser_name = kwargs["browser_name"]
         if not browser_name.upper() in self.support_browsers:
-            LOGGER().error("Unsupported browser name: %s" , browser_name)
+            LOGGER.error("Unsupported browser name: %s" , browser_name)
             raise DriverException("Unsupported browser name: %s" % browser_name)
 
         #remove browser_name key from kwargs
@@ -357,19 +357,19 @@ class Root(UIElement):
         '''
         get keyboard class to use keyboard related methods
         '''
-        LOGGER().info("Browser not support keyboard action")
+        LOGGER.debug("Browser not support keyboard action")
         return None
 
     def get_mouse(self):
         '''
         get mouse class to use mouse related methods
         '''
-        LOGGER().info("Browser not support mouse action")
+        LOGGER.debug("Browser not support mouse action")
         return None
 
     def get_touch(self):
         '''
         get touch class to use touch related methods
         '''
-        LOGGER().info("Browser not support touch action")
+        LOGGER.debug("Browser not support touch action")
         return None

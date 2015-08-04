@@ -72,7 +72,7 @@ class AppMap(object):
         try:
             import pyxb
         except ImportError:
-            LOGGER().info("pyxb not install, skip app map verification")
+            LOGGER.debug("pyxb not install, skip app map verification")
             return
             
         from validate import check_app_map
@@ -238,7 +238,7 @@ class AppMap(object):
         '''
         (object_name_list, parameter_list) = gui_command_parser.parse(command, lexer=gui_command_lexer)
         object_= self._get_object_by_name_list(object_name_list)
-        LOGGER().debug("GUI execute %s %s" , object_name_list, parameter_list)
+        LOGGER.debug("GUI execute %s %s" , object_name_list, parameter_list)
         object_(*parameter_list)
         
     def cli_execute(self, command):
@@ -257,7 +257,7 @@ class AppMap(object):
         if app_path:
             os.chdir(app_path)
                 
-        LOGGER().debug("CLI execute: %s" , repr(args))
+        LOGGER.debug("CLI execute: %s" , repr(args))
         p = subprocess.Popen(args, shell=True)
         #some app is blocking, do not wait here
         #p.communicate()

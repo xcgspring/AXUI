@@ -23,7 +23,7 @@ def image_compare(image1, image2, diff_image_name="diff.bmp"):
         diff = ImageChops.difference(i1, i2)
         diff_image_path = os.path.join(diff_image_location, diff_image_name)
         diff.save(diff_image_path)
-        LOGGER().debug("Diff image save to: %s" % diff_image_path)
+        LOGGER.debug("Diff image save to: %s" % diff_image_path)
     
     #caculate the diff percentage
     pairs = izip(i1.getdata(), i2.getdata())
@@ -35,6 +35,6 @@ def image_compare(image1, image2, diff_image_name="diff.bmp"):
      
     ncomponents = i1.size[0] * i1.size[1] * 3
     dif_percentage = float(dif) / ncomponents
-    LOGGER().debug("Difference (percentage): %f" % dif_percentage)
+    LOGGER.debug("Difference (percentage): %f" % dif_percentage)
     return dif_percentage
 

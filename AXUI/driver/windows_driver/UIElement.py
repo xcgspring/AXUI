@@ -74,7 +74,7 @@ class Method(object):
         '''
         args = list(in_args)
         if len(self.args) != len(args):
-            LOGGER().warn("Input arguments number not match expected")
+            LOGGER.warn("Input arguments number not match expected")
             return None
         for index, expected_arg in enumerate(self.args):
             expected_arg_type = expected_arg[0]
@@ -87,7 +87,7 @@ class Method(object):
                     args[index] = UIA.UIA_enums[expected_arg_type][args[index]]
 
                 if args[index] not in UIA.UIA_enums[expected_arg_type].values():
-                    LOGGER().warn("Input argument not in expected value: %s" , args[index])
+                    LOGGER.warn("Input argument not in expected value: %s" , args[index])
                     return None
 
         return self.function_object(*args)
@@ -111,7 +111,7 @@ class Pattern(object):
             try:
                 getattr(self.pattern_object, name)
             except AttributeError:
-                LOGGER().warn("%s not exist in Pattern:%s", name, pattern_identifier)
+                LOGGER.warn("%s not exist in Pattern:%s", name, pattern_identifier)
                 continue
 
             if flag == "method":
@@ -222,19 +222,19 @@ class UIElement(object):
             identifier = UIA.IUIAutomation_object.CreateTrueCondition()
             index = translated_identifier
         else:
-            LOGGER().warn("Index identifier is wrong, get %s" , repr(translated_identifier))
+            LOGGER.warn("Index identifier is wrong, get %s" , repr(translated_identifier))
             return None
 
         target_UIAElements = self.UIAElement.FindAll(scope, identifier)
         if index+1 > target_UIAElements.Length:
-            LOGGER().warn("Find %d matched elements, index:%d out of range", target_UIAElements.Length, index)
+            LOGGER.warn("Find %d matched elements, index:%d out of range", target_UIAElements.Length, index)
             return None
         return UIElement(target_UIAElements.GetElement(index))
 
     def _find_by_UIA(self, translated_identifier, scope=UIA.UIA_wrapper.TreeScope_Descendants):
         target_UIAElement = self.UIAElement.FindFirst(scope, translated_identifier)
         if target_UIAElement == ctypes.POINTER(UIA.UIA_wrapper.IUIAutomationElement)():
-            LOGGER().info("Find no element matching identifier")
+            LOGGER.debug("Find no element matching identifier")
             return None
 
         return UIElement(target_UIAElement)
@@ -259,7 +259,7 @@ class UIElement(object):
             translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
 
             if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
-                LOGGER().warn("find_elements method not support find by Coordinate or find by Index")
+                LOGGER.warn("find_elements method not support find by Coordinate or find by Index")
                 return []
             else:
                 translated_identifier = translated_identifier[1]
@@ -289,7 +289,7 @@ class UIElement(object):
             flag = False
 
         if not flag:
-            LOGGER().warn("Current UIAElement is no longer exist")
+            LOGGER.warn("Current UIAElement is no longer exist")
             return None
 
         return UIElement(UIAElement)
@@ -356,7 +356,7 @@ class UIElement(object):
         try:
             self.UIAElement.SetFocus()
         except _ctypes.COMError:
-            LOGGER().warn("SetFocus fail on current element, maybe due to this element not support SetFocus")
+            LOGGER.warn("SetFocus fail on current element, maybe due to this element not support SetFocus")
             #self.parent.SetFocus()
 
     def get_clickable_point(self):
@@ -435,7 +435,7 @@ class Root(UIElement):
         else:
             translated_identifier = Translater.ID_Translater(parsed_identifier).get_translated()
             if translated_identifier[0] == "Coordinate" or translated_identifier[0] == "Index":
-                LOGGER().warn("find_elements method not support find by Coordinate or find by Index")
+                LOGGER.warn("find_elements method not support find by Coordinate or find by Index")
                 return []
             else:
                 translated_identifier = translated_identifier[1]

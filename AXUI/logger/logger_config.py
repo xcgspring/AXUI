@@ -16,7 +16,7 @@ def config_logger():
 class Config(object):
 
     _logger_name = "AXUI"
-    _logging_level = logging.DEBUG
+    _logging_level = logging.INFO
     _logging_file_name = "AXUI.log"
     _logging_formatter = "[ %(levelname)s ][ %(filename)s:%(lineno)d ] %(message)s"
 

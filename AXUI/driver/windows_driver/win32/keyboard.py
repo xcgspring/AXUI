@@ -696,7 +696,7 @@ Function:
         self.UIElement.set_focus()
         
         #translate arguments to a string
-        LOGGER().debug("Before translate, value: %s" , repr(values))
+        LOGGER.debug("Before translate, value: %s" , repr(values))
         string = ""
         for value in values:
             #value should only allow to be string or int
@@ -718,12 +718,12 @@ Function:
                 
                 string += translated_value
             else:
-                LOGGER().warning("keyboard input method arguments can only be string or int value, other value will be skipped")
+                LOGGER.warning("keyboard input method arguments can only be string or int value, other value will be skipped")
                 
-        LOGGER().debug("Translated string: %s" , string)        
+        LOGGER.debug("Translated string: %s" , string)
         
         keys = parse_keys(string)
-        LOGGER().debug("Keyboard input string: %s, parsed keys: %s" , string, repr(keys))
+        LOGGER.debug("Keyboard input string: %s, parsed keys: %s" , string, repr(keys))
         for k in keys:
             k.Run()
             time.sleep(0.05)

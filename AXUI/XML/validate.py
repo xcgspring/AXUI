@@ -102,12 +102,12 @@ def check_app_map(XSD_file, app_map_file):
     with open(app_map_file) as app_map:
         try:
             XSD_module.CreateFromDocument(app_map.read())
-            LOGGER().info("Check successful")
+            LOGGER.debug("Check successful")
         except pyxb.UnrecognizedContentError as e:
-            LOGGER().warn(e.details())
+            LOGGER.warn(e.details())
         except pyxb.IncompleteElementContentError as e:
-            LOGGER().warn(e.details())
+            LOGGER.warn(e.details())
         except pyxb.ValidationError as e:
-            LOGGER().warn(e.details())  
+            LOGGER.warn(e.details())
         
 

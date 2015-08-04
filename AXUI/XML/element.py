@@ -313,7 +313,7 @@ class Element(object):
             os.remove(absfile)
 
         self.UIElement.screenshot(absfile)
-        LOGGER().debug("screenshot take: %s" , absfile)
+        LOGGER.debug("screenshot take: %s" , absfile)
         return absfile
 
     def __getattr__(self, name):

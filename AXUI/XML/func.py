@@ -20,10 +20,10 @@ class _Step(object):
         
     def run(self):
         if self.type == "GUI":
-            LOGGER().debug("run gui command: %s" , self.command)
+            LOGGER.debug("run gui command: %s" , self.command)
             self.app_map.gui_execute(self.command)
         elif self.type == "CLI":
-            LOGGER().debug("run cli command: %s" , self.command)
+            LOGGER.debug("run cli command: %s" , self.command)
             self.app_map.cli_execute(self.command)
         else:
             raise ValueError("step type must be GUI or CLI, get: %s" % self.type)
