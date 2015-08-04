@@ -1,45 +1,32 @@
 '''
-config module used to configure modules with contents in a config file
-Functions:
-    config_self:        set the config file to use
-    config:             config the module with contents from config file
+config module
 '''
+
 import ConfigParser
 
-raw_parser = None
+from XML import core_config
+from driver import driver_config
+from image import image_config
+from logger import logger_config
 
-class ConfigException(Exception):
-    pass
 
-def config_self(config_file):
-    global raw_parser
-    raw_parser = ConfigParser.RawConfigParser()
-    raw_parser.read(config_file)
+class Config(object):
+    supported_sections = ["core", "driver", "image", "logger"]
+    def load_config_file(self, config_file):
+        raw_parser = ConfigParser.RawConfigParser()
+        raw_parser.read(config_file)
 
-def config(module):
-    '''
-    module needs to contain interfaces as below: 
-        config_section:     config_section is a string represent the section string in config file
-        default_configs:    default configs to use when config not specified by config file
-        config:             true method to do the configuration
-    '''
-    if raw_parser is None:
-        raise ConfigException("Before config other module, need config config_module first")
-    
-    section = module.config_section
-    configs = {}
+        for section in raw_parser.sections():
+            if section in self.supported_sections:
+                module = eval(section+"_config")
+                for option in raw_parser.options(section):
+                    if module.hasattr(option):
+                        module.option = raw_parser.get(section, option)
 
-    for config in module.default_configs.items():
-        option = config[0]
-        try:
-            value = raw_parser.get(section, option)
-            if not value:
-                raise ValueError("No value in section: %s, option: %s" %(section, option))
-            configs[option] = value
-        except ConfigParser.NoOptionError:
-            configs[option] = module.default_configs[option]
-        except ConfigParser.NoSectionError:
-            configs = module.default_configs
+    def __getattr__(self, item):
+        if item in self.supported_sections:
+            return eval(item+"_config")
+        else:
+            raise AttributeError("No config for %s" % item)
 
-    module.config(configs)
-    return configs
+config = Config()

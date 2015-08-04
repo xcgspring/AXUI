@@ -3,15 +3,15 @@ import os
 from itertools import izip
 from PIL import Image, ImageChops
 
-import image_config
+from image_config import image_config
 from AXUI.logger import LOGGER
 
 def image_compare(image1, image2, diff_image_name="diff.bmp"):
     '''compare two images, return difference percentage
     #code from http://rosettacode.org/wiki/Percentage_difference_between_images#Python
     '''
-    gen_diff_image = image_config.query_gen_diff_image()
-    diff_image_location = image_config.query_diff_image_location()
+    gen_diff_image = image_config.gen_diff_image
+    diff_image_location = image_config.diff_image_location
 
     i1 = Image.open(image1)
     i2 = Image.open(image2)

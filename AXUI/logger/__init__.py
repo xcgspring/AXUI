@@ -1,4 +1,4 @@
 #for config use
-from _logger import *
+from logger_config import logger_config
 #for logger use
-from _logger import LOGGER
+from logger import LOGGER

@@ -3,7 +3,7 @@ import os
 import time
 from AXUI.logger import LOGGER
 from AXUI.driver import get_driver, DriverException
-import XML_config
+from XML_config import core_config
 
 class TimeOutError(Exception):
     pass
@@ -140,9 +140,9 @@ class Element(object):
         self.name = ""
         self.parent_string = ""
         self.identifier_string = ""
-        self.timeout = XML_config.query_timeout()
-        self.screenshot_location = XML_config.query_screenshot_location()
-        self.screenshot_on_failure = XML_config.query_screenshot_on_failure()
+        self.timeout = core_config.timeout
+        self.screenshot_location = core_config.screenshot_location
+        self.screenshot_on_failure = core_config.screenshot_on_failure
         self.children = {}
         self.parent = None
         self.start_func = None

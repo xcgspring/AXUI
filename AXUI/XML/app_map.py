@@ -8,13 +8,13 @@ from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser
 from  AXUI.parsing.gui_command_parsing import gui_command_lexer, gui_command_parser
 from  AXUI.parsing.cli_command_parsing import cli_command_lexer, cli_command_parser
 import func
-import XML_config
+from XML_config import core_config
 import element as element_module
 
 def singleton(class_):
     instances = {}
     def getinstance(xml, **kwargs):
-        full_xml = XML_config.query_app_map_file(xml)
+        full_xml = core_config.query_app_map_file(xml)
         if full_xml not in instances:
             #uplevel_app_map_xmls is a global value in decorater
             #will overwrite it if there is argument passed in
@@ -76,7 +76,7 @@ class AppMap(object):
             return
             
         from validate import check_app_map
-        check_app_map(XML_config.query_schema_file("AXUI_app_map.xsd"), self.app_map_xml)
+        check_app_map(core_config.query_schema_file("AXUI_app_map.xsd"), self.app_map_xml)
         
     def _parse_variable_elements(self, root_element):
         variable_root = root_element.find("AXUI:variables", namespaces={"AXUI":"AXUI"})
@@ -93,8 +93,8 @@ class AppMap(object):
                 name = include_element.attrib["name"]
                 path = include_element.attrib["path"]
                 #prevent recursive include
-                if XML_config.query_app_map_file(path) in self.uplevel_app_map_xmls:
-                    raise ValueError("Recursive include for app map: %s" % XML_config.query_app_map_file(path))
+                if core_config.query_app_map_file(path) in self.uplevel_app_map_xmls:
+                    raise ValueError("Recursive include for app map: %s" % core_config.query_app_map_file(path))
                 self.app_maps[name] = AppMap(path, uplevel_app_map_xmls=self.uplevel_app_map_xmls)
             
     def _parse_func_elements(self, root_element):

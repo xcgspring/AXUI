@@ -1,20 +1,16 @@
 
-config_section="driver"
-default_configs={ #"driver_used": "fake_driver",
-                  "driver_used": "windows",
-                }
+class Config(object):
+    _driver_used = "windows"
 
-DriverUsed = default_configs["driver_used"]
+    def __str__(self):
+        return ""
 
-def config(configs=None):
-    '''callback function used by config module
-    
-    '''
-    if configs is None:
-        configs = default_configs
-    
-    global DriverUsed
-    DriverUsed=configs["driver_used"]
+    @property
+    def driver_used(self):
+        return self._driver_used
 
-#used by config module
-__all__=["config_section", "default_configs", "config"]
+    @driver_used.setter
+    def driver_used(self, input):
+        self._driver_used = input
+
+driver_config = Config()
