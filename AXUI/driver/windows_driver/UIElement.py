@@ -87,7 +87,7 @@ class Method(object):
                     args[index] = UIA.UIA_enums[expected_arg_type][args[index]]
 
                 if args[index] not in UIA.UIA_enums[expected_arg_type].values():
-                    LOGGER.warn("Input argument not in expected value: %s" , args[index])
+                    LOGGER.debug("Input argument not in expected value: %s" , args[index])
                     return None
 
         return self.function_object(*args)
@@ -111,7 +111,7 @@ class Pattern(object):
             try:
                 getattr(self.pattern_object, name)
             except AttributeError:
-                LOGGER.warn("%s not exist in Pattern:%s", name, pattern_identifier)
+                LOGGER.debug("%s not exist in Pattern:%s", name, pattern_identifier)
                 continue
 
             if flag == "method":

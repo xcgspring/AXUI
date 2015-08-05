@@ -367,17 +367,7 @@ class Element(object):
         #need to start parent element first
         self.parent.start()
         if self.verify() is None:
-            #do a desktop screenshot here as required
-            if self.screenshot_on:
-                #get root
-                element = self
-                parent = element.parent
-                while not parent is None:
-                    element = parent
-                    parent = element.parent
-                #screenshot
-                element.screenshot()
-            LOGGER.info("Cannot find element: %s, trigger start function", self.name)
+            LOGGER.info("Start function triggered, due to cannot find element: %s", self.name)
             #run start func
             if self.start_func:
                 self.start_func.run()
