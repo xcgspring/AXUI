@@ -66,7 +66,7 @@ class Config(object):
     def screenshot_option(self, input_value):
         accepts = ["always_on", "always_off", "on_failure"]
         if input_value in accepts:
-            self._screenshot_option = accepts[input_value]
+            self._screenshot_option = input_value
         else:
             raise ValueError("Expect value in %s, get %s" % (str(accepts), input_value))
 

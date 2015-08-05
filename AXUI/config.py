@@ -20,8 +20,8 @@ class GlobalConfig(object):
             if section in self.supported_sections:
                 module = eval(section+"_config")
                 for option in raw_parser.options(section):
-                    if module.hasattr(option):
-                        module.option = raw_parser.get(section, option)
+                    if hasattr(module, option):
+                        setattr(module, option, raw_parser.get(section, option))
 
     def __getattr__(self, item):
         if item in self.supported_sections:

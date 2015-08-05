@@ -32,6 +32,8 @@ class RootElement(object):
         #Need init by app map module
         self.name = ""
         self.children = {}
+        self.parent = None
+        self._time_out = None
 
         #get driver module
         driver_module = get_driver()
@@ -41,6 +43,42 @@ class RootElement(object):
     def __repr__(self):
         docstring = "root element instance"
         return docstring
+
+    @property
+    def timeout(self):
+        if not self._time_out is None:
+            return self._time_out
+        else:
+            return core_config.timeout
+
+    @timeout.setter
+    def timeout(self, input_value):
+        self._time_out = input_value
+
+    @property
+    def screenshot_location(self):
+        return core_config.screenshot_location
+
+    @property
+    def screenshot_on(self):
+        if core_config.screenshot_option == "always_on":
+            return True
+        else:
+            return False
+
+    @property
+    def screenshot_off(self):
+        if core_config.screenshot_option == "always_off":
+            return True
+        else:
+            return False
+
+    @property
+    def screenshot_on_failure(self):
+        if core_config.screenshot_option == "on_failure":
+            return True
+        else:
+            return False
 
     @property
     def details(self):
@@ -94,6 +132,23 @@ class RootElement(object):
         '''
         self.start()
         return self.root.find_elements(identifier)
+
+    def screenshot(self, screenshot_location = ""):
+        '''take a screen shot for this element
+        '''
+        if not os.path.isdir(screenshot_location):
+            screenshot_location = self.screenshot_location
+
+        self.start()
+
+        filename = self.name+"_"+str(time.time())+".bmp"
+        absfile = os.path.join(screenshot_location, filename)
+        if os.path.isfile(absfile):
+            os.remove(absfile)
+
+        self.root.screenshot(absfile)
+        LOGGER.info("Screenshot taken: %s" , absfile)
+        return absfile
 
     def __getattr__(self, name):
         if self.children.has_key(name):
@@ -157,7 +212,7 @@ class Element(object):
         if not self._time_out is None:
             return self._time_out
         else:
-            return core_config.timeout
+            return core_config.time_out
 
     @timeout.setter
     def timeout(self, input_value):
@@ -276,12 +331,23 @@ class Element(object):
         LOGGER.info("Waiting Element show up, timeout %s", self.timeout)
         start_time = time.time()
         while True:
+            current_time = time.time()
             self.UIElement = self.verify()
             if not self.UIElement is None:
+                LOGGER.info("Find element: %s after waiting %ss, continue", self.name, current_time - start_time)
+                #do a desktop screenshot here as required
+                if self.screenshot_on:
+                    #get root
+                    element = self
+                    parent = element.parent
+                    while not parent is None:
+                        element = parent
+                        parent = element.parent
+                    #screenshot
+                    element.screenshot()
                 return
 
             time.sleep(0.1)
-            current_time = time.time()
             if current_time - start_time > self.timeout:
                 #do a desktop screenshot here as required
                 if not self.screenshot_off:
@@ -358,13 +424,16 @@ class Element(object):
         else:
             LOGGER.info("Not find element %s, continue", self.name)
 
-    def screenshot(self):
+    def screenshot(self, screenshot_location = ""):
         '''take a screen shot for this element
         '''
+        if not os.path.isdir(screenshot_location):
+            screenshot_location = self.screenshot_location
+
         self.start()
 
-        filename = self.name+"_"+time.strftime("%y%m%d_%H%M%S")+".bmp"
-        absfile = os.path.join(self.screenshot_location, filename)
+        filename = self.name+"_"+str(time.time())+".bmp"
+        absfile = os.path.join(screenshot_location, filename)
         if os.path.isfile(absfile):
             os.remove(absfile)
 

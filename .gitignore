@@ -1,3 +1,5 @@
 *.pyc
 *.log
 .idea
+dist
+AXUI.egg-info

@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 setup(
     name = "AXUI",
     packages = find_packages(),
-    package_data = {"AXUI":["global.cfg"], "AXUI.XML":["schemas/AXUI_app_map.xsd"], "AXUI.driver.windows":["screenshot/screenshot.exe"]},
+    package_data = {"AXUI":["global.cfg"], "AXUI.XML":["schemas/AXUI_app_map.xsd"], "AXUI.driver.windows_driver":["screenshot/screenshot.exe"]},
     version = "0.2.4",
     description = "A cross platform UI auto framework",
     author = "xcgspring",
