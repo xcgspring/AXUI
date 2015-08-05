@@ -10,7 +10,7 @@ from image import image_config
 from logger import logger_config
 
 
-class Config(object):
+class GlobalConfig(object):
     supported_sections = ["core", "driver", "image", "logger"]
     def load_config_file(self, config_file):
         raw_parser = ConfigParser.RawConfigParser()
@@ -29,4 +29,4 @@ class Config(object):
         else:
             raise AttributeError("No config for %s" % item)
 
-config = Config()
+Config = GlobalConfig()

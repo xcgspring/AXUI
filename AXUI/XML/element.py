@@ -239,6 +239,7 @@ class Element(object):
         '''wait until UIElement is valid or timeout
         '''
         #keep finding the element by identifier, until found or timeout
+        LOGGER.info("Waiting Element show up, timeout %s", self.timeout)
         start_time = time.time()
         while True:
             self.UIElement = self.verify()
@@ -258,7 +259,7 @@ class Element(object):
                         parent = element.parent
                     #screenshot
                     element.screenshot()
-                raise TimeOutError("time out encounter, during element:%s start" % self.name)
+                raise TimeOutError("time out encounter, during start element:%s" % self.name)
 
     def start(self):
         '''start and find this UIElement
@@ -266,14 +267,20 @@ class Element(object):
         #need to start parent element first
         self.parent.start()
         if self.verify() is None:
+            LOGGER.info("Cannot find element: %s, trigger start function", self.name)
             #run start func
             if self.start_func:
                 self.start_func.run()
+            else:
+                LOGGER.info("Element doesn't have start function")
             self._wait_start()
+        else:
+            LOGGER.info("Find element: %s, continue", self.name)
 
     def _wait_stop(self):
         '''wait until UIElement is not valid or timeout
         '''
+        LOGGER.info("Waiting Element to stop, timeout %s" % self.timeout)
         if not self.identifier is None:
             #keep verify the element, until not found or timeout
             start_time = time.time()
@@ -285,7 +292,7 @@ class Element(object):
                 time.sleep(0.1)
                 current_time = time.time()
                 if current_time - start_time > self.timeout:
-                    raise TimeOutError("time out encounter, during element:%s stop" % self.name)
+                    raise TimeOutError("time out encounter, during stop element:%s" % self.name)
 
     def stop(self):
         '''stop and verify this UIElement
@@ -298,9 +305,14 @@ class Element(object):
 
             #stop self
             #only stop and check element which has stop_func attribute
+            LOGGER.info("Find element %s, trigger stop function", self.name)
             if self.stop_func:
                 self.stop_func.run()
-                self._wait_stop()
+            else:
+                LOGGER.info("Element doesn't have stop function")
+            self._wait_stop()
+        else:
+            LOGGER.info("Not find element %s, continue", self.name)
 
     def screenshot(self):
         '''take a screen shot for this element
