@@ -1,5 +1,7 @@
-
+import os
 import logging
+
+AXUI_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
 
 def config_logger():
     logger = logging.getLogger(logger_config.logger_name)
@@ -7,7 +9,7 @@ def config_logger():
     logger.setLevel(logger_config.logging_level)
     logger.handlers = []
 
-    file_handler = logging.FileHandler(logger_config.logging_file_name, mode="w")
+    file_handler = logging.FileHandler(logger_config.logging_file_path, mode="w")
     file_handler.setLevel(logger_config.logging_level)
     formatter = logging.Formatter(logger_config.logging_formatter)
     file_handler.setFormatter(formatter)
@@ -17,7 +19,7 @@ class Config(object):
 
     _logger_name = "AXUI"
     _logging_level = logging.INFO
-    _logging_file_name = "AXUI.log"
+    _logging_file_path = os.path.join(AXUI_ROOT, "AXUI.log")
     _logging_formatter = "[ %(levelname)s ][ %(filename)s:%(lineno)d ] %(message)s"
 
     def __str__(self):
@@ -59,12 +61,12 @@ class Config(object):
         config_logger()
 
     @property
-    def logging_file_name(self):
-        return self._logging_file_name
+    def logging_file_path(self):
+        return self._logging_file_path
 
-    @logging_file_name.setter
-    def logging_file_name(self, input):
-        self._logging_file_name = str(input)
+    @logging_file_path.setter
+    def logging_file_path(self, input):
+        self._logging_file_path = str(input)
         config_logger()
 
     @property

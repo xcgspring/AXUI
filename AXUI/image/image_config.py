@@ -1,10 +1,10 @@
 
 import os
+from AXUI.logger import logger_config
 
 class Config(object):
 
     _gen_diff_image = True
-    _diff_image_location = os.path.dirname(os.path.abspath(__file__))
 
     def __str__(self):
         return ""
@@ -25,16 +25,9 @@ class Config(object):
 
     @property
     def diff_image_location(self):
-        return self._diff_image_location
-
-    @diff_image_location.setter
-    def diff_image_location(self, input):
-        #check if input valid
-        if not os.path.isabs(input):
-            raise ValueError("Expect a path for screenshot_location, get %s" % input)
-        else:
-            if not os.path.isdir(input):
-                os.makedirs(input)
-            self._diff_image_location = input
+        _diff_image_location = os.path.join(os.path.dirname(logger_config.logging_file_path), "diff")
+        if os.path.isdir(_diff_image_location):
+            os.makedirs(_diff_image_location)
+        return _diff_image_location
 
 image_config = Config()

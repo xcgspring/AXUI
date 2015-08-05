@@ -1,7 +1,7 @@
 
 import os
 import time
-from AXUI.logger import LOGGER
+from AXUI.logger import LOGGER, logger_config
 from AXUI.driver import get_driver
 from AXUI.exceptions import DriverException, TimeOutError
 from XML_config import core_config
@@ -138,9 +138,7 @@ class Element(object):
         self.name = ""
         self.parent_string = ""
         self.identifier_string = ""
-        self.timeout = core_config.timeout
-        self.screenshot_location = core_config.screenshot_location
-        self.screenshot_on_failure = core_config.screenshot_on_failure
+        self._time_out = None
         self.children = {}
         self.parent = None
         self.start_func = None
@@ -153,6 +151,42 @@ class Element(object):
     def __repr__(self):
         docstring = "element instance for: %s" % self.name
         return docstring
+
+    @property
+    def timeout(self):
+        if not self._time_out is None:
+            return self._time_out
+        else:
+            return core_config.timeout
+
+    @timeout.setter
+    def timeout(self, input_value):
+        self._time_out = input_value
+
+    @property
+    def screenshot_location(self):
+        return core_config.screenshot_location
+
+    @property
+    def screenshot_on(self):
+        if core_config.screenshot_option == "always_on":
+            return True
+        else:
+            return False
+
+    @property
+    def screenshot_off(self):
+        if core_config.screenshot_option == "always_off":
+            return True
+        else:
+            return False
+
+    @property
+    def screenshot_on_failure(self):
+        if core_config.screenshot_option == "on_failure":
+            return True
+        else:
+            return False
 
     @property
     def details(self):
@@ -250,7 +284,7 @@ class Element(object):
             current_time = time.time()
             if current_time - start_time > self.timeout:
                 #do a desktop screenshot here as required
-                if self.screenshot_on_failure:
+                if not self.screenshot_off:
                     #get root
                     element = self
                     parent = element.parent
@@ -267,6 +301,16 @@ class Element(object):
         #need to start parent element first
         self.parent.start()
         if self.verify() is None:
+            #do a desktop screenshot here as required
+            if self.screenshot_on:
+                #get root
+                element = self
+                parent = element.parent
+                while not parent is None:
+                    element = parent
+                    parent = element.parent
+                #screenshot
+                element.screenshot()
             LOGGER.info("Cannot find element: %s, trigger start function", self.name)
             #run start func
             if self.start_func:
@@ -325,7 +369,7 @@ class Element(object):
             os.remove(absfile)
 
         self.UIElement.screenshot(absfile)
-        LOGGER.debug("screenshot take: %s" , absfile)
+        LOGGER.info("Screenshot taken: %s" , absfile)
         return absfile
 
     def __getattr__(self, name):
