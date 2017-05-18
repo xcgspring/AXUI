@@ -7,14 +7,14 @@ from AXUI.exceptions import DriverException
 
 try:
     import selenium.webdriver as webdriver
-except ImportError, e:
+except ImportError as e:
     LOGGER.error("To use AXUI selenium driver, you must install selenium python project first, check https://pypi.python.org/pypi/selenium")
     raise e
 
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
-import Translater
+from . import Translater
 
 class Keyboard(object):
     def __init__(self, selenium_element):
@@ -41,7 +41,7 @@ class Keyboard(object):
                     key = value.lstrip("{").rstrip("}")
                     try:
                         key_value = getattr(Keys, key)
-                    except AttributeError, e:
+                    except AttributeError as e:
                         LOGGER.warning("Input special key not support: %s, skip this input" , key)
                     else:
                         translated_values.append(key_value)

@@ -43,8 +43,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'AXUI document'
-copyright = u'2015, xcgspring'
+project = 'AXUI document'
+copyright = '2015, xcgspring'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -196,8 +196,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'AXUIdocument.tex', u'AXUI document Documentation',
-   u'xcgspring', 'manual'),
+  ('index', 'AXUIdocument.tex', 'AXUI document Documentation',
+   'xcgspring', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -226,8 +226,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'axuidocument', u'AXUI document Documentation',
-     [u'xcgspring'], 1)
+    ('index', 'axuidocument', 'AXUI document Documentation',
+     ['xcgspring'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -240,8 +240,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'AXUIdocument', u'AXUI document Documentation',
-   u'xcgspring', 'AXUIdocument', 'One line description of project.',
+  ('index', 'AXUIdocument', 'AXUI document Documentation',
+   'xcgspring', 'AXUIdocument', 'One line description of project.',
    'Miscellaneous'),
 ]
 
@@ -261,10 +261,10 @@ texinfo_documents = [
 # -- Options for Epub output ----------------------------------------------
 
 # Bibliographic Dublin Core info.
-epub_title = u'AXUI document'
-epub_author = u'xcgspring'
-epub_publisher = u'xcgspring'
-epub_copyright = u'2015, xcgspring'
+epub_title = 'AXUI document'
+epub_author = 'xcgspring'
+epub_publisher = 'xcgspring'
+epub_copyright = '2015, xcgspring'
 
 # The basename for the epub file. It defaults to the project name.
 #epub_basename = u'AXUI document'

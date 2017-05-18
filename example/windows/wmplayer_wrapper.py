@@ -34,7 +34,7 @@ def wmplayer_close():
     
 def wmplayer_open_media_file(media_file):
     if not os.path.isfile(media_file):
-        print("media file not exist: %s" % media_file)
+        print(("media file not exist: %s" % media_file))
         return
     appmap.wmplayer_Window.Open_Dialog.FileName_ComboBox.FileName_Edit.ValuePattern.SetValue(media_file)
     appmap.wmplayer_Window.Open_Dialog.Open_Button.InvokePattern.Invoke()

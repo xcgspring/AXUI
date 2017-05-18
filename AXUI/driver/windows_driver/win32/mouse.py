@@ -334,16 +334,16 @@ Attributes:
         sample_size = x_sample_size > y_sample_size and x_sample_size or y_sample_size
         #build population
         if abs_source_coords[0] < abs_dest_coords[0]:
-            x_population = range(abs_source_coords[0], abs_dest_coords[0])
+            x_population = list(range(abs_source_coords[0], abs_dest_coords[0]))
         else:
-            x_population = range(abs_dest_coords[0], abs_source_coords[0])
+            x_population = list(range(abs_dest_coords[0], abs_source_coords[0]))
         while len(x_population)<sample_size:
             x_population = x_population*2
             
         if abs_source_coords[1] < abs_dest_coords[1]:
-            y_population = range(abs_source_coords[1], abs_dest_coords[1])
+            y_population = list(range(abs_source_coords[1], abs_dest_coords[1]))
         else:
-            y_population = range(abs_dest_coords[1], abs_source_coords[1])
+            y_population = list(range(abs_dest_coords[1], abs_source_coords[1]))
         while len(y_population)<sample_size:
             y_population = y_population*2
         #get coords

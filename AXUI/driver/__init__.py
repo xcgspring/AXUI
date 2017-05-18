@@ -1,4 +1,4 @@
-from config_driver import driver_config
+from .config_driver import driver_config
 from AXUI.logger import LOGGER
 
 def get_driver():
@@ -9,7 +9,7 @@ def get_driver():
         import sys, os
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         driver = __import__(driver_config.driver_used+"_driver")
-    except ImportError, e:
+    except ImportError as e:
         LOGGER.error("Driver load error: %s" % driver_config.driver_used)
         raise e
         

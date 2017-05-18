@@ -2,13 +2,13 @@
 from AXUI.logger import LOGGER
 from AXUI.exceptions import DriverException
 
-import UIA
+from . import UIA
 import ctypes
 import _ctypes
 
-import win32
-import screenshot
-import Translater
+from . import win32
+from . import screenshot
+from . import Translater
 
 def _unpack(flag, name, *args):
     return flag, name, args
@@ -86,7 +86,7 @@ class Method(object):
                 if args[index] in UIA.UIA_enums[expected_arg_type]:
                     args[index] = UIA.UIA_enums[expected_arg_type][args[index]]
 
-                if args[index] not in UIA.UIA_enums[expected_arg_type].values():
+                if args[index] not in list(UIA.UIA_enums[expected_arg_type].values()):
                     LOGGER.debug("Input argument not in expected value: %s" , args[index])
                     return None
 
@@ -124,7 +124,7 @@ class Pattern(object):
     def __repr__(self):
         docstring = ""
         docstring += "Properties:\n"
-        for property_ in self.properties.items():
+        for property_ in list(self.properties.items()):
             name = property_[0]
             argument = property_[1][0]
             value_type = argument[1]
@@ -135,7 +135,7 @@ class Pattern(object):
             docstring += "  Value:\t"+repr(value)+"\n"
 
         docstring += "\nMethods:\n"
-        for method_ in self.methods.items():
+        for method_ in list(self.methods.items()):
             name = method_[0]
             arguments = method_[1]
             docstring += "#"*32+"\n"

@@ -13,9 +13,9 @@ class TestAppMap(unittest.TestCase):
             tok = identifier_lexer.token()
             if not tok:
                 break
-            print tok
+            print(tok)
         
     def test_yacc(self):
         from AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser
-        print identifier_parser.parse(self.identifier, lexer=identifier_lexer)
+        print(identifier_parser.parse(self.identifier, lexer=identifier_lexer))
 

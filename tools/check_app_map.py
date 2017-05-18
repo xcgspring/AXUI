@@ -14,12 +14,12 @@ def check_app_map(xs_module, app_map):
         app_map_instance = xs_module.CreateFromDocument(app_map)
         print("Check successful")
     except pyxb.UnrecognizedContentError as e:
-        print(e.details())
+        print((e.details()))
     except pyxb.IncompleteElementContentError as e:
-    	print(e.details())
+    	print((e.details()))
         
 if __name__=="__main__":
-    print("Usage:\npython %s XSD_file(abs path) app_map_file" % __file__)
+    print(("Usage:\npython %s XSD_file(abs path) app_map_file" % __file__))
     XSD_file = sys.argv[1]
     app_map_file = sys.argv[2]
     XSD_module_name = os.path.basename(XSD_file).split(".")[0]
