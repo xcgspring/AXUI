@@ -2,18 +2,18 @@
 config module
 '''
 
-import ConfigParser
+import configparser
 
-from XML import core_config
-from driver import driver_config
-from image import image_config
-from logger import logger_config
+from .XML import core_config
+from .driver import driver_config
+from .image import image_config
+from .logger import logger_config
 
 
 class GlobalConfig(object):
     supported_sections = ["core", "driver", "image", "logger"]
     def load_config_file(self, config_file):
-        raw_parser = ConfigParser.RawConfigParser()
+        raw_parser = configparser.RawConfigParser()
         raw_parser.read(config_file)
 
         for section in raw_parser.sections():

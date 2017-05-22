@@ -7,9 +7,9 @@ from AXUI.logger import LOGGER
 from  AXUI.parsing.identifier_parsing import identifier_lexer, identifier_parser 
 from  AXUI.parsing.gui_command_parsing import gui_command_lexer, gui_command_parser
 from  AXUI.parsing.cli_command_parsing import cli_command_lexer, cli_command_parser
-import func
-from XML_config import core_config
-import element as element_module
+from . import func
+from .XML_config import core_config
+from . import element as element_module
 
 def singleton(class_):
     instances = {}
@@ -75,7 +75,7 @@ class AppMap(object):
             LOGGER.debug("pyxb not install, skip app map verification")
             return
             
-        from validate import check_app_map
+        from .validate import check_app_map
         check_app_map(core_config.query_schema_file("AXUI_app_map.xsd"), self.app_map_xml)
         
     def _parse_variable_elements(self, root_element):

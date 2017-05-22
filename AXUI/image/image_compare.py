@@ -1,9 +1,9 @@
 
 import os
-from itertools import izip
+
 from PIL import Image, ImageChops
 
-from image_config import image_config
+from .image_config import image_config
 from AXUI.logger import LOGGER
 
 def image_compare(image1, image2, diff_image_name="diff.bmp"):
@@ -26,7 +26,7 @@ def image_compare(image1, image2, diff_image_name="diff.bmp"):
         LOGGER.debug("Diff image save to: %s" % diff_image_path)
     
     #caculate the diff percentage
-    pairs = izip(i1.getdata(), i2.getdata())
+    pairs = zip(i1.getdata(), i2.getdata())
     if len(i1.getbands()) == 1:
         # for gray-scale jpegs
         dif = sum((p1==p2) and 1 or 0 for p1,p2 in pairs)

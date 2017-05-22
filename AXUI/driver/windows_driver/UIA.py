@@ -960,7 +960,7 @@ UIA_control_pattern_interfaces = {
 }
 
 #Control Pattern Identifiers
-UIA_control_pattern_identifers = UIA_control_pattern_interfaces.keys()
+UIA_control_pattern_identifers = list(UIA_control_pattern_interfaces.keys())
 
 #Control Pattern Availability Property Identifiers
 UIA_control_pattern_availability_property_identifiers = \
@@ -968,7 +968,7 @@ UIA_control_pattern_availability_property_identifiers = \
 
 #check if enum exist in current version UIA namespace
 #set the value if exist
-for enum in UIA_enums.items():
+for enum in list(UIA_enums.items()):
     enum_name = enum[0]
     enum_contents = enum[1]
     #check if enum name in current UIA namespace

@@ -21,7 +21,7 @@ class TestWin32(unittest.TestCase):
     def test_mouse(self):
         from AXUI.driver.windows.win32 import Mouse
         mouse = Mouse(FakeUIElement())
-        print mouse
+        print(mouse)
         mouse.RightClick()
 
         

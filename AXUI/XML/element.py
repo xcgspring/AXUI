@@ -4,7 +4,7 @@ import time
 from AXUI.logger import LOGGER, logger_config
 from AXUI.driver import get_driver
 from AXUI.exceptions import DriverException, TimeOutError
-from XML_config import core_config
+from .XML_config import core_config
 
 class FakeUIElement(object):
     '''used for Elements without identifier
@@ -151,7 +151,7 @@ class RootElement(object):
         return absfile
 
     def __getattr__(self, name):
-        if self.children.has_key(name):
+        if name in self.children:
             return self.children[name]
         else:
             self.start()
@@ -432,7 +432,7 @@ class Element(object):
         return absfile
 
     def __getattr__(self, name):
-        if self.children.has_key(name):
+        if name in self.children:
             return self.children[name]
         else:
             self.start()

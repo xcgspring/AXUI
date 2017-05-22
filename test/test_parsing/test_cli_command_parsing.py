@@ -13,11 +13,11 @@ class TestAppMap(unittest.TestCase):
             tok = cli_command_lexer.token()
             if not tok:
                 break
-            print tok
+            print(tok)
         
     def test_yacc(self):
         from AXUI.parsing.cli_command_parsing import cli_command_lexer, cli_command_parser
-        print cli_command_parser.parse(self.command, lexer=cli_command_lexer)
+        print(cli_command_parser.parse(self.command, lexer=cli_command_lexer))
 
 if __name__=="__main__":
     unittest.main(verbosity=2)

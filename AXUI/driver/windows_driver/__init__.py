@@ -13,4 +13,4 @@ if (int(windows_version.split(".")[0]) >= 6 and int(windows_version.split(".")[1
     shcore = ctypes.windll.shcore
     shcore.SetProcessDpiAwareness(2)
     
-from UIElement import UIElement, Root
+from .UIElement import UIElement, Root

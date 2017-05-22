@@ -4,7 +4,7 @@ translate AXUI identifier to Windows UIA searchCondition
 import re
 from AXUI.logger import LOGGER
 from AXUI.exceptions import DriverException
-import UIA
+from . import UIA
 
 #Custom identifiers is defined for UI elements not properly recongnized by UIA
 #Custom identifiers used with UIA identifiers should its special rules
